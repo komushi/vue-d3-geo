@@ -1,3 +1,8 @@
-import vueD3Geo from './components/D3GeoStatic'
+import D3GeoStatic from './components/D3GeoStatic'
+// import D3GeoDoubleLayer from './components/D3GeoDoubleLayer'
 
-export default vueD3Geo
+
+export {
+	// D3GeoDoubleLayer,
+	D3GeoStatic
+}

@@ -1,6 +1,6 @@
 {
   "name": "vue-d3-geo",
-  "version": "0.0.21",
+  "version": "0.0.50",
   "description": "A D3 Geo Vue.js Library",
   "author": "Lei Xu <komushi@gmail.com>",
   "main": "dist/lib/vue-d3-geo.min.js",
@@ -41,9 +41,7 @@
     "html-webpack-plugin": "^2.28.0",
     "http-proxy-middleware": "^0.17.3",
     "npm-run-all": "^4.0.2",
-    "node-sass": "^4.7.2",
     "webpack-bundle-analyzer": "^2.2.1",
-    "sass-loader": "^6.0.6",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "opn": "^5.1.0",

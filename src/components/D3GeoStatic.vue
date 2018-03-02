@@ -6,12 +6,9 @@
 <script>
 import * as d3 from 'd3';
 import * as topojson from 'topojson';
+import findprop from '../utils/findprop';
 
 const props = {
-  // data: {
-  //   type: Array,
-  //   default: () => [],
-  // },
   topojsonPath: {
     type: String
   },
@@ -25,7 +22,7 @@ const props = {
   },
   colorRange: {
     type: String,
-    default: '#0d47a1,#e3f2fd'
+    default: '#0d47a1,#0e2fdf'
   },
   center: {
     type: String,
@@ -54,14 +51,8 @@ const props = {
 };
 
 export default {
-  name: 'd3-geo-staic',
-  // data() {
-  //   return {
-  //     data: [99, 71, 78, 25, 36, 92],
-  //     line: '',
-  //   };
-  // },
-  props,
+  name: 'd3-geo-static',
+  // props,
   mounted() {
 
     const layerObjects = this.layerObjects;
@@ -69,9 +60,7 @@ export default {
     const layerFeatureCode = this.layerFeatureCode;
     const layerFeatureName = this.layerFeatureName;
     const featureNameStyle = this.featureNameStyle;
-    const findprop = this.findprop;
-
-
+    
     const svg = d3.select(this.$el)
       .append('svg')
       .attr('width', this.width)
@@ -231,83 +220,10 @@ export default {
 
     });
 
-  },
-  methods: {
-    findprop(obj, path) {
-
-        var args = path.split('.'), i, l;
-
-        for (i=0, l=args.length; i<l; i++) {
-            if (!obj.hasOwnProperty(args[i]))
-                return;
-            obj = obj[args[i]];
-        }
-
-        return obj;
-    }
   }
 };
 </script>
 
-<style lang="sass">
-@import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
-
-svg 
-  font-size: 11px
-  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo'
-  font-weight: 300
-  margin: auto
-  display: block
-
-.background 
-  fill: none
-  pointer-events: all
-
-.circle 
-
-.layer1 
-  cursor: pointer
-
-.layer1:hover 
-  fill: orange
-
-
-.layer1.active
-  display:none
-
-
-.layer1-boundary
-  fill: none
-  stroke: white
-  stroke-dasharray: 2,2
-  stroke-linejoin: round
-  stroke-width: 1
-
-
-.layer1LegendTitle 
-  fill: black
-  fill-opacity: 1
-  font-size: 18px
-  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo'
-  font-weight: 700
-  text-anchor: middle
-
-
-.layer2 
-  stroke: white
-  stroke-width: 0.2
-
-.label 
-  fill: white
-  fill-opacity: 1
-  font-size: 18px
-  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo'
-  font-weight: 700
-  text-anchor: middle
-  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
-</style>
-
-<!--
 <style>
 @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
 
@@ -377,4 +293,3 @@ svg {
      1px 1px 0 #000;
 }
 </style>
--->
