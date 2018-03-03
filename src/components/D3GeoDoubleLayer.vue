@@ -61,16 +61,20 @@ const props = {
     default: 'properties.block_code'
   },
   layer1EventData: {
-    type: String,
-    default: 'districtRank'
+    type: Object,
+    default: null
   },
   layer2EventData: {
     type: String,
     default: 'circleData'
   },
-  layer2EventCount: {
+  layer1EventCountTag: {
     type: String,
     default: 'dropoffCount'
+  },
+  layer1LegendTitle: {
+    type: String,
+    default: '３０分以内の降車イベント'
   },
   onReceiveEvents: {
     type: String,
@@ -84,15 +88,14 @@ const props = {
 
 export default {
   name: 'd3-geo-double-layer',
-  // data() {
-  //   return {
-  //     data: [99, 71, 78, 25, 36, 92],
-  //     line: '',
-  //   };
-  // },
+  data() {
+    return {
+      legendWidth: 0,
+      gLayer1: () => ({})
+    };
+  },
   props,
   mounted() {
-
     const width = this.width;
     const height = this.height;
     const layer1Objects = this.layer1Objects;
@@ -122,6 +125,9 @@ export default {
     const g = svg.append('g');
     const gLayer2 = g.append("g").attr("id", "layer2");
     const gLayer1 = g.append("g").attr("id", "layer1");
+// console.log("gLayer1", gLayer1);
+    // this.gLayer1 = gLayer1;
+// console.log("this.gLayer1", this.gLayer1);
     const gLabelLayer2 = g.append("g").attr("id", "layer2_label");
     const gLabelLayer1 = g.append("g").attr("id", "layer1_label");
 
@@ -132,49 +138,7 @@ export default {
 
     const path = d3.geo.path().projection(projection);
     
-    ///////////////////////////////////////////////////////////////////////////
-    /////////////////////// legend common functions ///////////////////////////
-    ///////////////////////////////////////////////////////////////////////////
-    const getCountScale = function(maxCount, width) {
-      //Calculate the variables for the sort gradient
-      return d3.scale.linear()
-        .domain([0, maxCount])
-        .range([0, width]);
-    }
 
-    const getCountPoints = function(maxCount, width, size) {
-      //Calculate the variables for the sort gradient
-      const countScale = getCountScale(maxCount, size);
-
-      //Calculate the variables for the sort gradient
-      const countRange = countScale.domain();
-      countRange[2] = countRange[1] - countRange[0];
-      const countPoints = [];
-      for(var i = 0; i < size; i++) {
-        countPoints.push(i * countRange[2]/(size-1) + countRange[0]);
-      }
-
-      return countPoints;
-    }
-
-    const getColorScale = function(maxCount, colorRange) {
-
-      return d3.scale.linear()
-        .domain([0, maxCount/2, maxCount])
-        .range(colorRange.split(","));
-    }
-
-    const getXAxis = function(legendWidth, maxCount) {
-      const xScale = d3.scale.linear()
-       .range([-legendWidth/2, legendWidth/2])
-       .domain([ 0, maxCount　] );
-
-      return d3.svg.axis().orient("bottom")
-              .ticks(5)
-              //.tickFormat(formatPercent)
-              .scale(xScale);
-    }
-    
     ///////////////////////////////////////////////////////////////////////////
     ///////////////// adding common static gradients //////////////////////////
     ///////////////////////////////////////////////////////////////////////////
@@ -205,8 +169,8 @@ export default {
     ///////////////////////////////////////////////////////////////////////////
     //////////////// Adding the initial gradient for the legend ///////////////
     ///////////////////////////////////////////////////////////////////////////
-    const countPoints = getCountPoints(1, width, 10);
-    const countScale = getCountScale(1, width);
+    const countPoints = this.getCountPoints(1, width, 10);
+    const countScale = this.getCountScale(1, width);
 
     //Create the linearGradient
     commonGrads
@@ -232,7 +196,7 @@ export default {
 
     const gBox = g.node().getBBox();
 
-    const legendWidth = Math.min(width*0.8, 600);
+    this.legendWidth = Math.min(width*0.8, 600);
     //Color Legend container
     const legendsvg = g.append("g")
       .attr("id", "legendWrapper")
@@ -241,9 +205,9 @@ export default {
     //Draw the Rectangle
     legendsvg.append("rect")
       .attr("id", "legendRect")
-      .attr("x", -legendWidth/2)
+      .attr("x", -this.legendWidth/2)
       .attr("y", 0)
-      .attr("width", legendWidth)
+      .attr("width", this.legendWidth)
       .attr("height", 10)
       .style("fill", "url(#legend-traffic)");
       
@@ -256,7 +220,7 @@ export default {
       .text(layer1LegendTitle);
 
     //Define x-axis
-    const xAxis = getXAxis(legendWidth, 0);
+    const xAxis = this.getXAxis(this.legendWidth, 0);
 
     //Set up X axis
     legendsvg.append("g")
@@ -267,6 +231,7 @@ export default {
     // console.log("this.topojsonPath:", this.topojsonPath);
 
     d3.json(this.topojsonPath, function (error, json) {
+      let vm = this;
 
       const layer1Featues = topojson.feature(json, json.objects[layer1Objects]).features;
       const layer2Featues = topojson.feature(json, json.objects[layer2Objects]).features;
@@ -395,6 +360,7 @@ export default {
         });
 
       // Layer1 polygons
+// console.log("vm.gLayer1!!!!!!!!!!", vm.gLayer1);
       gLayer1.selectAll("path")
         .data(layer1Featues)
         .enter().append("path")
@@ -557,8 +523,157 @@ export default {
         });
     }
     /***** hover *****/
+  },
+  watch: {
+    layer1EventData: function(newData, oldData) {
+      // console.log("newData", newData);
+      // console.log("oldData", oldData);
+      this.visualizeLayer1Events(newData);
+    }
+  },
+  methods: {
 
+    visualizeLayer1Events(eventList) {
+      let vm = this;
+
+      var events = d3.entries(eventList);
+// console.log("events", events);
+      var maxCount = d3.max(events, function(d) {
+        // console.log("d", d);
+        // console.log("vm.layer1EventCountTag", vm.layer1EventCountTag);
+        return d.value[vm.layer1EventCountTag]; 
+      });
+// console.log("maxCount", maxCount);
+
+      ///////////////////////////////////////////////////////////////////////////
+      //////////////// Update the gradient for the legend ///////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+      var colorScale = this.getColorScale(maxCount, this.colorRange);
+
+      var countPoints = this.getCountPoints(maxCount, this.width, 10);
+
+      //Update the linearGradient
+      d3.select("#common_grads_def")
+        .selectAll("linearGradient")
+        .selectAll("stop")
+        .attr("stop-color",  function(d, i) { 
+          return colorScale(countPoints[i]); 
+        });
+
+      ///////////////////////////////////////////////////////////////////////////
+      ////////////////////////// Update the legend //////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+      var xAxis = this.getXAxis(this.legendWidth, maxCount);
+
+      d3.select("#axis")
+        .selectAll(".tick")
+        .remove();
+
+      d3.select("#axis")
+        .call(xAxis);
+
+
+      ///////////////////////////////////////////////////////////////////////////
+      //////////////// Set the dynamic gradient for layer1 //////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+      // const gLayer1 = d3.selectAll("#layer1");
+
+      // edit event count  
+      d3.select("#layer1").selectAll("path")
+        .filter(function(d){
+          if (d.type === "Feature") {
+            var featureCode = findprop(d, vm.layer1FeatureCode);
+            var element = eventList[featureCode];
+            
+            if (!element) {
+              d[vm.layer1EventCountTag] = 1;
+              return true;
+            } 
+            else {
+              var sortValue = element[vm.layer1EventCountTag];
+              if (d[vm.layer1EventCountTag]) {
+                if (sortValue != d[vm.layer1EventCountTag]) {
+                  d[vm.layer1EventCountTag] = sortValue;
+                  return true;
+                }
+              } 
+              else {
+                d[vm.layer1EventCountTag] = sortValue;
+                return true;
+              }                    
+            }
+          }
+          return false;
+        });
+
+      // edit event count
+      d3.select("#layer1_grads")
+        .selectAll("radialGradient")
+        .selectAll("stop")
+        .style("stop-color",  function(d, i) { 
+          return colorScale(d[vm.layer1EventCountTag]); 
+        });
+
+      d3.select("#layer1_hgrads")
+        .selectAll("radialGradient")
+        .selectAll("stop")
+        .filter(function(d){
+            return this.getAttribute("offset") === "100%"
+        })
+        .style("stop-color",  function(d, i) { 
+          return colorScale(d[vm.layer1EventCountTag]); 
+        });
+
+      d3.select("#layer1").selectAll("path")
+        .filter(function(d){
+          return d.type === "Feature"
+        })
+        .style("fill", function(d, i) {
+          return "url(#grad" + findprop(d, vm.layer1FeatureCode) + ")";
+        });
+    },
+  
+    ///////////////////////////////////////////////////////////////////////////
+    /////////////////////// legend common functions ///////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    getCountScale(maxCount, width) {
+      //Calculate the variables for the sort gradient
+      return d3.scale.linear()
+        .domain([0, maxCount])
+        .range([0, width]);
+    },
+    getCountPoints(maxCount, width, size) {
+      //Calculate the variables for the sort gradient
+      const countScale = this.getCountScale(maxCount, size);
+
+      //Calculate the variables for the sort gradient
+      const countRange = countScale.domain();
+      countRange[2] = countRange[1] - countRange[0];
+      const countPoints = [];
+      for(var i = 0; i < size; i++) {
+        countPoints.push(i * countRange[2]/(size-1) + countRange[0]);
+      }
+
+      return countPoints;
+    },
+    getColorScale(maxCount, colorRange) {
+
+      return d3.scale.linear()
+        .domain([0, maxCount/2, maxCount])
+        .range(colorRange.split(","));
+    },
+    getXAxis(legendWidth, maxCount) {
+      const xScale = d3.scale.linear()
+       .range([-legendWidth/2, legendWidth/2])
+       .domain([ 0, maxCount　] );
+
+      return d3.svg.axis().orient("bottom")
+              .ticks(5)
+              //.tickFormat(formatPercent)
+              .scale(xScale);
+    }
   }
+
 };
 </script>
 
