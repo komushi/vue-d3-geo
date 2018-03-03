@@ -534,62 +534,72 @@ export default {
 };
 </script>
 
-<!-- <style lang="sass">
+<style>
 @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
 
-svg 
-  font-size: 11px
-  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo'
-  font-weight: 300
-  margin: auto
-  display: block
+svg {
+  font-size: 11px;
+  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
+  font-weight: 300;
+  margin: auto;
+  display: block;
+}
 
-.background 
-  fill: none
-  pointer-events: all
+.background {
+  fill: none;
+  pointer-events: all;
+}
 
-.circle 
+.circle {
+}
 
-.layer1 
-  cursor: pointer
-
-.layer1:hover 
-  fill: orange
-
-
-.layer1.active
-  display:none
+.layer1 {
+  cursor: pointer;
+}
 
 
-.layer1-boundary
-  fill: none
-  stroke: white
-  stroke-dasharray: 2,2
-  stroke-linejoin: round
-  stroke-width: 1
+.layer1:hover {
+  fill: orange;
+}
 
+.layer1.active {
+  display:none;
+}
 
-.layer1LegendTitle 
-  fill: black
-  fill-opacity: 1
-  font-size: 18px
-  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo'
-  font-weight: 700
-  text-anchor: middle
+.layer1-boundary {
+  fill: none;
+  stroke: white;
+  stroke-dasharray: 2,2;
+  stroke-linejoin: round;
+  stroke-width: 1;
+}
 
+.layer1LegendTitle {
+  fill: black;
+  fill-opacity: 1;
+  font-size: 18px;
+  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
+  font-weight: 700;
+  text-anchor: middle;
+}
 
-.layer2 
-  stroke: white
-  stroke-width: 0.2
+.layer2 {
+  stroke: white;
+  stroke-width: 0.2;
+}
 
-.label 
-  fill: white
-  fill-opacity: 1
-  font-size: 18px
-  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo'
-  font-weight: 700
-  text-anchor: middle
-  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
+.label {
+  fill: white;
+  fill-opacity: 1;
+  font-size: 18px;
+  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
+  font-weight: 700;
+  text-anchor: middle;
+  text-shadow:
+    2px 2px 0 #000,
+    -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+}
 </style>
-
- -->

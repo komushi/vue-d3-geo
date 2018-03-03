@@ -9,6 +9,10 @@ import * as topojson from 'topojson';
 import findprop from '../utils/findprop';
 
 const props = {
+  // data: {
+  //   type: Array,
+  //   default: () => [],
+  // },
   topojsonPath: {
     type: String
   },
@@ -22,7 +26,7 @@ const props = {
   },
   colorRange: {
     type: String,
-    default: '#0d47a1,#0e2fdf'
+    default: '#0d47a1,#e3f2fd'
   },
   center: {
     type: String,
@@ -51,8 +55,14 @@ const props = {
 };
 
 export default {
-  name: 'd3-geo-static',
-  // props,
+  name: 'd3-geo-staic',
+  // data() {
+  //   return {
+  //     data: [99, 71, 78, 25, 36, 92],
+  //     line: '',
+  //   };
+  // },
+  props,
   mounted() {
 
     const layerObjects = this.layerObjects;
@@ -60,7 +70,7 @@ export default {
     const layerFeatureCode = this.layerFeatureCode;
     const layerFeatureName = this.layerFeatureName;
     const featureNameStyle = this.featureNameStyle;
-    
+
     const svg = d3.select(this.$el)
       .append('svg')
       .attr('width', this.width)
@@ -223,6 +233,8 @@ export default {
   }
 };
 </script>
+
+
 
 <style>
 @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
