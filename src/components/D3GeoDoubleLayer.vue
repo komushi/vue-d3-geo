@@ -59,6 +59,26 @@ const props = {
   layer2FeatureCode: {
     type: String,
     default: 'properties.block_code'
+  },
+  layer1EventData: {
+    type: String,
+    default: 'districtRank'
+  },
+  layer2EventData: {
+    type: String,
+    default: 'circleData'
+  },
+  layer2EventCount: {
+    type: String,
+    default: 'dropoffCount'
+  },
+  onReceiveEvents: {
+    type: String,
+    default: 'subTaxiEventsFrom'
+  },
+  onStopEvents: {
+    type: String,
+    default: 'unsubTaxiEvents'
   }
 };
 
@@ -73,6 +93,8 @@ export default {
   props,
   mounted() {
 
+    const width = this.width;
+    const height = this.height;
     const layer1Objects = this.layer1Objects;
     const layer2Objects = this.layer2Objects;
     const colorRange = this.colorRange;
@@ -81,8 +103,10 @@ export default {
     const layer2FeatureCode = this.layer2FeatureCode;
     const layer2FeatureName = this.layer2FeatureName;
     const layer1LegendTitle = this.layer1LegendTitle;
-    const width = this.width;
-    const height = this.height;
+    const onReceiveEvents = this.onReceiveEvents;
+    const onStopEvents = this.onStopEvents;
+    let vm = this;
+
 
     const svg = d3.select(this.$el)
       .append('svg')
@@ -240,7 +264,7 @@ export default {
       .attr("transform", "translate(0," + (10) + ")")
       .call(xAxis);
 
-    console.log("this.topojsonPath:", this.topojsonPath);
+    // console.log("this.topojsonPath:", this.topojsonPath);
 
     d3.json(this.topojsonPath, function (error, json) {
 
@@ -469,6 +493,9 @@ export default {
       const featureCode = findprop(d, layer1FeatureCode);
       // scope.onStopEvents();
       // scope.onReceiveEvents({feature: featureCode});
+
+      vm.$emit(onReceiveEvents);
+      vm.$emit(onStopEvents);
     }
 
     function reset() {
@@ -494,6 +521,7 @@ export default {
         .style("display", "none");
 
       // scope.onStopEvents();
+      vm.$emit(onStopEvents);
     };
     /***** click to zoom *****/
 
