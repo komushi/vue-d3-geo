@@ -10,8 +10,8 @@
       :layer1-event-data="districtRankList"
       layer1-event-count-tag="dropoffCount"
       layer1-legend-title="１５分以内の降車イベント"
-      on-receive-events="subTaxiEventsFrom"
-      on-stop-events="unsubTaxiEvents"
+      @on-receive-events="subTaxiEventsFrom"
+      @on-stop-events="unsubTaxiEvents"
       >    
     </d3-geo-double-layer>
   </div>

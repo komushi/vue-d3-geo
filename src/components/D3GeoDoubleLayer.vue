@@ -76,35 +76,34 @@ const props = {
     type: String,
     default: '３０分以内の降車イベント'
   },
-  onReceiveEvents: {
-    type: String,
-    default: 'subTaxiEventsFrom'
-  },
-  onStopEvents: {
-    type: String,
-    default: 'unsubTaxiEvents'
-  }
+  // onReceiveEvents: {
+  //   type: String,
+  //   default: 'subTaxiEventsFrom'
+  // },
+  // onStopEvents: {
+  //   type: String,
+  //   default: 'unsubTaxiEvents'
+  // }
 };
 
 export default {
   name: 'd3-geo-double-layer',
   data() {
     return {
-      legendWidth: 0,
-      gLayer1: () => ({})
+      legendWidth: 0
     };
   },
   props,
   mounted() {
-    const width = this.width;
-    const height = this.height;
-    const layer1Objects = this.layer1Objects;
-    const layer2Objects = this.layer2Objects;
-    const colorRange = this.colorRange;
-    const layer1FeatureCode = this.layer1FeatureCode;
-    const layer1FeatureName = this.layer1FeatureName;
-    const layer2FeatureCode = this.layer2FeatureCode;
-    const layer2FeatureName = this.layer2FeatureName;
+    // const width = this.width;
+    // const height = this.height;
+    // const layer1Objects = this.layer1Objects;
+    // const layer2Objects = this.layer2Objects;
+    // const colorRange = this.colorRange;
+    // const layer1FeatureCode = this.layer1FeatureCode;
+    // const layer1FeatureName = this.layer1FeatureName;
+    // const layer2FeatureCode = this.layer2FeatureCode;
+    // const layer2FeatureName = this.layer2FeatureName;
     const layer1LegendTitle = this.layer1LegendTitle;
     const onReceiveEvents = this.onReceiveEvents;
     const onStopEvents = this.onStopEvents;
@@ -113,13 +112,13 @@ export default {
 
     const svg = d3.select(this.$el)
       .append('svg')
-      .attr('width', width)
-      .attr('height', height);
+      .attr('width', vm.width)
+      .attr('height', vm.height);
 
     svg.append("rect")
       .attr("class", "background")
-      .attr("width", width)
-      .attr("height", height)
+      .attr("width", vm.width)
+      .attr("height", vm.height)
       .on("click", reset);
 
     const g = svg.append('g');
@@ -134,7 +133,7 @@ export default {
     const projection = d3.geo.mercator()
       .center(this.center.split(","))
       .scale(this.scale)
-      .translate([width / 2, height / 2]);
+      .translate([vm.width / 2, vm.height / 2]);
 
     const path = d3.geo.path().projection(projection);
     
@@ -169,8 +168,8 @@ export default {
     ///////////////////////////////////////////////////////////////////////////
     //////////////// Adding the initial gradient for the legend ///////////////
     ///////////////////////////////////////////////////////////////////////////
-    const countPoints = this.getCountPoints(1, width, 10);
-    const countScale = this.getCountScale(1, width);
+    const countPoints = this.getCountPoints(1, vm.width, 10);
+    const countScale = this.getCountScale(1, vm.width);
 
     //Create the linearGradient
     commonGrads
@@ -182,10 +181,10 @@ export default {
       .data(d3.range(10))                
       .enter().append("stop") 
       .attr("offset", function(d,i) { 
-        return countScale( countPoints[i] )/width;
+        return countScale( countPoints[i] ) / vm.width;
       })   
       .attr("stop-color", function(d,i) { 
-        return colorRange.split(",")[0]; 
+        return vm.colorRange.split(",")[0]; 
       });
 
 
@@ -196,11 +195,11 @@ export default {
 
     const gBox = g.node().getBBox();
 
-    this.legendWidth = Math.min(width*0.8, 600);
+    this.legendWidth = Math.min(vm.width * 0.8, 600);
     //Color Legend container
     const legendsvg = g.append("g")
       .attr("id", "legendWrapper")
-      .attr("transform", "translate(" + (width/2) + "," + (height * 0.95) + ")");
+      .attr("transform", "translate(" + (vm.width / 2) + "," + (vm.height * 0.95) + ")");
 
     //Draw the Rectangle
     legendsvg.append("rect")
@@ -231,13 +230,12 @@ export default {
     // console.log("this.topojsonPath:", this.topojsonPath);
 
     d3.json(this.topojsonPath, function (error, json) {
-      let vm = this;
 
-      const layer1Featues = topojson.feature(json, json.objects[layer1Objects]).features;
-      const layer2Featues = topojson.feature(json, json.objects[layer2Objects]).features;
-      const meshLayer1 = topojson.mesh(json, json.objects[layer1Objects], function(a, b) { return a !== b; });
+      const layer1Featues = topojson.feature(json, json.objects[vm.layer1Objects]).features;
+      const layer2Featues = topojson.feature(json, json.objects[vm.layer2Objects]).features;
+      const meshLayer1 = topojson.mesh(json, json.objects[vm.layer1Objects], function(a, b) { return a !== b; });
 
-      const initColor = colorRange.split(",")[0];
+      const initColor = vm.colorRange.split(",")[0];
 
       // fill color gradient process
       const hgrads = g.append("defs").attr("id", "layer1_hgrads").selectAll("radialGradient")
@@ -252,7 +250,7 @@ export default {
         .attr("r", "100%")
         .attr("id", function(d, i) { 
           
-          return "hgrad" + findprop(d, layer1FeatureCode);
+          return "hgrad" + findprop(d, vm.layer1FeatureCode);
           // return "hgrad" + (i + 1);
         });
       
@@ -280,7 +278,7 @@ export default {
         .attr("cy", "50%")
         .attr("r", "35%")
         .attr("id", function(d, i) { 
-          return "grad" + findprop(d, layer1FeatureCode);
+          return "grad" + findprop(d, vm.layer1FeatureCode);
           // return "grad" + (i + 1);
         });
 
@@ -301,14 +299,14 @@ export default {
       const mouseoverLayer1 = function(p) {
         d3.select(this)
           .style("fill", function(d) {
-              return "url(#hgrad" + findprop(d, layer1FeatureCode) + ")";
+              return "url(#hgrad" + findprop(d, vm.layer1FeatureCode) + ")";
           });
       }
       
       const mouseoutLayer1 = function (p) {
         d3.select(this)
           .style("fill", function(d) { 
-            return "url(#grad" + findprop(d, layer1FeatureCode) + ")";
+            return "url(#grad" + findprop(d, vm.layer1FeatureCode) + ")";
           });
       }
 
@@ -318,22 +316,22 @@ export default {
         .enter().append("path")
         .attr("d", path)
         .attr("fill", function(d, i) {
-            return "url(#grad" + findprop(d, layer1FeatureCode) + ")";
+            return "url(#grad" + findprop(d, vm.layer1FeatureCode) + ")";
             // return "#bbdefb";
         })
         .style("fill-opacity", 0)
         .style("display", "none")
         .attr("layer1-feature-code", function(d) {
-          return findprop(d, layer1FeatureCode);
+          return findprop(d, vm.layer1FeatureCode);
         })
         .attr("layer1-feature-name", function(d) {
-          return findprop(d, layer1FeatureName);
+          return findprop(d, vm.layer1FeatureName);
         })
         .attr("layer2-feature-code", function(d) { 
-          return findprop(d, layer2FeatureCode);
+          return findprop(d, vm.layer2FeatureCode);
         })
         .attr("layer2-feature-name", function(d) { 
-          return findprop(d, layer2FeatureName);
+          return findprop(d, vm.layer2FeatureName);
         })
         .attr("class", "layer2")
         .on("click", layer2Clicked)
@@ -353,10 +351,10 @@ export default {
         .attr("dy", ".35em")
         .attr("pointer-events", "none")
         .text(function(d) { 
-          return findprop(d, layer2FeatureName); 
+          return findprop(d, vm.layer2FeatureName); 
         })
         .attr("layer2-feature-code", function(d) { 
-          return findprop(d, layer2FeatureCode);
+          return findprop(d, vm.layer2FeatureCode);
         });
 
       // Layer1 polygons
@@ -367,13 +365,13 @@ export default {
         .attr("class", "layer1")
         .attr("d", path)
         .style("fill", function(d, i) {
-          return "url(#grad" + findprop(d, layer1FeatureCode) + ")";
+          return "url(#grad" + findprop(d, vm.layer1FeatureCode) + ")";
         })
         .attr("layer1-feature-code", function(d) {
-          return findprop(d, layer1FeatureCode);
+          return findprop(d, vm.layer1FeatureCode);
         })
         .attr("layer1-feature-name", function(d) {
-          return findprop(d, layer1FeatureName);
+          return findprop(d, vm.layer1FeatureName);
         })
         .on("click", layer1Clicked)
         .on("mouseover", mouseoverLayer1)
@@ -396,10 +394,10 @@ export default {
         .attr("dy", ".35em")
         .attr("pointer-events", "none")
         .text(function(d) { 
-          return findprop(d, layer1FeatureName); 
+          return findprop(d, vm.layer1FeatureName); 
         })
         .attr("layer1-feature-code", function(d) { 
-          return findprop(d, layer1FeatureCode);
+          return findprop(d, vm.layer1FeatureCode);
         });
 
     });
@@ -428,13 +426,15 @@ export default {
 
 
     const zoom = function(d) {
+      console.log("this is zoom");
+
       const bounds = path.bounds(d),
           dx = bounds[1][0] - bounds[0][0],
           dy = bounds[1][1] - bounds[0][1],
           x = (bounds[0][0] + bounds[1][0]) / 2,
           y = (bounds[0][1] + bounds[1][1]) / 2,
-          scale = .9 / Math.max(dx / width, dy / height),
-          translate = [width / 2 - scale * x, height / 2 - scale * y];
+          scale = .9 / Math.max(dx / vm.width, dy / vm.height),
+          translate = [vm.width / 2 - scale * x, vm.height / 2 - scale * y];
 
       g.transition()
         .duration(750)
@@ -456,12 +456,12 @@ export default {
 
 
       // callback to notify the specified feature is ready to receive location events
-      const featureCode = findprop(d, layer1FeatureCode);
+      const featureCode = findprop(d, vm.layer1FeatureCode);
       // scope.onStopEvents();
       // scope.onReceiveEvents({feature: featureCode});
 
-      vm.$emit(onReceiveEvents);
-      vm.$emit(onStopEvents);
+      vm.$emit('on-receive-events');
+      vm.$emit('on-stop-events');
     }
 
     function reset() {
@@ -487,7 +487,7 @@ export default {
         .style("display", "none");
 
       // scope.onStopEvents();
-      vm.$emit(onStopEvents);
+      vm.$emit('on-stop-events');
     };
     /***** click to zoom *****/
 
@@ -495,7 +495,7 @@ export default {
     const mouseoverLayer2 = function(p) {
       gLabelLayer2.selectAll("text")
         .filter(function(d){
-          return findprop(p, layer2FeatureCode) == findprop(d, layer2FeatureCode);
+          return findprop(p, vm.layer2FeatureCode) == findprop(d, vm.layer2FeatureCode);
         })
         .transition()
         .style("fill-opacity", 1)
@@ -503,14 +503,14 @@ export default {
 
       d3.select(this)
         .style("fill", function(d) {
-            return "url(#hgrad" + findprop(d, layer1FeatureCode) + ")";
+            return "url(#hgrad" + findprop(d, vm.layer1FeatureCode) + ")";
         });
     }
     
     const mouseoutLayer2 = function (p) {
       gLabelLayer2.selectAll("text")
         .filter(function(d){
-          return findprop(p, layer2FeatureCode) == findprop(d, layer2FeatureCode);
+          return findprop(p, vm.layer2FeatureCode) == findprop(d, vm.layer2FeatureCode);
         })
         .transition()
         .style("fill-opacity", 0)
@@ -519,7 +519,7 @@ export default {
 
       d3.select(this)
         .style("fill", function(d) {
-            return "url(#grad" + findprop(d, layer1FeatureCode) + ")";
+            return "url(#grad" + findprop(d, vm.layer1FeatureCode) + ")";
         });
     }
     /***** hover *****/
@@ -548,9 +548,9 @@ export default {
       ///////////////////////////////////////////////////////////////////////////
       //////////////// Update the gradient for the legend ///////////////////////
       ///////////////////////////////////////////////////////////////////////////
-      var colorScale = this.getColorScale(maxCount, this.colorRange);
+      var colorScale = this.getColorScale(maxCount, vm.colorRange);
 
-      var countPoints = this.getCountPoints(maxCount, this.width, 10);
+      var countPoints = this.getCountPoints(maxCount, vm.width, 10);
 
       //Update the linearGradient
       d3.select("#common_grads_def")
