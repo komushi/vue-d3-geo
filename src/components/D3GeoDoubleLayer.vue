@@ -64,7 +64,7 @@ const props = {
     type: Object
   },
   layer2EventData: {
-    type: Object
+    type: Array
   },
   layer1EventCountTag: {
     type: String,
@@ -105,9 +105,18 @@ export default {
     const gLabelLayer1 = g.append("g").attr("id", "layer1_label");
 
     const projection = d3.geo.mercator()
-      .center(this.center.split(","))
-      .scale(this.scale)
+      .center(vm.center.split(","))
+      .scale(vm.scale)
       .translate([vm.width / 2, vm.height / 2]);
+console.log(projection);
+
+//     const projection = function(point) {
+//       return d3.geo.mercator()
+//         .center(vm.center.split(","))
+//         .scale(vm.scale)
+//         .translate([vm.width / 2, vm.height / 2]);
+//     }
+// console.log(projection);
 
     const path = d3.geo.path().projection(projection);
     
@@ -142,8 +151,8 @@ export default {
     ///////////////////////////////////////////////////////////////////////////
     //////////////// Adding the initial gradient for the legend ///////////////
     ///////////////////////////////////////////////////////////////////////////
-    const countPoints = this.getCountPoints(1, vm.width, 10);
-    const countScale = this.getCountScale(1, vm.width);
+    const countPoints = vm.getCountPoints(1, vm.width, 10);
+    const countScale = vm.getCountScale(1, vm.width);
 
     //Create the linearGradient
     commonGrads
@@ -169,7 +178,7 @@ export default {
 
     const gBox = g.node().getBBox();
 
-    this.legendWidth = Math.min(vm.width * 0.8, 600);
+    vm.legendWidth = Math.min(vm.width * 0.8, 600);
     //Color Legend container
     const legendsvg = g.append("g")
       .attr("id", "legendWrapper")
@@ -178,9 +187,9 @@ export default {
     //Draw the Rectangle
     legendsvg.append("rect")
       .attr("id", "legendRect")
-      .attr("x", -this.legendWidth/2)
+      .attr("x", -vm.legendWidth/2)
       .attr("y", 0)
-      .attr("width", this.legendWidth)
+      .attr("width", vm.legendWidth)
       .attr("height", 10)
       .style("fill", "url(#legend-traffic)");
       
@@ -193,7 +202,7 @@ export default {
       .text(vm.layer1LegendTitle);
 
     //Define x-axis
-    const xAxis = this.getXAxis(this.legendWidth, 0);
+    const xAxis = vm.getXAxis(vm.legendWidth, 0);
 
     //Set up X axis
     legendsvg.append("g")
@@ -203,7 +212,7 @@ export default {
 
     // console.log("this.topojsonPath:", this.topojsonPath);
 
-    d3.json(this.topojsonPath, function (error, json) {
+    d3.json(vm.topojsonPath, function (error, json) {
 
       const layer1Featues = topojson.feature(json, json.objects[vm.layer1Objects]).features;
       const layer2Featues = topojson.feature(json, json.objects[vm.layer2Objects]).features;
@@ -400,8 +409,6 @@ export default {
 
 
     const zoom = function(d) {
-      console.log("this is zoom");
-
       const bounds = path.bounds(d),
           dx = bounds[1][0] - bounds[0][0],
           dy = bounds[1][1] - bounds[0][1],
@@ -432,7 +439,7 @@ export default {
       // callback to notify the specified feature is ready to receive location events
       const featureCode = findprop(d, vm.layer1FeatureCode);
 
-      vm.$emit('on-receive-events', {feature: featureCode});
+      vm.$emit('on-receive-events', featureCode);
       vm.$emit('on-stop-events');
     }
 
@@ -525,9 +532,9 @@ export default {
       ///////////////////////////////////////////////////////////////////////////
       //////////////// Update the gradient for the legend ///////////////////////
       ///////////////////////////////////////////////////////////////////////////
-      var colorScale = this.getColorScale(maxCount, vm.colorRange);
+      var colorScale = vm.getColorScale(maxCount, vm.colorRange);
 
-      var countPoints = this.getCountPoints(maxCount, vm.width, 10);
+      var countPoints = vm.getCountPoints(maxCount, vm.width, 10);
 
       //Update the linearGradient
       d3.select("#common_grads_def")
@@ -540,7 +547,7 @@ export default {
       ///////////////////////////////////////////////////////////////////////////
       ////////////////////////// Update the legend //////////////////////////////
       ///////////////////////////////////////////////////////////////////////////
-      var xAxis = this.getXAxis(this.legendWidth, maxCount);
+      var xAxis = vm.getXAxis(vm.legendWidth, maxCount);
 
       d3.select("#axis")
         .selectAll(".tick")
@@ -612,7 +619,7 @@ export default {
     ///////////////////////////////////////////////////////////////////////////
     ///////// Set the style of the legned and map objects on Layer2 ///////////
     ///////////////////////////////////////////////////////////////////////////
-    visualizeLayer2Events(eventList) {
+    visualizeLayer2Events(data) {
       d3.selectAll('circle')
         .data(data)
         .enter().append('circle')
