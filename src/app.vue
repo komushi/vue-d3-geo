@@ -9,7 +9,6 @@
       topojson-path="https://s3-ap-northeast-1.amazonaws.com/angular-example/tokyo_23_blocks_districts_final.json"
       :layer1-event-data="districtRankList"
       layer1-event-count-tag="dropoffCount"
-      layer1-legend-title="１５分以内の降車イベント"
       @on-receive-events="subTaxiEventsFrom"
       @on-stop-events="unsubTaxiEvents"
       >    
@@ -33,8 +32,9 @@ export default {
     };
   },
   methods: {
-    subTaxiEventsFrom() {
+    subTaxiEventsFrom(payload) {
       console.log('subTaxiEventsFrom');
+      console.log('payload', payload);
     },
     unsubTaxiEvents() {
       console.log('unsubTaxiEvents');

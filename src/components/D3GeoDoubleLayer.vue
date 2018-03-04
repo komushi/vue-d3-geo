@@ -61,12 +61,10 @@ const props = {
     default: 'properties.block_code'
   },
   layer1EventData: {
-    type: Object,
-    default: null
+    type: Object
   },
   layer2EventData: {
-    type: String,
-    default: 'circleData'
+    type: Object
   },
   layer1EventCountTag: {
     type: String,
@@ -74,16 +72,8 @@ const props = {
   },
   layer1LegendTitle: {
     type: String,
-    default: '３０分以内の降車イベント'
-  },
-  // onReceiveEvents: {
-  //   type: String,
-  //   default: 'subTaxiEventsFrom'
-  // },
-  // onStopEvents: {
-  //   type: String,
-  //   default: 'unsubTaxiEvents'
-  // }
+    default: 'Drop-off events in the last 30 minutes'
+  }
 };
 
 export default {
@@ -95,20 +85,7 @@ export default {
   },
   props,
   mounted() {
-    // const width = this.width;
-    // const height = this.height;
-    // const layer1Objects = this.layer1Objects;
-    // const layer2Objects = this.layer2Objects;
-    // const colorRange = this.colorRange;
-    // const layer1FeatureCode = this.layer1FeatureCode;
-    // const layer1FeatureName = this.layer1FeatureName;
-    // const layer2FeatureCode = this.layer2FeatureCode;
-    // const layer2FeatureName = this.layer2FeatureName;
-    const layer1LegendTitle = this.layer1LegendTitle;
-    const onReceiveEvents = this.onReceiveEvents;
-    const onStopEvents = this.onStopEvents;
     let vm = this;
-
 
     const svg = d3.select(this.$el)
       .append('svg')
@@ -121,12 +98,9 @@ export default {
       .attr("height", vm.height)
       .on("click", reset);
 
-    const g = svg.append('g');
+    const g = svg.append('g').attr("id", "base");
     const gLayer2 = g.append("g").attr("id", "layer2");
     const gLayer1 = g.append("g").attr("id", "layer1");
-// console.log("gLayer1", gLayer1);
-    // this.gLayer1 = gLayer1;
-// console.log("this.gLayer1", this.gLayer1);
     const gLabelLayer2 = g.append("g").attr("id", "layer2_label");
     const gLabelLayer1 = g.append("g").attr("id", "layer1_label");
 
@@ -216,7 +190,7 @@ export default {
       .attr("x", 0)
       .attr("y", -10)
       .style("text-anchor", "middle")
-      .text(layer1LegendTitle);
+      .text(vm.layer1LegendTitle);
 
     //Define x-axis
     const xAxis = this.getXAxis(this.legendWidth, 0);
@@ -335,8 +309,8 @@ export default {
         })
         .attr("class", "layer2")
         .on("click", layer2Clicked)
-        .on("mouseover", mouseoverLayer2)
-        .on("mouseout", mouseoutLayer2);
+        .on("mouseover", vm.mouseoverLayer2)
+        .on("mouseout", vm.mouseoutLayer2);
 
       // Layer2 labels
       gLabelLayer2.selectAll("text")
@@ -358,7 +332,7 @@ export default {
         });
 
       // Layer1 polygons
-// console.log("vm.gLayer1!!!!!!!!!!", vm.gLayer1);
+
       gLayer1.selectAll("path")
         .data(layer1Featues)
         .enter().append("path")
@@ -457,10 +431,8 @@ export default {
 
       // callback to notify the specified feature is ready to receive location events
       const featureCode = findprop(d, vm.layer1FeatureCode);
-      // scope.onStopEvents();
-      // scope.onReceiveEvents({feature: featureCode});
 
-      vm.$emit('on-receive-events');
+      vm.$emit('on-receive-events', {feature: featureCode});
       vm.$emit('on-stop-events');
     }
 
@@ -491,7 +463,9 @@ export default {
     };
     /***** click to zoom *****/
 
-    /***** hover *****/
+    ///////////////////////////////////////////////////////////////////////////
+    /////////////////////// Mouse over Layer2 Process /////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     const mouseoverLayer2 = function(p) {
       gLabelLayer2.selectAll("text")
         .filter(function(d){
@@ -506,7 +480,10 @@ export default {
             return "url(#hgrad" + findprop(d, vm.layer1FeatureCode) + ")";
         });
     }
-    
+
+    ///////////////////////////////////////////////////////////////////////////
+    /////////////////////// Mouse out Layer2 Process /////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     const mouseoutLayer2 = function (p) {
       gLabelLayer2.selectAll("text")
         .filter(function(d){
@@ -522,28 +499,28 @@ export default {
             return "url(#grad" + findprop(d, vm.layer1FeatureCode) + ")";
         });
     }
-    /***** hover *****/
+
   },
   watch: {
     layer1EventData: function(newData, oldData) {
-      // console.log("newData", newData);
-      // console.log("oldData", oldData);
       this.visualizeLayer1Events(newData);
+    },
+    layer2EventData: function(newData, oldData) {
+      this.visualizeLayer2Events(newData);
     }
   },
   methods: {
-
+    ///////////////////////////////////////////////////////////////////////////
+    ///////// Set the style of the legned and map objects on Layer1 ///////////
+    ///////////////////////////////////////////////////////////////////////////
     visualizeLayer1Events(eventList) {
       let vm = this;
 
       var events = d3.entries(eventList);
-// console.log("events", events);
+
       var maxCount = d3.max(events, function(d) {
-        // console.log("d", d);
-        // console.log("vm.layer1EventCountTag", vm.layer1EventCountTag);
         return d.value[vm.layer1EventCountTag]; 
       });
-// console.log("maxCount", maxCount);
 
       ///////////////////////////////////////////////////////////////////////////
       //////////////// Update the gradient for the legend ///////////////////////
@@ -632,7 +609,33 @@ export default {
           return "url(#grad" + findprop(d, vm.layer1FeatureCode) + ")";
         });
     },
-  
+    ///////////////////////////////////////////////////////////////////////////
+    ///////// Set the style of the legned and map objects on Layer2 ///////////
+    ///////////////////////////////////////////////////////////////////////////
+    visualizeLayer2Events(eventList) {
+      d3.selectAll('circle')
+        .data(data)
+        .enter().append('circle')
+        .style('opacity', 0)
+        .attr("class", "circle")
+        .style("fill", function(d, i) {
+          return "url(#circleGrad1)";
+        })
+        .attr('cx', function(d) { 
+          return projection(d)[0];
+        })
+        .attr('cy', function(d) { 
+          return projection(d)[1];
+        })
+        .attr('r', 2)
+      .transition()
+        .delay(function(d,i) { return i * 100; })
+        .style('opacity', 1)
+      .transition()
+        .delay(function(d,i) { return i * 100 + 250 + 100; })
+        .style('opacity', 0)
+        .remove();
+    },
     ///////////////////////////////////////////////////////////////////////////
     /////////////////////// legend common functions ///////////////////////////
     ///////////////////////////////////////////////////////////////////////////
