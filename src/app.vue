@@ -154,11 +154,13 @@ export default {
               dot = this.coordinates.slice(to, from);
             }
             this.circleData = dot;
-          }, 1000);  
+          }, 1500);  
       }
     },
     unsubTaxiEvents() {
       console.log('unsubTaxiEvents');
+      // clearInterval(timer);
+      
     },
     generateData() {
       let districtRank = {};

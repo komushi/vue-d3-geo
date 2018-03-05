@@ -80,7 +80,8 @@ export default {
   name: 'd3-geo-double-layer',
   data() {
     return {
-      legendWidth: 0
+      legendWidth: 0,
+      projection: {}
     };
   },
   props,
@@ -104,21 +105,12 @@ export default {
     const gLabelLayer2 = g.append("g").attr("id", "layer2_label");
     const gLabelLayer1 = g.append("g").attr("id", "layer1_label");
 
-    const projection = d3.geo.mercator()
+    this.projection = d3.geo.mercator()
       .center(vm.center.split(","))
       .scale(vm.scale)
       .translate([vm.width / 2, vm.height / 2]);
-console.log(projection);
 
-//     const projection = function(point) {
-//       return d3.geo.mercator()
-//         .center(vm.center.split(","))
-//         .scale(vm.scale)
-//         .translate([vm.width / 2, vm.height / 2]);
-//     }
-// console.log(projection);
-
-    const path = d3.geo.path().projection(projection);
+    const path = d3.geo.path().projection(this.projection);
     
 
     ///////////////////////////////////////////////////////////////////////////
@@ -620,7 +612,9 @@ console.log(projection);
     ///////// Set the style of the legned and map objects on Layer2 ///////////
     ///////////////////////////////////////////////////////////////////////////
     visualizeLayer2Events(data) {
-      d3.selectAll('circle')
+      let vm = this;
+
+      d3.select("#base").selectAll('circle')
         .data(data)
         .enter().append('circle')
         .style('opacity', 0)
@@ -629,10 +623,10 @@ console.log(projection);
           return "url(#circleGrad1)";
         })
         .attr('cx', function(d) { 
-          return projection(d)[0];
+          return vm.projection(d)[0];
         })
         .attr('cy', function(d) { 
-          return projection(d)[1];
+          return vm.projection(d)[1];
         })
         .attr('r', 2)
       .transition()
