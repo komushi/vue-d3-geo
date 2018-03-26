@@ -378,9 +378,11 @@ export default {
     });
 
     /***** click to zoom *****/
-    var active = d3.select(null);
+    let active = d3.select(null);
 
     const layer2Clicked = function(d) {
+      console.log("layer2Clicked");
+      // console.log("active.node()", active.node());
       if (active.node()) {
         if (this.getAttribute("layer1-feature-code") == active.node().getAttribute("layer1-feature-code")) {
           return reset();
@@ -389,6 +391,9 @@ export default {
     }
 
     const layer1Clicked = function(d) {
+      console.log("layer1Clicked");
+      // console.log("active.node()", active.node());
+      // console.log("this", this);
       if (active.node() === this) {
         return reset();
       }
@@ -430,12 +435,13 @@ export default {
 
       // callback to notify the specified feature is ready to receive location events
       const featureCode = findprop(d, vm.layer1FeatureCode);
-
-      vm.$emit('on-receive-events', featureCode);
+      // console.log("featureCode", featureCode);
       vm.$emit('on-stop-events');
+      vm.$emit('on-receive-events', featureCode);
     }
 
     function reset() {
+      console.log("reset");
       active.classed("active", false);
       active = d3.select(null);
 
@@ -515,18 +521,18 @@ export default {
     visualizeLayer1Events(eventList) {
       let vm = this;
 
-      var events = d3.entries(eventList);
+      const events = d3.entries(eventList);
 
-      var maxCount = d3.max(events, function(d) {
+      const maxCount = d3.max(events, function(d) {
         return d.value[vm.layer1EventCountTag]; 
       });
 
       ///////////////////////////////////////////////////////////////////////////
       //////////////// Update the gradient for the legend ///////////////////////
       ///////////////////////////////////////////////////////////////////////////
-      var colorScale = vm.getColorScale(maxCount, vm.colorRange);
+      const colorScale = vm.getColorScale(maxCount, vm.colorRange);
 
-      var countPoints = vm.getCountPoints(maxCount, vm.width, 10);
+      const countPoints = vm.getCountPoints(maxCount, vm.width, 10);
 
       //Update the linearGradient
       d3.select("#common_grads_def")
@@ -539,7 +545,7 @@ export default {
       ///////////////////////////////////////////////////////////////////////////
       ////////////////////////// Update the legend //////////////////////////////
       ///////////////////////////////////////////////////////////////////////////
-      var xAxis = vm.getXAxis(vm.legendWidth, maxCount);
+      const xAxis = vm.getXAxis(vm.legendWidth, maxCount);
 
       d3.select("#axis")
         .selectAll(".tick")
@@ -558,15 +564,15 @@ export default {
       d3.select("#layer1").selectAll("path")
         .filter(function(d){
           if (d.type === "Feature") {
-            var featureCode = findprop(d, vm.layer1FeatureCode);
-            var element = eventList[featureCode];
+            const featureCode = findprop(d, vm.layer1FeatureCode);
+            const element = eventList[featureCode];
             
             if (!element) {
               d[vm.layer1EventCountTag] = 1;
               return true;
             } 
             else {
-              var sortValue = element[vm.layer1EventCountTag];
+              const sortValue = element[vm.layer1EventCountTag];
               if (d[vm.layer1EventCountTag]) {
                 if (sortValue != d[vm.layer1EventCountTag]) {
                   d[vm.layer1EventCountTag] = sortValue;
@@ -612,6 +618,7 @@ export default {
     ///////// Set the style of the legned and map objects on Layer2 ///////////
     ///////////////////////////////////////////////////////////////////////////
     visualizeLayer2Events(data) {
+      console.log(data);
       let vm = this;
 
       d3.select("#base").selectAll('circle')
@@ -654,7 +661,7 @@ export default {
       const countRange = countScale.domain();
       countRange[2] = countRange[1] - countRange[0];
       const countPoints = [];
-      for(var i = 0; i < size; i++) {
+      for(let i = 0; i < size; i++) {
         countPoints.push(i * countRange[2]/(size-1) + countRange[0]);
       }
 

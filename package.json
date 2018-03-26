@@ -1,9 +1,9 @@
 {
   "name": "vue-d3-geo",
-  "version": "0.0.51",
+  "version": "0.0.52",
   "description": "A D3 Geo Vue.js Library",
   "author": "Lei Xu <komushi@gmail.com>",
-  "main": "dist/lib/vue-d3-geo.min.js",
+  "main": "src/lib.js",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -16,9 +16,10 @@
     "build:docs": "node build/build.js"
   },
   "dependencies": {
-    "vue": "^2.3.3",
+    "axios": "^0.18.0",
     "d3": "3.5.*",
-    "topojson": "1.*"
+    "topojson": "1.*",
+    "vue": "^2.3.3"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
