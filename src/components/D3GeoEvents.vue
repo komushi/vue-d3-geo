@@ -89,9 +89,7 @@ export default {
 
     const path = d3.geo.path().projection(this.projection);
     
-    const color = d3.scale.linear().domain([1, parseInt(vm.topNumber)])
-                  .interpolate(d3.interpolateHcl)
-                  .range(vm.colorRange.split(","));
+    const colorScale = vm.getColorScale(vm.topNumber, vm.colorRange);
 
     ///////////////////////////////////////////////////////////////////////////
     ////////////////// adding from/to gradients ///////////////////////////////
@@ -118,7 +116,7 @@ export default {
     fromGrads.append("stop")
         .attr("offset", "100%")
         .style("stop-color",  function(d, i) { 
-          return color(i + 1); 
+          return colorScale(i + 1); 
         })
         .style("stop-opacity", "1");
 
@@ -147,7 +145,7 @@ export default {
     toGrads.append("stop")
         .attr("offset", "100%")
         .style("stop-color",  function(d, i) { 
-          return color(i + 1); 
+          return colorScale(i + 1); 
         })
         .style("stop-opacity", "1");
 
