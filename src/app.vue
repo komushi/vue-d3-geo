@@ -4,10 +4,10 @@
 <!--     <d3-geo-static class="d3-geo-static" topojson-path="https://s3-ap-northeast-1.amazonaws.com/angular-example/tokyo_23_blocks_districts_final.json"></d3-geo-static> -->
     
 
-<!-- for 2-layer
+
     <d3-geo-double-layer 
       id="01" 
-      topojson-path="https://s3-ap-northeast-1.amazonaws.com/angular-example/tokyo_23_blocks_districts_final.json"
+      topojson-path="static/data/tokyo_23_blocks_districts_final.json"
       :layer1-event-data="districtRankList"
       :layer2-event-data="circleData"
       layer1-event-count-tag="dropoffCount"
@@ -15,29 +15,29 @@
       @on-stop-events="unsubTaxiEvents"
       >    
     </d3-geo-double-layer>
-for 2-layer  -->
 
-     <d3-geo-events 
+
+<!--      <d3-geo-events 
       id="01" 
-      topojson-path="https://s3-ap-northeast-1.amazonaws.com/angular-example/tokyo_23_blocks_districts_final.json"
+      topojson-path="static/data/tokyo_23_blocks_districts_final.json"
       :layer-event-data="matrixJson"
       >    
-    </d3-geo-events>
+    </d3-geo-events> -->
   </div>
 </template>
 
 <script>
 // import D3GeoStatic from './components/D3GeoStatic'
-// import D3GeoDoubleLayer from './components/D3GeoDoubleLayer'
-import D3GeoEvents from './components/D3GeoEvents'
+import D3GeoDoubleLayer from './components/D3GeoDoubleLayer'
+// import D3GeoEvents from './components/D3GeoEvents'
 import axios from 'axios'
 
 export default {
   name: 'app',
   components: {
     // D3GeoStatic,
-    // D3GeoDoubleLayer,
-    D3GeoEvents
+    D3GeoDoubleLayer,
+    // D3GeoEvents
   },
   data() {
     return {
@@ -151,51 +151,51 @@ export default {
   },
   methods: {
     /*** for 2-layer ***/
-    // subTaxiEventsFrom(payload) {
-    //   console.log('subTaxiEventsFrom');
-    //   // console.log('payload', payload);
+    subTaxiEventsFrom(payload) {
+      // console.log('subTaxiEventsFrom');
+      // console.log('payload', payload);
 
-    //   if (payload == '101') {
-    //     // console.log('this.timer', this.timer);
-    //     this.timer = 
-    //       setInterval(() => {
-    //         var min = 0;
-    //         var max = this.coordinates.length - 1;
-    //         var from = Math.floor(Math.random() * (max - min + 1)) + min;
-    //         var to = Math.floor(Math.random() * (max - min + 1)) + min;
-    //         var dot;
-    //         if (from <= to) {
-    //           dot = this.coordinates.slice(from, to);
-    //         }
-    //         else {
-    //           dot = this.coordinates.slice(to, from);
-    //         }
-    //         this.circleData = dot;
-    //       }, 1500);  
-    //   }
-    // },
-    // unsubTaxiEvents() {
-    //   // console.log('this.timer', this.timer);
-    //   console.log('unsubTaxiEvents');
-    //   clearInterval(this.timer);
+      if (payload == '101') {
+        // console.log('this.timer', this.timer);
+        this.timer = 
+          setInterval(() => {
+            var min = 0;
+            var max = this.coordinates.length - 1;
+            var from = Math.floor(Math.random() * (max - min + 1)) + min;
+            var to = Math.floor(Math.random() * (max - min + 1)) + min;
+            var dot;
+            if (from <= to) {
+              dot = this.coordinates.slice(from, to);
+            }
+            else {
+              dot = this.coordinates.slice(to, from);
+            }
+            this.circleData = dot;
+          }, 1500);  
+      }
+    },
+    unsubTaxiEvents() {
+      // console.log('this.timer', this.timer);
+      // console.log('unsubTaxiEvents');
+      clearInterval(this.timer);
       
-    // },
-    // generateData() {
-    //   let districtRank = {};
-    //   let rank = 1;
-    //   let i;
-    //   for (i = 101; i <= 123; i++){
+    },
+    generateData() {
+      let districtRank = {};
+      let rank = 1;
+      let i;
+      for (i = 101; i <= 123; i++){
 
-    //     const min = 0;
-    //     const max = 500;
+        const min = 0;
+        const max = 500;
         
-    //     let count = Math.floor(Math.random() * (max - min + 1)) + min;
-    //     districtRank[i.toString()] = {district:i, dropoffCount:count, rank: rank};
-    //     rank++;
-    //   }
+        let count = Math.floor(Math.random() * (max - min + 1)) + min;
+        districtRank[i.toString()] = {district:i, dropoffCount:count, rank: rank};
+        rank++;
+      }
 
-    //   return districtRank;
-    // }
+      return districtRank;
+    }
     /*** for 2-layer ***/
 
     /*** for route event ***/
@@ -204,20 +204,20 @@ export default {
   },
   mounted() {
     /*** for 2-layer ***/
-    // setInterval(() => {
-    //   this.districtRankList = this.generateData();
-    // }, 2000);
+    setInterval(() => {
+      this.districtRankList = this.generateData();
+    }, 1000);
     /*** for 2-layer ***/
 
     /*** for route event ***/
-    axios.get("https://s3-ap-northeast-1.amazonaws.com/angular-example/event_data1.json")
+    axios.get("static/data/event_data1.json")
       .then((response)  =>  {
         console.log(response.data.toptenlist);
         this.jsons.push(response.data.toptenlist);
       }, (error)  =>  {
       })
 
-    axios.get("https://s3-ap-northeast-1.amazonaws.com/angular-example/event_data2.json")
+    axios.get("static/data/event_data2.json")
       .then((response)  =>  {
         console.log(response);
         this.jsons.push(response.data.toptenlist);

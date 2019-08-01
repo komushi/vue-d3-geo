@@ -272,6 +272,7 @@ export default {
           .style("stop-opacity", "1");
 
       const mouseoverLayer1 = function(p) {
+        console.log('mouseoverLayer1')
         d3.select(this)
           .style("fill", function(d) {
               return "url(#hgrad" + findprop(d, vm.layer1FeatureCode) + ")";
@@ -310,8 +311,8 @@ export default {
         })
         .attr("class", "layer2")
         .on("click", layer2Clicked)
-        .on("mouseover", vm.mouseoverLayer2)
-        .on("mouseout", vm.mouseoutLayer2);
+        .on("mouseover", mouseoverLayer2)
+        .on("mouseout", mouseoutLayer2);
 
       // Layer2 labels
       gLabelLayer2.selectAll("text")
@@ -441,7 +442,7 @@ export default {
     }
 
     function reset() {
-      console.log("reset");
+      // console.log("reset");
       active.classed("active", false);
       active = d3.select(null);
 
@@ -472,8 +473,11 @@ export default {
     /////////////////////// Mouse over Layer2 Process /////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     const mouseoverLayer2 = function(p) {
+      console.log('mouseoverLayer2')
       gLabelLayer2.selectAll("text")
         .filter(function(d){
+          console.log("p", findprop(p, vm.layer2FeatureCode))
+          console.log("d", findprop(d, vm.layer2FeatureCode))
           return findprop(p, vm.layer2FeatureCode) == findprop(d, vm.layer2FeatureCode);
         })
         .transition()
