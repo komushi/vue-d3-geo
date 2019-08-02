@@ -1,11 +1,11 @@
 {
   "name": "vue-d3-geo",
-  "version": "0.0.62",
+  "version": "0.0.63",
   "description": "A D3 Geo Vue.js Library",
   "author": "Lei Xu <komushi@gmail.com>",
   "main": "src/lib.js",
   "private": false,
-  "license": "MIT",
+  "license": "ISC",
   "scripts": {
     "prepublishOnly": "npm run build",
     "dev": "npm-run-all --parallel dev:lib dev:docs",
