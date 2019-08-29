@@ -7,7 +7,7 @@
 
     <d3-geo-double-layer 
       id="01" 
-      topojson-path="static/data/tokyo_23_blocks_districts_final.json"
+      topojson-path="data/tokyo_23_blocks_districts_final.json"
       :layer1-event-data="districtRankList"
       :layer2-event-data="circleData"
       layer1-event-count-tag="dropoffCount"
@@ -210,14 +210,14 @@ export default {
     /*** for 2-layer ***/
 
     /*** for route event ***/
-    axios.get("static/data/event_data1.json")
+    axios.get("data/event_data1.json")
       .then((response)  =>  {
         console.log(response.data.toptenlist);
         this.jsons.push(response.data.toptenlist);
       }, (error)  =>  {
       })
 
-    axios.get("static/data/event_data2.json")
+    axios.get("data/event_data2.json")
       .then((response)  =>  {
         console.log(response);
         this.jsons.push(response.data.toptenlist);
