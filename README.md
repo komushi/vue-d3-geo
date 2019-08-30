@@ -1,15 +1,22 @@
 # vue-d3-geo
 A D3 Geo Vue.js Library
-[live-demo](http://github.com/komushi/vue-d3-geo/demo/index.html)
+![screenshot](https://raw.githubusercontent.com/komushi/vue-d3-geo/master/images/screenshot.jpg)
 
-## 1. For Users
+## 1. For Users to see the demo(using live-server or host it as a static web app)
+```
+git clone https://github.com/komushi/vue-d3-geo
+cd vue-d3-geo/demo
+live-server
+```
 
-### 1-1. Install 
+## 2. For Users to use the components
+
+### 2-1. Install 
 ```
 npm install --save vue-d3-geo
 ```
 
-### 1-2. Add d3-geo components in your vue's template
+### 2-2. Add d3-geo components in your vue's template
 ***The topojson-path provides a topojson map. Currently the center of the map is Tokyo's coordinates by default. Need to change the center with your own topojson.***
 ```
 <template>
@@ -39,7 +46,7 @@ npm install --save vue-d3-geo
 </template>
 ```
 
-### 1-3. Add d3-geo components in your vue's script
+### 2-3. Add d3-geo components in your vue's script
 ```
 <script>
 ...
@@ -62,20 +69,20 @@ export default {
 </script>
 ```
 
-## 2. For Developers
+## 3. For Developers
 Fork this repo.
 
-### 2-1. Compiles and hot-reloads for development
+### 3-1. Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### 2-2. Compiles and minifies for production
+### 3-2. Compiles and minifies for production
 ```
 npm run build
 ```
 
-### 2-3. Lints and fixes files
+### 3-3. Lints and fixes files
 ```
 npm run lint
 ```
