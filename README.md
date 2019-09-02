@@ -52,8 +52,8 @@ npm install --save vue-d3-geo
 ```
 
 #### Use custom map
-* [D3GeoStatic](./API.md)
-* [D3GeoDoubleLayer](./API.md)
+* [Custom Single-layer map](./API_REF.md#)
+* [Custom Double-layer map](./API_REF.md#)
 
 ***Use topojson-path to provide a topojson map. Currently the center of the map is Tokyo's coordinates by default. Need to change the center with your own topojson.***
 
