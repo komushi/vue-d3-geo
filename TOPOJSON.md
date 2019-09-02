@@ -202,3 +202,5 @@ Copy the following files under public/data/
 [Shapefile is a popular geospatial vector data format for geographic information system (GIS) software.](https://en.wikipedia.org/wiki/Shapefile)
 
 [United States Census Bureau](https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html)
+
+[Different ways to convert Shapefile to GeoJSON – Online or Offline or API](https://www.igismap.com/different-ways-to-convert-shapefile-to-geojson-online-or-offline-or-api/)

@@ -96,7 +96,7 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration references
+### Customization configuration references
 * https://qiita.com/coppieee/items/dcf120d6b8eef68ecb34
 * https://cli.vuejs.org/guide/build-targets.html
 * https://github.com/awaigand/vue-cli-target-lib-example/
