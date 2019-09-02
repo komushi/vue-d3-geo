@@ -17,7 +17,24 @@ npm install --save vue-d3-geo
 ```
 
 ### 2-2. Add d3-geo components in your vue's template
-***The topojson-path provides a topojson map. Currently the center of the map is Tokyo's coordinates by default. Need to change the center with your own topojson.***
+#### Default single-layer Tokyo map
+```
+<template>
+	<div>
+		...
+
+		<d3-geo-static
+		  id="01" 
+		  topojson-path="data/tokyo_23_blocks_districts_final.json"
+		  >    
+		</d3-geo-static>
+
+		....
+	</div>
+</template>
+```
+
+#### Default double-layer Tokyo map
 ```
 <template>
 	<div>
@@ -29,22 +46,17 @@ npm install --save vue-d3-geo
 		  >    
 		</d3-geo-double-layer>
 
-		<d3-geo-events
-		  id="02" 
-		  topojson-path="data/tokyo_23_blocks_districts_final.json"
-		  >    
-		</d3-geo-events>
-
-		<d3-geo-static
-		  id="03" 
-		  topojson-path="data/tokyo_23_blocks_districts_final.json"
-		  >    
-		</d3-geo-static>
-
 		....
 	</div>
 </template>
 ```
+
+#### Use custom map
+* [D3GeoStatic](./API.md)
+* [D3GeoDoubleLayer](./API.md)
+
+***Use topojson-path to provide a topojson map. Currently the center of the map is Tokyo's coordinates by default. Need to change the center with your own topojson.***
+
 
 ### 2-3. Add d3-geo components in your vue's script
 ```

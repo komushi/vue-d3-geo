@@ -137,6 +137,11 @@ geo2topo states=states.geojson counties=counties.geojson > states_counties.topoj
 ```
 
 ## 2. Set TopoJSON(map) to vue-d3-geo
+Copy the following files under public/data/
+* counties.topojson
+* states.topojson
+* states_counties.topojson
+
 ### 2-1. Map of Counties
 ```
 <d3-geo-static 
