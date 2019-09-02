@@ -12084,12 +12084,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"31fc87b8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoStatic.vue?vue&type=template&id=4c21f462&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"31fc87b8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoStatic.vue?vue&type=template&id=7e1073a6&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/D3GeoStatic.vue?vue&type=template&id=4c21f462&
+// CONCATENATED MODULE: ./src/components/D3GeoStatic.vue?vue&type=template&id=7e1073a6&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.regexp.split.js
 var es6_regexp_split = __webpack_require__("28a5");
@@ -14031,11 +14031,11 @@ var props = {
     type: String
   },
   width: {
-    type: Number,
+    type: [String, Number],
     default: 1000
   },
   height: {
-    type: Number,
+    type: [String, Number],
     default: 1000
   },
   colorRange: {
@@ -14047,7 +14047,7 @@ var props = {
     default: '139.752268, 35.677043'
   },
   scale: {
-    type: Number,
+    type: [String, Number],
     default: 110000
   },
   layerObjects: {
@@ -14280,12 +14280,12 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoStatic = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"31fc87b8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoDoubleLayer.vue?vue&type=template&id=01c80b81&
-var D3GeoDoubleLayervue_type_template_id_01c80b81_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
-var D3GeoDoubleLayervue_type_template_id_01c80b81_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"31fc87b8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoDoubleLayer.vue?vue&type=template&id=3b0fddd4&
+var D3GeoDoubleLayervue_type_template_id_3b0fddd4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
+var D3GeoDoubleLayervue_type_template_id_3b0fddd4_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/D3GeoDoubleLayer.vue?vue&type=template&id=01c80b81&
+// CONCATENATED MODULE: ./src/components/D3GeoDoubleLayer.vue?vue&type=template&id=3b0fddd4&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom.iterable.js
 var web_dom_iterable = __webpack_require__("ac6a");
@@ -14315,11 +14315,11 @@ var D3GeoDoubleLayervue_type_script_lang_js_props = {
     type: String
   },
   width: {
-    type: Number,
+    type: [String, Number],
     default: 1000
   },
   height: {
-    type: Number,
+    type: [String, Number],
     default: 1000
   },
   colorRange: {
@@ -14331,7 +14331,7 @@ var D3GeoDoubleLayervue_type_script_lang_js_props = {
     default: '139.752268, 35.677043'
   },
   scale: {
-    type: Number,
+    type: [String, Number],
     default: 110000
   },
   layer1Objects: {
@@ -14737,8 +14737,8 @@ var D3GeoDoubleLayervue_type_style_index_0_lang_css_ = __webpack_require__("003a
 
 var D3GeoDoubleLayer_component = normalizeComponent(
   components_D3GeoDoubleLayervue_type_script_lang_js_,
-  D3GeoDoubleLayervue_type_template_id_01c80b81_render,
-  D3GeoDoubleLayervue_type_template_id_01c80b81_staticRenderFns,
+  D3GeoDoubleLayervue_type_template_id_3b0fddd4_render,
+  D3GeoDoubleLayervue_type_template_id_3b0fddd4_staticRenderFns,
   false,
   null,
   null,
@@ -14747,12 +14747,12 @@ var D3GeoDoubleLayer_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoDoubleLayer = (D3GeoDoubleLayer_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"31fc87b8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoEvents.vue?vue&type=template&id=3f63e2da&
-var D3GeoEventsvue_type_template_id_3f63e2da_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
-var D3GeoEventsvue_type_template_id_3f63e2da_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"31fc87b8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoEvents.vue?vue&type=template&id=3f45621d&
+var D3GeoEventsvue_type_template_id_3f45621d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
+var D3GeoEventsvue_type_template_id_3f45621d_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/D3GeoEvents.vue?vue&type=template&id=3f63e2da&
+// CONCATENATED MODULE: ./src/components/D3GeoEvents.vue?vue&type=template&id=3f45621d&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.promise.js
 var es6_promise = __webpack_require__("551c");
@@ -14779,11 +14779,11 @@ var D3GeoEventsvue_type_script_lang_js_props = {
     type: String
   },
   width: {
-    type: Number,
+    type: [String, Number],
     default: 1000
   },
   height: {
-    type: Number,
+    type: [String, Number],
     default: 1000
   },
   bgColor: {
@@ -14795,7 +14795,7 @@ var D3GeoEventsvue_type_script_lang_js_props = {
     default: '#227AFF,#FFF500'
   },
   topNumber: {
-    type: Number,
+    type: [String, Number],
     default: 10
   },
   center: {
@@ -14803,7 +14803,7 @@ var D3GeoEventsvue_type_script_lang_js_props = {
     default: '139.752268, 35.677043'
   },
   scale: {
-    type: Number,
+    type: [String, Number],
     default: 150000
   },
   layerObjects: {
@@ -15041,8 +15041,8 @@ var D3GeoEventsvue_type_style_index_0_lang_css_ = __webpack_require__("80a1");
 
 var D3GeoEvents_component = normalizeComponent(
   components_D3GeoEventsvue_type_script_lang_js_,
-  D3GeoEventsvue_type_template_id_3f63e2da_render,
-  D3GeoEventsvue_type_template_id_3f63e2da_staticRenderFns,
+  D3GeoEventsvue_type_template_id_3f45621d_render,
+  D3GeoEventsvue_type_template_id_3f45621d_staticRenderFns,
   false,
   null,
   null,

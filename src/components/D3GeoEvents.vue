@@ -17,11 +17,11 @@ const props = {
     type: String
   },
   width: {
-    type: Number,
+    type: [String, Number],
     default: 1000
   },
   height: {
-    type: Number,
+    type: [String, Number],
     default: 1000
   },
   bgColor: {
@@ -33,7 +33,7 @@ const props = {
     default: '#227AFF,#FFF500'
   },
   topNumber: {
-    type: Number,
+    type: [String, Number],
     default: 10
   },
   center: {
@@ -41,7 +41,7 @@ const props = {
     default: '139.752268, 35.677043'
   },
   scale: {
-    type: Number,
+    type: [String, Number],
     default: 150000
   },
   layerObjects: {
