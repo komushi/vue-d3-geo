@@ -1,5 +1,5 @@
 # TopoJSON, GeoJSON and Shapefile
-This guide shows you how to generate/use TopoJSON files(maps) for vue-d3-geo.
+This guide expalins how to generate/use TopoJSON files(maps) for vue-d3-geo.
 
 ![states](https://raw.githubusercontent.com/komushi/vue-d3-geo/master/images/states.jpg)
 
@@ -65,7 +65,7 @@ geo2topo counties=counties.geojson > counties.topojson
     "bbox": [
     	...
     ]
-}    
+}
 ```
 
 #### Counties TopoJSON
@@ -147,9 +147,9 @@ Copy the following files under public/data/
 <d3-geo-static 
     id="01"
     topojson-path="data/counties.topojson"
-    layerObjects="counties"
-    layerFeatureName="properties.NAME"
-    layerFeatureCode="properties.COUNTYNS"
+    layer-objects="counties"
+    layer-feature-name="properties.NAME"
+    layer-feature-code="properties.COUNTYNS"
     scale="1400"
     width="1600"
     height="800"
@@ -163,9 +163,9 @@ Copy the following files under public/data/
 <d3-geo-static 
     id="01"
     topojson-path="data/states.topojson"
-    layerObjects="states"
-    layerFeatureName="properties.NAME"
-    layerFeatureCode="properties.STATEFP"
+    layer-objects="states"
+    layer-feature-name="properties.NAME"
+    layer-feature-code="properties.STATEFP"
     scale="1400"
     width="1600"
     height="800"
