@@ -100,3 +100,9 @@ npm run lint
 * https://qiita.com/coppieee/items/dcf120d6b8eef68ecb34
 * https://cli.vuejs.org/guide/build-targets.html
 * https://github.com/awaigand/vue-cli-target-lib-example/
+
+
+## 4. TODO
+* Upgrade to the latest d3.js
+* Add a road/rail component like below.
+https://qiita.com/hiyuzawa/items/b28fa4d380d02d8bd5a1
