@@ -105,12 +105,12 @@ export default {
     const gLabelLayer2 = g.append("g").attr("id", "layer2_label");
     const gLabelLayer1 = g.append("g").attr("id", "layer1_label");
 
-    this.projection = d3.geo.mercator()
+    this.projection = d3.geoMercator()
       .center(vm.center.split(","))
       .scale(vm.scale)
       .translate([vm.width / 2, vm.height / 2]);
 
-    const path = d3.geo.path().projection(this.projection);
+    const path = d3.geoPath().projection(this.projection);
     
 
     ///////////////////////////////////////////////////////////////////////////
@@ -204,7 +204,7 @@ export default {
 
     // console.log("this.topojsonPath:", this.topojsonPath);
 
-    d3.json(vm.topojsonPath, function (error, json) {
+    d3.json(this.topojsonPath).then(json => {
 
       const layer1Featues = topojson.feature(json, json.objects[vm.layer1Objects]).features;
       const layer2Featues = topojson.feature(json, json.objects[vm.layer2Objects]).features;
@@ -653,7 +653,7 @@ export default {
     ///////////////////////////////////////////////////////////////////////////
     getCountScale(maxCount, width) {
       //Calculate the variables for the sort gradient
-      return d3.scale.linear()
+      return d3.scaleLinear()
         .domain([0, maxCount])
         .range([0, width]);
     },
@@ -673,16 +673,16 @@ export default {
     },
     getColorScale(maxCount, colorRange) {
 
-      return d3.scale.linear()
+      return d3.scaleLinear()
         .domain([0, maxCount/2, maxCount])
         .range(colorRange.split(","));
     },
     getXAxis(legendWidth, maxCount) {
-      const xScale = d3.scale.linear()
+      const xScale = d3.scaleLinear()
        .range([-legendWidth/2, legendWidth/2])
        .domain([ 0, maxCount　] );
 
-      return d3.svg.axis().orient("bottom")
+      return d3.axisBottom()
               .ticks(5)
               //.tickFormat(formatPercent)
               .scale(xScale);

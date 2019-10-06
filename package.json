@@ -1,11 +1,11 @@
 {
   "name": "vue-d3-geo",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "A D3 Geo Vue.js Library",
   "author": "Lei Xu <komushi@gmail.com>",
   "homepage": "https://github.com/komushi/vue-d3-geo/",
   "license": "ISC",
-  "main":"dist/vue-d3-geo.common.js",
+  "main": "dist/vue-d3-geo.common.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "npm run build:lib && npm run build:demo",
@@ -13,14 +13,15 @@
     "build:demo": "vue-cli-service build --dest demo/",
     "build:lib": "vue-cli-service build --target lib --name vue-d3-geo ./src/lib.js --dest dist/"
   },
-  "dependencies": {},
+  "dependencies": {
+    "d3": "^5.12.0",
+    "topojson": "^3.0.2",
+    "vue": "^2.6.10"
+  },
   "peerDependencies": {
     "core-js": "^2.6.5",
-    "vue": "^2.6.10",
     "vue-router": "^3.0.3",
-    "vuex": "^3.0.1",
-    "d3": "3.5.*",
-    "topojson": "3.*"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",

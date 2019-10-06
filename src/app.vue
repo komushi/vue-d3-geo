@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-<!--     <d3-geo-static id="03" topojson-path="data/tokyo_23_blocks_districts_final.json"></d3-geo-static>
- -->  
+
 
     <d3-geo-double-layer 
       id="01" 
@@ -20,6 +19,12 @@
       :layer-event-data="matrixJson"
       >    
     </d3-geo-events>
+
+<!--     <d3-geo-static
+      id="03" 
+      topojson-path="data/tokyo_23_blocks_districts_final.json"
+      >    
+    </d3-geo-static> -->
   </div>
 </template>
 
@@ -222,11 +227,13 @@ export default {
       })
 
 
+    let count = 0;
+
     setInterval(() => {
+
       let idx = Math.floor(Math.random() * 2);
-      this.matrixJson = this.jsons[idx];
-      // console.log(this.matrixJson);
-    }, 1200);
+      this.matrixJson = this.jsons[idx];   
+    }, 2500);
     /*** for route event ***/
   }
 }

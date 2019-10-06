@@ -82,24 +82,27 @@ export default {
 
     console.log("this.center:", this.center);
 
-    const projection = d3.geo.mercator()
+    const projection = d3.geoMercator()
       .center(this.center.split(","))
       .scale(this.scale)
       .translate([this.width / 2, this.height / 2]);
 
-    const path = d3.geo.path().projection(projection);
+    const path = d3.geoPath().projection(projection);
     
 
     
     
 
-    console.log("this.topojsonPath:", this.topojsonPath);
-    d3.json(this.topojsonPath, function (error, json) {
+    // console.log("this.topojsonPath:", this.topojsonPath);
+    ///////////////////////////////////////////////////////////////////////////
+    ////////////////////////// TODO:loading map data //////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    d3.json(this.topojsonPath).then(json => {
       console.log("layerObjects:", layerObjects);
       const layerFeatues = topojson.feature(json, json.objects[layerObjects]).features;
       const mesh = topojson.mesh(json, json.objects[layerObjects], function(a, b) { return a !== b; });
 
-      const color = d3.scale.linear().domain([1,layerFeatues.length])
+      const color = d3.scaleLinear().domain([1,layerFeatues.length])
                     .interpolate(d3.interpolateHcl)
                     .range(colorRange.split(","));
 
@@ -225,10 +228,9 @@ export default {
           .attr("layer-feature-code", function(d) { 
             return findprop(d, layerFeatureCode);
           });
-
       } 
-
     });
+
 
   }
 };

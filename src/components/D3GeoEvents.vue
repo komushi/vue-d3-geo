@@ -82,12 +82,12 @@ export default {
     const gLayer = g.append("g").attr("id", vm.layerObjects);
     const gLabelLayer = g.append("g").attr("id", vm.layerObjects + "_label");
 
-    this.projection = d3.geo.mercator()
+    this.projection = d3.geoMercator()
       .center(vm.center.split(","))
       .scale(vm.scale)
       .translate([vm.width / 2, vm.height / 2]);
 
-    const path = d3.geo.path().projection(this.projection);
+    const path = d3.geoPath().projection(this.projection);
     
     const colorScale = vm.getColorScale(vm.topNumber, vm.colorRange);
 
@@ -152,8 +152,7 @@ export default {
     ///////////////////////////////////////////////////////////////////////////
     ////////////////////////// TODO:loading map data //////////////////////////
     ///////////////////////////////////////////////////////////////////////////
-    d3.json(vm.topojsonPath, function (error, json) {
-
+    d3.json(this.topojsonPath).then(json => {
       const layerFeatues = topojson.feature(json, json.objects[vm.layerObjects]).features;
       const mesh = topojson.mesh(json, json.objects[vm.layerObjects], function(a, b) { return a !== b; });
 
@@ -183,9 +182,9 @@ export default {
           return "translate(" + path.centroid(d) + ")"; 
         })
         .attr("dy", "-1em");
-
-
     });
+
+
   },
   watch: {
     layerEventData: function(newData, oldData) {
@@ -206,7 +205,45 @@ export default {
     ///////////////////////////////////////////////////////////////////////////
     ///////// Set the style of the legned and map objects on Layer1 ///////////
     ///////////////////////////////////////////////////////////////////////////
+    hideFeatureNames() {
+      let vm = this;
 
+      const gLabelLayer = d3.select("#" + vm.layerObjects + "_label");
+
+      return new Promise((resolve, reject) => {
+        const highlightData = gLabelLayer.selectAll("text")
+          .filter(function(d){
+            return d.hasOwnProperty("showname");
+          });
+
+        if (highlightData.size() == 0) {
+          resolve();
+        } else {
+          let n = 0;
+
+          highlightData
+            .transition()
+            .style("fill-opacity", 0)
+            .transition()
+            .text(function(d){
+              if (d.hasOwnProperty("showname")) {
+                delete d.showname;
+              }
+              return "";
+            })
+            .attr("style", null)
+            .each(function() {
+              ++n; 
+            })
+            .on("end", () => { 
+              if (!--n) {
+                resolve();
+              }; 
+            });
+        }
+      });
+    },
+/*
     hideFeatureNames() {
       let vm = this;
 
@@ -232,12 +269,13 @@ export default {
               return "";
             })
             .attr("style", null)
-            .call(this.endall, function() {
+            .call(vm.endall, function() {
               resolve();
             });
         }
       });
     },
+*/
     showFeatureNames(newValue) {
       let vm = this;
 
@@ -293,21 +331,58 @@ export default {
         if (highlightData.size() == 0) {
           resolve();
         } else {
+          let n = 0;
+
           highlightData
             .transition()
             .attr("fill", function(d){
               delete d.highlight;
               return vm.bgColor;
             })
-            .call(this.endall, function() {
+            .each(function() {
+              ++n; 
+            })
+            .on("end", () => { 
+              if (!--n) {
+                resolve();
+              }; 
+            });            
+               
+        }
+      });
+    },    
+/*    
+    dehighlightFeatures(oldFeatureCodes) {
+
+      let vm = this;
+
+      const gLayer = d3.select("#" + vm.layerObjects);
+
+      return new Promise((resolve, reject) => {
+        const highlightData = gLayer.selectAll("path")
+          .filter(function(d){
+            return d.hasOwnProperty("highlight");
+          });
+
+        if (highlightData.size() == 0) {
+          resolve();
+        } else {
+          highlightData
+            .transition()
+            .attr("fill", function(d){
+              delete d.highlight;
+              return vm.bgColor;
+            })
+            .call(vm.endall, function() {
               resolve();
             });                
         }
       });
     },
+*/    
     highlightFeatures(newValue) {
 
-      // var color = d3.scale.linear().domain([1, newValue.length])
+      // var color = d3.scaleLinear().domain([1, newValue.length])
       //               .interpolate(d3.interpolateHcl)
       //               .range(scope.colorRange.split(","));
 
@@ -341,14 +416,16 @@ export default {
           }
         });
     },
+/*    
     endall(transition, callback) { 
       let n = 0; 
       transition 
         .each(function() { ++n; }) 
-        .each("end", () => { 
+        .on("end", () => { 
           if (!--n) callback.apply(this, arguments); 
         }); 
     },
+*/    
     extractCodes(routes, key) {
       let featureCodes = [];
       if (routes) {
@@ -364,7 +441,7 @@ export default {
       }
     },
     getColorScale(topNumber, colorRange) { 
-      return d3.scale.linear().domain([1, topNumber])
+      return d3.scaleLinear().domain([1, topNumber])
         .interpolate(d3.interpolateHcl)
         .range(colorRange.split(","));
     }
