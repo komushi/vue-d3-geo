@@ -400,6 +400,17 @@ module.exports = {
 
 /***/ }),
 
+/***/ "1b59":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_D3GeoSubway_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("30cf");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_D3GeoSubway_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_D3GeoSubway_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_index_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_D3GeoSubway_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "1fa8":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -845,6 +856,13 @@ module.exports = function (it) {
   return toString.call(it).slice(8, -1);
 };
 
+
+/***/ }),
+
+/***/ "30cf":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -24847,7 +24865,269 @@ var D3GeoEvents_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoEvents = (D3GeoEvents_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1b474004-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoSubway.vue?vue&type=template&id=38e06799&
+var D3GeoSubwayvue_type_template_id_38e06799_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
+var D3GeoSubwayvue_type_template_id_38e06799_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/D3GeoSubway.vue?vue&type=template&id=38e06799&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoSubway.vue?vue&type=script&lang=js&
+
+
+//
+//
+//
+//
+//
+
+
+
+var D3GeoSubwayvue_type_script_lang_js_props = {
+  // data: {
+  //   type: Array,
+  //   default: () => [],
+  // },
+  mapPath: {
+    type: String
+  },
+  subwayPath: {
+    type: String
+  },
+  width: {
+    type: [String, Number],
+    default: 1000
+  },
+  height: {
+    type: [String, Number],
+    default: 1000
+  },
+  colorRange: {
+    type: String,
+    default: '#e3f2fd,#e3f2fd'
+  },
+  center: {
+    type: String,
+    default: '139.752268, 35.677043'
+  },
+  scale: {
+    type: [String, Number],
+    default: 110000
+  },
+  layerObjects: {
+    type: String,
+    default: 'districts'
+  },
+  layerFeatureName: {
+    type: String,
+    default: 'properties.district'
+  },
+  layerFeatureCode: {
+    type: String,
+    default: 'properties.district_code'
+  },
+  subwayObjects: {
+    type: String,
+    default: 'lines'
+  },
+  subwayFeatureName: {
+    type: String,
+    default: 'properties.N02_003'
+  },
+  featureNameStyle: {
+    type: String,
+    default: 'static'
+  }
+};
+/* harmony default export */ var D3GeoSubwayvue_type_script_lang_js_ = ({
+  name: 'd3-geo-subway',
+  // data() {
+  //   return {
+  //     data: [99, 71, 78, 25, 36, 92],
+  //     line: '',
+  //   };
+  // },
+  props: D3GeoSubwayvue_type_script_lang_js_props,
+  mounted: function mounted() {
+    var vm = this;
+    var layerObjects = this.layerObjects;
+    var colorRange = this.colorRange;
+    var layerFeatureCode = this.layerFeatureCode;
+    var layerFeatureName = this.layerFeatureName;
+    var featureNameStyle = this.featureNameStyle;
+    var subwayObjects = this.subwayObjects;
+    var subwayFeatureName = this.subwayFeatureName;
+    var svg = src_select(this.$el).append('svg').attr('width', this.width).attr('height', this.height);
+    var g = svg.append('g');
+    var gLayer = g.append("g").attr("id", this.layerObjects);
+    var gLabelLayer = g.append("g").attr("id", this.layerObjects + "_label");
+    var gSubwayLayer = g.append("g").attr("id", this.subwayObjects);
+    var gSubwayLabelLayer = g.append("g").attr("id", this.subwayObjects + "_label");
+    console.log("this.center:", this.center);
+    var projection = mercator().center(this.center.split(",")).scale(this.scale).translate([this.width / 2, this.height / 2]);
+    var path = d3_geo_src_path().projection(projection); // console.log("this.mapPath:", this.mapPath);
+    ///////////////////////////////////////////////////////////////////////////
+    ////////////////////////// TODO:loading map data //////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    src_json(this.mapPath).then(function (json) {
+      console.log("layerObjects:", layerObjects);
+      var layerFeatues = src_feature(json, json.objects[layerObjects]).features;
+      var mesh = src_mesh(json, json.objects[layerObjects], function (a, b) {
+        return a !== b;
+      });
+      var color = src_linear_linear().domain([1, layerFeatues.length]).interpolate(src_hcl).range(colorRange.split(",")); // fill color gradient process
+
+      var hgrads = g.append("defs").attr("id", layerObjects + "_hdef").selectAll("radialGradient").data(layerFeatues).enter().append("radialGradient").attr("gradientUnits", "objectBoundingBox").attr("fx", "50%").attr("fy", "50%").attr("cx", "50%").attr("cy", "50%").attr("r", "100%").attr("id", function (d) {
+        // return "hgrad" + d.id;
+        return "hgrad" + findprop(d, layerFeatureCode);
+      });
+      hgrads.append("stop").attr("offset", "0%").style("stop-color", "white").style("stop-opacity", "1");
+      hgrads.append("stop").attr("offset", "100%").style("stop-color", function (d, i) {
+        return color(i + 1);
+      }).style("stop-opacity", "1");
+      var grads = g.append("defs").attr("id", layerObjects + "_def").selectAll("radialGradient").data(layerFeatues).enter().append("radialGradient").attr("gradientUnits", "objectBoundingBox").attr("fx", "50%").attr("fy", "50%").attr("cx", "50%").attr("cy", "50%").attr("r", "35%").attr("id", function (d) {
+        // return "grad" + d.id;
+        return "grad" + findprop(d, layerFeatureCode);
+      });
+      grads.append("stop").attr("offset", "0%").style("stop-color", function (d, i) {
+        return color(i + 1);
+      }).style("stop-opacity", ".8");
+      grads.append("stop").attr("offset", "100%").style("stop-color", function (d, i) {
+        return color(i + 1);
+      }).style("stop-opacity", "1");
+
+      if (featureNameStyle == 'static') {
+        var mouseover = function mouseover(p) {
+          src_select(this).style("fill", function (d) {
+            // return "url(#hgrad" + d.id + ")";
+            return "url(#hgrad" + findprop(d, layerFeatureCode) + ")";
+          });
+        };
+
+        var mouseout = function mouseout(p) {
+          src_select(this).style("fill", function (d) {
+            // return "url(#grad" + d.id + ")";
+            return "url(#grad" + findprop(d, layerFeatureCode) + ")";
+          });
+        }; // polygons
+
+
+        gLayer.selectAll("path").data(layerFeatues).enter().append("path") // .attr("class", "layer1")
+        .attr("d", path) // .attr("fill", function(d,i) { 
+        //   return color(i + 1);
+        // })
+        .attr("fill", function (d) {
+          // return "url(#grad" + d.id + ")";
+          return "url(#grad" + findprop(d, layerFeatureCode) + ")";
+        }).attr("layer-feature-code", function (d) {
+          return findprop(d, layerFeatureCode);
+        }).attr("layer-feature-name", function (d) {
+          return findprop(d, layerFeatureName);
+        }).on("mouseover", mouseover).on("mouseout", mouseout); // border
+
+        gLayer.append("path").datum(mesh).attr("d", path).attr("class", "layer1-boundary"); // Layer1 labels
+
+        gLabelLayer.selectAll("text").data(layerFeatues).enter().append("text").attr("class", "label").attr("pointer-events", "none").attr("transform", function (d) {
+          return "translate(" + path.centroid(d) + ")";
+        }).attr("dy", ".35em").text(function (d) {
+          return findprop(d, layerFeatureName);
+        }).attr("layer-feature-code", function (d) {
+          return findprop(d, layerFeatureCode);
+        });
+      }
+    }); ///////////////////////////////////////////////////////////////////////////
+    ////////////////////////// loading subway data ////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    src_json(this.subwayPath).then(function (json) {
+      var subwayFeatures = src_feature(json, json.objects[subwayObjects]).features;
+      console.log("subwayFeatures:", subwayFeatures);
+
+      var click = function click(p, i) {
+        console.log('click', p); // gSubwayLabelLayer.selectAll("text")
+        //   .filter(function(d){
+        //     // console.log("p", findprop(p, subwayFeatureName))
+        //     // console.log("d", findprop(d, subwayFeatureName))
+        //     return findprop(p, subwayFeatureName) == findprop(d, subwayFeatureName);
+        //   })
+        //   .transition()
+        //   .style("fill-opacity", 1)
+        //   .style("display", "block");        
+      };
+
+      var mouseover = function mouseover(p, i) {
+        src_select(this).style("cursor", "pointer").attr("class", "subwayActive");
+        gSubwayLabelLayer.selectAll("text").filter(function (d) {
+          // console.log("p", findprop(p, subwayFeatureName))
+          // console.log("d", findprop(d, subwayFeatureName))
+          return findprop(p, subwayFeatureName) == findprop(d, subwayFeatureName);
+        }).transition().style("fill-opacity", 1).style("display", "block");
+      };
+
+      var mouseout = function mouseout(p, i) {
+        src_select(this).style("cursor", "").attr("class", "subway");
+        gSubwayLabelLayer.selectAll("text").filter(function (d) {
+          // console.log("p", findprop(p, subwayFeatureName))
+          // console.log("d", findprop(d, subwayFeatureName))
+          return findprop(p, subwayFeatureName) == findprop(d, subwayFeatureName);
+        }).transition().style("fill-opacity", 0).transition().style("display", "none");
+      };
+
+      gSubwayLayer.selectAll("path").data(subwayFeatures).enter().append("path").attr("class", function (d) {
+        return "subway";
+      }).attr("d", path).on("mouseover", mouseover).on("mouseout", mouseout).on("click", click); // Subway labels
+
+      gSubwayLabelLayer.selectAll("text").data(subwayFeatures).enter().append("text").attr("class", "subwayLabel").attr("pointer-events", "none").attr("transform", function (d) {
+        return "translate(" + path.centroid(d) + ")";
+      }).attr("dy", ".35em").text(function (d) {
+        return findprop(d, subwayFeatureName);
+      }); // .attr("layer-feature-code", function(d) { 
+      //   return findprop(d, layerFeatureCode);
+      // });
+    }); ///////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////  zoom logic //////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    var zoomed = function zoomed() {
+      gLayer.attr("transform", on_event.transform);
+      gLabelLayer.attr("transform", on_event.transform);
+      gSubwayLayer.attr("transform", on_event.transform);
+      gSubwayLabelLayer.attr("transform", on_event.transform);
+    };
+
+    var zoom = d3_zoom_src_zoom().scaleExtent([1, 40]).translateExtent([[-100, -100], [this.width + 90, this.height + 100]]).on("zoom", zoomed);
+    svg.call(zoom);
+  }
+});
+// CONCATENATED MODULE: ./src/components/D3GeoSubway.vue?vue&type=script&lang=js&
+ /* harmony default export */ var components_D3GeoSubwayvue_type_script_lang_js_ = (D3GeoSubwayvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/D3GeoSubway.vue?vue&type=style&index=0&lang=css&
+var D3GeoSubwayvue_type_style_index_0_lang_css_ = __webpack_require__("1b59");
+
+// CONCATENATED MODULE: ./src/components/D3GeoSubway.vue
+
+
+
+
+
+
+/* normalize component */
+
+var D3GeoSubway_component = normalizeComponent(
+  components_D3GeoSubwayvue_type_script_lang_js_,
+  D3GeoSubwayvue_type_template_id_38e06799_render,
+  D3GeoSubwayvue_type_template_id_38e06799_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var D3GeoSubway = (D3GeoSubway_component.exports);
 // CONCATENATED MODULE: ./src/lib.js
+
 
 
 
@@ -24856,6 +25136,7 @@ var D3GeoEvents_component = normalizeComponent(
 /* concated harmony reexport D3GeoDoubleLayer */__webpack_require__.d(__webpack_exports__, "D3GeoDoubleLayer", function() { return D3GeoDoubleLayer; });
 /* concated harmony reexport D3GeoEvents */__webpack_require__.d(__webpack_exports__, "D3GeoEvents", function() { return D3GeoEvents; });
 /* concated harmony reexport D3GeoStatic */__webpack_require__.d(__webpack_exports__, "D3GeoStatic", function() { return D3GeoStatic; });
+/* concated harmony reexport D3GeoSubway */__webpack_require__.d(__webpack_exports__, "D3GeoSubway", function() { return D3GeoSubway; });
 
 
 

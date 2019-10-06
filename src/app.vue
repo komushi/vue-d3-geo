@@ -2,7 +2,7 @@
   <div id="app">
 
 
-    <d3-geo-double-layer 
+<!--     <d3-geo-double-layer 
       id="01" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
       :layer1-event-data="districtRankList"
@@ -18,13 +18,23 @@
       topojson-path="data/tokyo_23_blocks_districts_final.json"
       :layer-event-data="matrixJson"
       >    
-    </d3-geo-events>
+    </d3-geo-events> -->
 
 <!--     <d3-geo-static
       id="03" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
+      color-range='#6f97d9,#6f97d9'
       >    
     </d3-geo-static> -->
+
+    <d3-geo-subway
+      id="04" 
+      map-path="data/tokyo_23_blocks_districts_final.json"
+      subway-path="data/tokyo_subway.topojson"
+      width="1200"
+      height="1200"
+      >    
+    </d3-geo-subway>
   </div>
 </template>
 
@@ -32,6 +42,7 @@
 import D3GeoStatic from './components/D3GeoStatic'
 import D3GeoDoubleLayer from './components/D3GeoDoubleLayer'
 import D3GeoEvents from './components/D3GeoEvents'
+import D3GeoSubway from './components/D3GeoSubway'
 import axios from 'axios'
 
 export default {
@@ -39,7 +50,8 @@ export default {
   components: {
     D3GeoStatic,
     D3GeoDoubleLayer,
-    D3GeoEvents
+    D3GeoEvents,
+    D3GeoSubway
   },
   data() {
     return {

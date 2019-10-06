@@ -1,6 +1,6 @@
 {
   "name": "vue-d3-geo",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A D3 Geo Vue.js Library",
   "author": "Lei Xu <komushi@gmail.com>",
   "homepage": "https://github.com/komushi/vue-d3-geo/",
