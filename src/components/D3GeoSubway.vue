@@ -315,7 +315,7 @@ export default {
           .attr("d", path)
           .on("mouseover", mouseover)
           .on("mouseout", mouseout)
-          .on("click", click)
+          .on("click", click);
 
       // Subway labels
       gSubwayLabelLayer.selectAll("text")
@@ -448,7 +448,7 @@ svg {
      1px 1px 0 #000;
 }
 
-.subway { fill: none; stroke: #2342fd; stroke-width: 2px;}
+.subway { fill: none; stroke: #2342fd; stroke-width: 1px;}
 .subwayActive { fill: none; stroke: crimson; stroke-width: 3px; filter: drop-shadow(0 0 2rem orange);}
 
 </style>

@@ -100,3 +100,12 @@ npm run lint
 * https://qiita.com/coppieee/items/dcf120d6b8eef68ecb34
 * https://cli.vuejs.org/guide/build-targets.html
 * https://github.com/awaigand/vue-cli-target-lib-example/
+
+--------------
+
+## 4. TODO
+
+http://www.geonet.ch/basic-leaflet-map-with-d3-overlay/
+https://shimz.me/blog/d3-js/3517
+http://bl.ocks.org/shimizu/749df041c1945aef78fd992c7dfbe0e1
+https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8

@@ -194,3 +194,23 @@ Copy the following files under public/data/
 ### 5-1. Add gradient colors to the Path
 http://bl.ocks.org/pnavarrc/20950640812489f13246
 http://www.d3noob.org/2013/01/applying-colour-gradient-to-graph-line.html
+
+
+------------
+## D3GeoSubwayV2 - use geoIdentity for projection instead of geoMercator
+### Reference: Scaling d3 v4 map to fit SVG (or at all)
+https://stackoverflow.com/questions/42430361/scaling-d3-v4-map-to-fit-svg-or-at-all
+
+## D3GeoSubwayV3 - overlap happens need to use Bezier Curves Offset feature
+### Reference: defs in d3
+http://bl.ocks.org/anonymous/2b1d992dfb66542ec1e2
+
+## D3GeoSubwayV4 - Use mask to create 'identical paths' but color is an issue
+### Reference: D3 Translating two identical paths so that they run parallel
+https://stackoverflow.com/questions/42072309/d3-translating-two-identical-paths-so-that-they-run-parallel
+
+## Offset - Bezier Curves
+https://stackoverflow.com/questions/53411999/find-parallel-or-offset-svg-path
+https://pomax.github.io/bezierjs/#offset
+https://observablehq.com/@mbostock/hello-bezier-js
+https://stackoverflow.com/questions/37072075/paper-js-draw-multiple-parallel-paths-from-one-path

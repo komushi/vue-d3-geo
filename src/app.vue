@@ -11,8 +11,8 @@
       @on-receive-events="subTaxiEventsFrom"
       @on-stop-events="unsubTaxiEvents"
       >    
-    </d3-geo-double-layer>
-
+    </d3-geo-double-layer> -->
+    <!--
      <d3-geo-events 
       id="02" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
@@ -27,14 +27,41 @@
       >    
     </d3-geo-static> -->
 
-    <d3-geo-subway
+<!--     <d3-geo-static
+      id="03" 
+      topojson-path="data/states.topojson"
+      layer-objects="states"
+      layer-feature-name="properties.NAME"
+      layer-feature-code="properties.STUSPS"
+      color-range='#6f97d9,#6f97d9'
+      >    
+    </d3-geo-static> -->
+
+    <d3-geo-subway-v3
       id="04" 
       map-path="data/tokyo_23_blocks_districts_final.json"
       subway-path="data/tokyo_subway.topojson"
       width="1200"
       height="1200"
       >    
-    </d3-geo-subway>
+    </d3-geo-subway-v3>
+
+    <d3-geo-subway-v4
+      id="05" 
+      map-path="data/tokyo_23_blocks_districts_final.json"
+      subway-path="data/tokyo_subway.topojson"
+      color-range="#e3f2fd,#e3f2fd"
+      width="1200"
+      height="1200"
+      >    
+    </d3-geo-subway-v4>   
+
+    <d3-geo-leaf
+      id="06" 
+      subway-path="data/tokyo_subway.geojson"
+      color-range='#6f97d9,#6f97d9'
+      >    
+    </d3-geo-leaf> 
   </div>
 </template>
 
@@ -43,6 +70,9 @@ import D3GeoStatic from './components/D3GeoStatic'
 import D3GeoDoubleLayer from './components/D3GeoDoubleLayer'
 import D3GeoEvents from './components/D3GeoEvents'
 import D3GeoSubway from './components/D3GeoSubway'
+import D3GeoSubwayV3 from './components/D3GeoSubwayV3'
+import D3GeoSubwayV4 from './components/D3GeoSubwayV4'
+import D3GeoLeaf from './components/D3GeoLeaf'
 import axios from 'axios'
 
 export default {
@@ -51,7 +81,10 @@ export default {
     D3GeoStatic,
     D3GeoDoubleLayer,
     D3GeoEvents,
-    D3GeoSubway
+    D3GeoSubway,
+    D3GeoSubwayV3,
+    D3GeoSubwayV4,
+    D3GeoLeaf
   },
   data() {
     return {
@@ -252,6 +285,7 @@ export default {
 </script>
 
 <style>
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
