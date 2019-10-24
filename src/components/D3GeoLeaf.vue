@@ -20,6 +20,9 @@ const props = {
   subwayPath: {
     type: String
   },
+  subwayData: {
+    type: Object
+  },
   width: {
     type: [String, Number],
     default: 900
@@ -67,7 +70,28 @@ const props = {
 };
 export default {
   name: 'd3-geo-leaf',
+  data() {
+    return {
+      map: null,
+      mapAdded: false,
+      svgAdded: false,
+      layerAdded: false,
+    };
+  },
   props,
+  watch: {
+    subwayData: {
+        handler: function(newVal, oldVal){
+            this.renderMap();
+        },
+        deep: true
+
+    }
+  },
+  mounted () {
+    this.renderMap();
+  },
+/*  
   async mounted() {
 
     const subwayFeatureName = this.subwayFeatureName;
@@ -76,10 +100,10 @@ export default {
 
     const map = L.map('leaflet').fitBounds(L.geoJson(subwayJson).getBounds());
     // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
-    // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
+    L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
     // L.tileLayer.provider('Stamen.TonerBackground').addTo(map);
     // L.tileLayer.provider('Stamen.TonerLite').addTo(map);
-    L.tileLayer.provider('Hydda.Base').addTo(map);
+    // L.tileLayer.provider('Hydda.Base').addTo(map);
     // map.getPane('mapPane').style.pointerEvents = 'none';
     
 
@@ -98,41 +122,41 @@ export default {
 
     const path = d3.geoPath().projection(transform);
 
-    const mouseover = function(p, i) {
-      console.log("this is", p);
+    // const mouseover = function(p, i) {
+    //   console.log("this is", p);
 
-      d3.select(this)
-        .style("cursor", "pointer")
-        .attr("class", "subwayActive");
+    //   d3.select(this)
+    //     .style("cursor", "pointer")
+    //     .attr("class", "subwayActive");
 
-      gSubwayLabelLayer.selectAll("text")
-        .filter(function(d){
-          // console.log("p", findprop(p, subwayFeatureName))
-          // console.log("d", findprop(d, subwayFeatureName))
-          return findprop(p, subwayFeatureName) == findprop(d, subwayFeatureName);
-        })
-        .transition()
-        .style("fill-opacity", 1)
-        .style("display", "block");  
-    }
+    //   gSubwayLabelLayer.selectAll("text")
+    //     .filter(function(d){
+    //       // console.log("p", findprop(p, subwayFeatureName))
+    //       // console.log("d", findprop(d, subwayFeatureName))
+    //       return findprop(p, subwayFeatureName) == findprop(d, subwayFeatureName);
+    //     })
+    //     .transition()
+    //     .style("fill-opacity", 1)
+    //     .style("display", "block");  
+    // }
 
-    const mouseout = function(p, i) {
-      d3.select(this)
-        .style("cursor", "")
-        .attr("class", "subway");
+    // const mouseout = function(p, i) {
+    //   d3.select(this)
+    //     .style("cursor", "")
+    //     .attr("class", "subway");
 
 
-      gSubwayLabelLayer.selectAll("text")
-        .filter(function(d){
-          // console.log("p", findprop(p, subwayFeatureName))
-          // console.log("d", findprop(d, subwayFeatureName))
-          return findprop(p, subwayFeatureName) == findprop(d, subwayFeatureName);
-        })
-        .transition()
-        .style("fill-opacity", 0)
-        .transition()
-        .style("display", "none");        
-    }
+    //   gSubwayLabelLayer.selectAll("text")
+    //     .filter(function(d){
+    //       // console.log("p", findprop(p, subwayFeatureName))
+    //       // console.log("d", findprop(d, subwayFeatureName))
+    //       return findprop(p, subwayFeatureName) == findprop(d, subwayFeatureName);
+    //     })
+    //     .transition()
+    //     .style("fill-opacity", 0)
+    //     .transition()
+    //     .style("display", "none");        
+    // }
 
     const featureElement = gSubwayLayer.selectAll("path")
       .data(subwayJson.features)
@@ -151,10 +175,12 @@ export default {
 
     map.on("zoomend", () => {
       featureElement.attr("d", path);
+      console.log('zoomend', map.getBounds());
     });
 
     map.on("dragend", () => {
       featureElement.attr("d", path);
+      console.log('dragend', map.getBounds());
     });
 
     // Subway labels
@@ -170,28 +196,118 @@ export default {
     //     return findprop(d, subwayFeatureName); 
     //   });     
 
-/*
-    const data = [{
-        "node": "interesting",
-        "x": 641,
-        "y": 295
-    }];
 
-    const feature = gSubwayLayer
-      .selectAll("circle")
-      .data(data).enter().append("svg:circle").style("fill", "steelblue").attr("r", 20).attr("transform", function(d) {
-        return "translate(" + d.x + "," + d.y + ")";
-    })
-    .attr("pointer-events","visible")
-    .on("mouseover", function(p, i) {
-      console.log("this is", p);
+    // const data = [{
+    //     "node": "interesting",
+    //     "x": 641,
+    //     "y": 295
+    // }];
 
-      d3.select(this)
-        .style("cursor", "pointer");
-    });
-*/
+    // const feature = gSubwayLayer
+    //   .selectAll("circle")
+    //   .data(data).enter().append("svg:circle").style("fill", "steelblue").attr("r", 20).attr("transform", function(d) {
+    //     return "translate(" + d.x + "," + d.y + ")";
+    // })
+    // .attr("pointer-events","visible")
+    // .on("mouseover", function(p, i) {
+    //   console.log("this is", p);
+
+    //   d3.select(this)
+    //     .style("cursor", "pointer");
+    // });
+
+  },
+*/  
+  methods: {
+    renderMap() {
+      const subwayFeatureName = this.subwayFeatureName;
+
+      // const subwayJson = await d3.json(this.subwayPath);
+      const subwayJson = this.subwayData;
+
+      let map;
+      if (!this.mapAdded) {
+        map = L.map('leaflet').fitBounds(L.geoJson(subwayJson).getBounds());
+        this.map = map;
+      } else {
+        map = this.map;
+        map.fitBounds(L.geoJson(subwayJson).getBounds());
+      }
 
 
+      
+      // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
+      // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
+      // L.tileLayer.provider('Stamen.TonerBackground').addTo(map);
+      // L.tileLayer.provider('Stamen.TonerLite').addTo(map);
+      // L.tileLayer.provider('Hydda.Base').addTo(map);
+      L.tileLayer.provider('CartoDB.Voyager').addTo(map);
+      
+      if (!this.svgAdded) {
+        L.svg().addTo(map); 
+        this.svgAdded = true;
+      }
+      
+      const svg = d3.select(map.getPane('overlayPane')).select("svg");
+      const g = svg.select("g");
+
+      if (!this.layerAdded) {
+        g.append("g").attr("id", this.subwayObjects);
+        this.layerAdded = true;
+      }
+
+      const gSubwayLayer = g.select(`#${this.subwayObjects}`);
+
+      const transform = d3.geoTransform({
+        point: function(x, y) {
+          const point = map.latLngToLayerPoint(new L.LatLng(y, x));
+          this.stream.point(point.x, point.y);
+        }
+      });
+
+      const path = d3.geoPath().projection(transform);
+
+      // gSubwayLayer.selectAll("path").remove();
+
+      const featureElement = gSubwayLayer.selectAll("path")
+        .data(subwayJson.features)
+        .enter()
+        .append("path")
+        .attr("class", function(d) {
+            return "subway";
+        })
+        .attr("d", path);
+
+      // map.on("zoomend", () => {
+      //   featureElement.attr("d", path);
+      //   console.log('zoomend', map.getBounds());
+      // });
+
+      // map.on("dragend", () => {
+      //   featureElement.attr("d", path);
+      //   console.log('dragend', map.getBounds());
+      // });
+      if (!this.mapAdded) {
+        // map.on("moveend", () => {
+        //   featureElement.attr("d", path);
+        //   console.log('zoomend', map.getBounds());
+        // });
+
+        map.on("zoomend", () => {
+          featureElement.attr("d", path);
+          console.log('zoomend', map.getBounds());
+        });
+
+        map.on("dragend", () => {
+          featureElement.attr("d", path);
+          console.log('dragend', map.getBounds());
+        });
+        this.mapAdded = true;
+      }
+
+
+
+    }
   }
 };
 </script>

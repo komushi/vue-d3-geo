@@ -36,7 +36,7 @@
       color-range='#6f97d9,#6f97d9'
       >    
     </d3-geo-static> -->
-
+<!-- 
     <d3-geo-subway-v3
       id="04" 
       map-path="data/tokyo_23_blocks_districts_final.json"
@@ -56,9 +56,12 @@
       >    
     </d3-geo-subway-v4>   
 
+ -->    
     <d3-geo-leaf
+      v-if="currentSubway"
       id="06" 
       subway-path="data/tokyo_subway.geojson"
+      :subwayData="currentSubway"
       color-range='#6f97d9,#6f97d9'
       >    
     </d3-geo-leaf> 
@@ -88,6 +91,7 @@ export default {
   },
   data() {
     return {
+      currentSubway: null,
       jsons: [],
       matrixJson: null,
       timer: 0,
@@ -280,6 +284,31 @@ export default {
       this.matrixJson = this.jsons[idx];   
     }, 2500);
     /*** for route event ***/
+
+    /*** Dynamic Subway Data ***/
+    const subways = [];
+    axios.get("data/maihama.geojson")
+      .then((response)  =>  {
+        subways.push(response.data)
+      }, (error)  =>  {
+      
+      });
+
+    axios.get("data/rinkai.geojson")
+      .then((response)  =>  {
+        subways.push(response.data)
+        this.currentSubway = response.data
+      }, (error)  =>  {
+      
+      });
+
+    setInterval(() => {
+      let idx = Math.floor(Math.random() * 2)
+      this.currentSubway = subways[idx]
+      // console.log(this.currentSubway)
+
+    }, 5000);
+    /*** Dynamic Subway Data ***/
   }
 }
 </script>
