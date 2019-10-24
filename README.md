@@ -9,6 +9,8 @@ cd vue-d3-geo/demo
 live-server
 ```
 
+[live-server installation](https://www.npmjs.com/package/live-server)
+
 ## 2. For Users to use the components
 
 ### 2-1. Install 
