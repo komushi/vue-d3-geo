@@ -43130,12 +43130,12 @@ var D3GeoSubwayV4_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoSubwayV4 = (D3GeoSubwayV4_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"95b1bd42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=453c7aa4&
-var D3GeoLeafvue_type_template_id_453c7aa4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"d3geoleaf"}},[_c('div',{style:({ height: _vm.height + 'px', width:　'100%'}),attrs:{"id":"leaflet"}})])}
-var D3GeoLeafvue_type_template_id_453c7aa4_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"95b1bd42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=08d485ae&
+var D3GeoLeafvue_type_template_id_08d485ae_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"d3geoleaf"}},[_c('div',{style:({ height: _vm.height + 'px', width:　'100%'}),attrs:{"id":"leaflet"}})])}
+var D3GeoLeafvue_type_template_id_08d485ae_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/D3GeoLeaf.vue?vue&type=template&id=453c7aa4&
+// CONCATENATED MODULE: ./src/components/D3GeoLeaf.vue?vue&type=template&id=08d485ae&
 
 // EXTERNAL MODULE: ./node_modules/leaflet/dist/leaflet.css
 var leaflet = __webpack_require__("6cc5");
@@ -43148,8 +43148,6 @@ var leaflet_src_default = /*#__PURE__*/__webpack_require__.n(leaflet_src);
 var leaflet_providers = __webpack_require__("e5e02");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=script&lang=js&
-
-
 
 //
 //
@@ -43167,8 +43165,11 @@ var D3GeoLeafvue_type_script_lang_js_props = {
   mapPath: {
     type: String
   },
-  subwayPath: {
+  geojsonPath: {
     type: String
+  },
+  geojsonObject: {
+    type: Object
   },
   width: {
     type: [String, Number],
@@ -43202,11 +43203,11 @@ var D3GeoLeafvue_type_script_lang_js_props = {
     type: String,
     default: 'properties.district_code'
   },
-  subwayObjects: {
+  geojsonType: {
     type: String,
     default: 'lines'
   },
-  subwayFeatureName: {
+  geojsonFeatureName: {
     type: String,
     default: 'properties.N02_003'
   },
@@ -43217,119 +43218,98 @@ var D3GeoLeafvue_type_script_lang_js_props = {
 };
 /* harmony default export */ var D3GeoLeafvue_type_script_lang_js_ = ({
   name: 'd3-geo-leaf',
+  data: function data() {
+    return {
+      map: null,
+      mapAdded: false,
+      svgAdded: false,
+      layerAdded: false
+    };
+  },
   props: D3GeoLeafvue_type_script_lang_js_props,
-  mounted: function () {
-    var _mounted = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee() {
-      var subwayFeatureName, subwayJson, map, svg, g, gSubwayLayer, gSubwayLabelLayer, transform, path, mouseover, mouseout, featureElement;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              subwayFeatureName = this.subwayFeatureName;
-              _context.next = 3;
-              return src_json(this.subwayPath);
-
-            case 3:
-              subwayJson = _context.sent;
-              map = leaflet_src_default.a.map('leaflet').fitBounds(leaflet_src_default.a.geoJson(subwayJson).getBounds()); // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
-              // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
-              // L.tileLayer.provider('Stamen.TonerBackground').addTo(map);
-              // L.tileLayer.provider('Stamen.TonerLite').addTo(map);
-
-              leaflet_src_default.a.tileLayer.provider('Hydda.Base').addTo(map); // map.getPane('mapPane').style.pointerEvents = 'none';
-
-              leaflet_src_default.a.svg().addTo(map);
-              svg = src_select(map.getPane('overlayPane')).select("svg");
-              g = svg.select("g");
-              gSubwayLayer = g.append("g").attr("id", this.subwayObjects);
-              gSubwayLabelLayer = g.append("g").attr("id", this.subwayObjects + "_label");
-              transform = src_transform({
-                point: function point(x, y) {
-                  var point = map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(y, x));
-                  this.stream.point(point.x, point.y);
-                }
-              });
-              path = d3_geo_src_path().projection(transform);
-
-              mouseover = function mouseover(p, i) {
-                console.log("this is", p);
-                src_select(this).style("cursor", "pointer").attr("class", "subwayActive");
-                gSubwayLabelLayer.selectAll("text").filter(function (d) {
-                  // console.log("p", findprop(p, subwayFeatureName))
-                  // console.log("d", findprop(d, subwayFeatureName))
-                  return findprop(p, subwayFeatureName) == findprop(d, subwayFeatureName);
-                }).transition().style("fill-opacity", 1).style("display", "block");
-              };
-
-              mouseout = function mouseout(p, i) {
-                src_select(this).style("cursor", "").attr("class", "subway");
-                gSubwayLabelLayer.selectAll("text").filter(function (d) {
-                  // console.log("p", findprop(p, subwayFeatureName))
-                  // console.log("d", findprop(d, subwayFeatureName))
-                  return findprop(p, subwayFeatureName) == findprop(d, subwayFeatureName);
-                }).transition().style("fill-opacity", 0).transition().style("display", "none");
-              };
-
-              featureElement = gSubwayLayer.selectAll("path").data(subwayJson.features).enter().append("path").attr("class", function (d) {
-                return "subway";
-              }).attr("d", path).attr("pointer-events", "visible").on("mouseover", function (p, i) {
-                console.log("that is", p);
-              });
-              map.on("zoomend", function () {
-                featureElement.attr("d", path);
-              });
-              map.on("dragend", function () {
-                featureElement.attr("d", path);
-              }); // Subway labels
-              // gSubwayLabelLayer.selectAll("text")
-              //   .data(subwayJson.features)
-              //   .enter().append("text")
-              //   .attr("class", "subwayLabel")
-              //   .attr("transform", function(d) { 
-              //     return "translate(" + path.centroid(d) + ")"; 
-              //   })
-              //   .attr("dy", ".35em")
-              //   .text(function(d) { 
-              //     return findprop(d, subwayFeatureName); 
-              //   });     
-
-              /*
-                  const data = [{
-                      "node": "interesting",
-                      "x": 641,
-                      "y": 295
-                  }];
-              
-                  const feature = gSubwayLayer
-                    .selectAll("circle")
-                    .data(data).enter().append("svg:circle").style("fill", "steelblue").attr("r", 20).attr("transform", function(d) {
-                      return "translate(" + d.x + "," + d.y + ")";
-                  })
-                  .attr("pointer-events","visible")
-                  .on("mouseover", function(p, i) {
-                    console.log("this is", p);
-              
-                    d3.select(this)
-                      .style("cursor", "pointer");
-                  });
-              */
-
-            case 18:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, this);
-    }));
-
-    function mounted() {
-      return _mounted.apply(this, arguments);
+  watch: {
+    geojsonObject: {
+      handler: function handler(newVal, oldVal) {
+        this.renderMap();
+      },
+      deep: true
     }
+  },
+  mounted: function mounted() {
+    this.renderMap();
+  },
+  methods: {
+    renderMap: function renderMap() {
+      var geojsonFeatureName = this.geojsonFeatureName; // const geojsonObject = await d3.json(this.geojsonPath);
+      // const geojsonObject = this.geojsonObject;
 
-    return mounted;
-  }()
+      var map;
+
+      if (!this.mapAdded) {
+        map = leaflet_src_default.a.map('leaflet').fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
+        this.map = map;
+      } else {
+        map = this.map;
+        map.fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
+      } // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
+      // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
+      // L.tileLayer.provider('Stamen.TonerBackground').addTo(map);
+      // L.tileLayer.provider('Stamen.TonerLite').addTo(map);
+      // L.tileLayer.provider('Hydda.Base').addTo(map);
+
+
+      leaflet_src_default.a.tileLayer.provider('CartoDB.Voyager').addTo(map);
+
+      if (!this.svgAdded) {
+        leaflet_src_default.a.svg().addTo(map);
+        this.svgAdded = true;
+      }
+
+      var svg = src_select(map.getPane('overlayPane')).select("svg");
+      var g = svg.select("g");
+
+      if (!this.layerAdded) {
+        g.append("g").attr("id", this.geojsonType);
+        this.layerAdded = true;
+      }
+
+      var gGeojsonLayer = g.select("#".concat(this.geojsonType));
+      var transform = src_transform({
+        point: function point(x, y) {
+          var point = map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(y, x));
+          this.stream.point(point.x, point.y);
+        }
+      });
+      var path = d3_geo_src_path().projection(transform); // gGeojsonLayer.selectAll("path").remove();
+
+      var featureElement = gGeojsonLayer.selectAll("path").data(this.geojsonObject.features).enter().append("path").attr("class", function (d) {
+        return "geojson";
+      }).attr("d", path); // map.on("zoomend", () => {
+      //   featureElement.attr("d", path);
+      //   console.log('zoomend', map.getBounds());
+      // });
+      // map.on("dragend", () => {
+      //   featureElement.attr("d", path);
+      //   console.log('dragend', map.getBounds());
+      // });
+
+      if (!this.mapAdded) {
+        // map.on("moveend", () => {
+        //   featureElement.attr("d", path);
+        //   console.log('zoomend', map.getBounds());
+        // });
+        map.on("zoomend", function () {
+          featureElement.attr("d", path);
+          console.log('zoomend', map.getBounds());
+        });
+        map.on("dragend", function () {
+          featureElement.attr("d", path);
+          console.log('dragend', map.getBounds());
+        });
+        this.mapAdded = true;
+      }
+    }
+  }
 });
 // CONCATENATED MODULE: ./src/components/D3GeoLeaf.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_D3GeoLeafvue_type_script_lang_js_ = (D3GeoLeafvue_type_script_lang_js_); 
@@ -43347,8 +43327,8 @@ var D3GeoLeafvue_type_style_index_0_lang_css_ = __webpack_require__("2e33");
 
 var D3GeoLeaf_component = normalizeComponent(
   components_D3GeoLeafvue_type_script_lang_js_,
-  D3GeoLeafvue_type_template_id_453c7aa4_render,
-  D3GeoLeafvue_type_template_id_453c7aa4_staticRenderFns,
+  D3GeoLeafvue_type_template_id_08d485ae_render,
+  D3GeoLeafvue_type_template_id_08d485ae_staticRenderFns,
   false,
   null,
   null,

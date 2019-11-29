@@ -189,6 +189,10 @@ Copy the following files under public/data/
 
 [Reference to use LineString](https://qiita.com/hiyuzawa/items/b28fa4d380d02d8bd5a1)
 
+[leaflet example](https://leafletjs.com/examples/quick-start/)
+[leaflet reference](https://leafletjs.com/reference-1.5.0.html)
+
+
 ## 5. TODO
 
 ### 5-1. Add gradient colors to the Path

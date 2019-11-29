@@ -36,17 +36,17 @@
       color-range='#6f97d9,#6f97d9'
       >    
     </d3-geo-static> -->
-<!-- 
-    <d3-geo-subway-v3
+
+<!--     <d3-geo-subway
       id="04" 
       map-path="data/tokyo_23_blocks_districts_final.json"
       subway-path="data/tokyo_subway.topojson"
       width="1200"
       height="1200"
       >    
-    </d3-geo-subway-v3>
+    </d3-geo-subway>
 
-    <d3-geo-subway-v4
+    <d3-geo-subway-v2
       id="05" 
       map-path="data/tokyo_23_blocks_districts_final.json"
       subway-path="data/tokyo_subway.topojson"
@@ -54,14 +54,14 @@
       width="1200"
       height="1200"
       >    
-    </d3-geo-subway-v4>   
+    </d3-geo-subway-v2>  -->  
 
- -->    
+ 
     <d3-geo-leaf
       v-if="currentSubway"
       id="06" 
-      subway-path="data/tokyo_subway.geojson"
-      :subwayData="currentSubway"
+      geojson-path="data/tokyo_subway.geojson"
+      :geojson-object="currentSubway"
       color-range='#6f97d9,#6f97d9'
       >    
     </d3-geo-leaf> 
@@ -73,6 +73,7 @@ import D3GeoStatic from './components/D3GeoStatic'
 import D3GeoDoubleLayer from './components/D3GeoDoubleLayer'
 import D3GeoEvents from './components/D3GeoEvents'
 import D3GeoSubway from './components/D3GeoSubway'
+import D3GeoSubwayV2 from './components/D3GeoSubwayV2'
 import D3GeoSubwayV3 from './components/D3GeoSubwayV3'
 import D3GeoSubwayV4 from './components/D3GeoSubwayV4'
 import D3GeoLeaf from './components/D3GeoLeaf'
@@ -85,6 +86,7 @@ export default {
     D3GeoDoubleLayer,
     D3GeoEvents,
     D3GeoSubway,
+    D3GeoSubwayV2,
     D3GeoSubwayV3,
     D3GeoSubwayV4,
     D3GeoLeaf
