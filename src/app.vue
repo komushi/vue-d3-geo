@@ -37,14 +37,14 @@
       >    
     </d3-geo-static> -->
 
-    <d3-geo-subway
+<!--     <d3-geo-subway
       id="04" 
       map-path="data/tokyo_23_blocks_districts_final.json"
       subway-path="data/tokyo_subway.topojson"
       width="1200"
       height="1200"
       >    
-    </d3-geo-subway>
+    </d3-geo-subway> -->
 <!-- 
     <d3-geo-subway-v2
       id="05" 

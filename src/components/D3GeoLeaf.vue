@@ -117,19 +117,8 @@ export default {
       const colorScale = this.getColorScale(maxCount, this.colorRange);  
 
       ///////////////////////////////////////////////////////////////////////////
-      //////////////////////////// add svg and geojson //////////////////////////
+      ///////////////////// create transform and path function //////////////////
       ///////////////////////////////////////////////////////////////////////////
-      if (!this.svgAdded) {
-        L.svg().addTo(map); 
-        this.svgAdded = true;
-      }
-      
-      const svg = d3.select(map.getPane('overlayPane')).select("svg");
-      const g = svg.select("g");
-
-      g.selectAll(`g[id=${this.geojsonType}]`).remove();
-      const gGeojsonLayer = g.append("g").attr("id", this.geojsonType);
-
       const transform = d3.geoTransform({
         point: function(x, y) {
           const point = map.latLngToLayerPoint(new L.LatLng(y, x));
@@ -139,33 +128,95 @@ export default {
 
       const path = d3.geoPath().projection(transform);
 
-      gGeojsonLayer.selectAll("path").remove();
+      ///////////////////////////////////////////////////////////////////////////
+      ///////////////////////////////// add svg /////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+      if (!this.svgAdded) {
+        L.svg().addTo(map); 
+        this.svgAdded = true;
+      }
+      
+      ///////////////////////////////////////////////////////////////////////////
+      /////////////////////////// add geojson and label /////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+      const svg = d3.select(map.getPane('overlayPane')).select("svg");
+      const g = svg.select("g");
+
+      g.selectAll(`g[id=${this.geojsonType}]`).remove();
+      const gGeojsonLayer = g.append("g").attr("id", this.geojsonType);
+
+      g.selectAll(`g[id=${this.geojsonType}_label]`).remove();
+      const gLabelLayer = g.append("g").attr("id", this.geojsonType + "_label");
+
+
+      const mouseover = function(p, i) {
+        d3.select(this)
+          .style("cursor", "pointer")
+          .style("stroke-width", "5px")
+
+        gLabelLayer.selectAll("text")
+          .filter(function(d){
+            return d.properties[vm.countTag] == p.properties[vm.countTag];
+          })
+          .transition()
+          .style("fill-opacity", 1)
+          .style("display", "block")
+          .attr("fill", function(d,i) {
+            return colorScale(p.properties[vm.countTag]);
+          });
+      }
+
+      const mouseout = function(p, i) {
+        d3.select(this)
+          .style("cursor", "")
+          .style("stroke-width", "3px");
+
+        gLabelLayer.selectAll("text")
+          .filter(function(d){
+            return d.properties[vm.countTag] == p.properties[vm.countTag];
+          })
+          .transition()
+          .style("fill-opacity", 0)
+          .transition()
+          .style("display", "none");        
+      }      
 
       gGeojsonLayer.selectAll("path")
         .data(this.geojsonObject.features)
         .enter()
         .append("path")
-        .attr("fill", function() {
-          return "none"
-        })        
-        .attr("stroke-width", function() {
-          return "3px"
-        })
+        .style("fill", "none")        
+        .style("stroke-width", "3px")
+        .style("pointer-events", "auto")
         .attr("stroke", function(d,i) {
           return colorScale(d.properties[vm.countTag]);
-        });        
+        })
+        .on("mouseout", mouseout)
+        .on("mouseover", mouseover);
 
-      // g.selectAll(`g[id=${this.geojsonType}_label]`).remove();
-      // const gLabelLayer = g.append("g").attr("id", this.geojsonType + "_label");
-
+      // Subway labels
+      gLabelLayer.selectAll("text")
+        .data(this.geojsonObject.features)
+        .enter()
+        .append("text")
+        .attr("class", "geojsonLabel")
+        .attr("pointer-events", "none")
+        .attr("transform", function(d) { 
+          console.log(path.centroid(d));
+          return "translate(" + path.centroid(d) + ")"; 
+        })
+        .attr("dy", ".35em")
+        .text(function(d) { 
+          return d.properties[vm.countTag];
+        });
 
       ///////////////////////////////////////////////////////////////////////////
       ///////////////// Adding the initial gradient for the legend //////////////
       ///////////////////////////////////////////////////////////////////////////
-      g.selectAll("defs[id=common_grads_def]").remove();
+      g.selectAll("defs[id=color_grads_def]").remove();
 
       const commonGrads = g.append("defs")      
-        .attr("id", "common_grads_def");
+        .attr("id", "color_grads_def");
 
       commonGrads
         .append("linearGradient")
@@ -189,15 +240,16 @@ export default {
       vm.legendWidth = Math.min(vm.width * 0.8, 600);
 
       // Color Legend container
-      g.selectAll("g[id=legendWrapper]").remove();
+      g.selectAll("g[id=legend_wrapper]").remove();
 
       const legendsvg = g.append("g")      
-        .attr("id", "legendWrapper")
-        .attr("transform", "translate(" + (vm.width / 2) + "," + (vm.height * 0.95) + ")");
+        .attr("id", "legend_wrapper")
+        // .attr("transform", "translate(" + (vm.width / 2) + "," + (vm.height * 0.95) + ")");
+        .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
       //Draw the Rectangle
       legendsvg.append("rect")
-        .attr("id", "legendRect")
+        .attr("id", "legend_rect")
         .attr("x", -vm.legendWidth/2)
         .attr("y", 0)
         .attr("width", vm.legendWidth)
@@ -310,5 +362,19 @@ svg {
   text-anchor: middle;
 }
 
-.geojsonActive { fill: none; stroke: crimson; stroke-width: 3px; filter: drop-shadow(0 0 2rem orange);}
+.geojsonLabel {
+  display: none;
+  fill-opacity: 1;
+  font-size: 30px;
+  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
+  font-weight: 700;
+  text-anchor: middle;
+  text-shadow:
+    2px 2px 0 #000,
+    -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+}
+
 </style>
