@@ -1,7 +1,13 @@
-<template>
+<!-- <template>
   <div id="d3geoleaf">
     <div id="leaflet" :style="{ height: height + 'px', width:　'100%'}" ></div>
   </div>
+</template> -->
+
+<template>
+
+  <div id="leaflet" ref="leaflet" :style="{ height: '100%', width:　'100%'}"></div>
+
 </template>
 
 <script>
@@ -33,40 +39,24 @@ const props = {
   },
   colorRange: {
     type: String,
-    default: '#0d47a1,#e3f2fd'
+    default: '#0000ff,#e623e4,#ff0000'
   },
   center: {
     type: String,
     default: '139.752268, 35.677043'
   },
-  scale: {
-    type: [String, Number],
-    default: 110000
-  },
-  layerObjects: {
-    type: String,
-    default: 'districts'
-  },
-  layerFeatureName: {
-    type: String,
-    default: 'properties.district'
-  },
-  layerFeatureCode: {
-    type: String,
-    default: 'properties.district_code'
-  },
   geojsonType: {
     type: String,
     default: 'lines'
   },
-  geojsonFeatureName: {
+  countTag: {
     type: String,
-    default: 'properties.N02_003'
+    default: 'collected'
   },
-  featureNameStyle: {
+  legendTitle: {
     type: String,
-    default: 'static'
-  }
+    default: 'Collected Count Per Feature'
+  }  
 };
 export default {
   name: 'd3-geo-leaf',
@@ -75,7 +65,6 @@ export default {
       map: null,
       mapAdded: false,
       svgAdded: false,
-      layerAdded: false,
     };
   },
   props,
@@ -93,21 +82,18 @@ export default {
   },
   methods: {
     renderMap() {
-      const geojsonFeatureName = this.geojsonFeatureName;
-
-      // const geojsonObject = await d3.json(this.geojsonPath);
-      // const geojsonObject = this.geojsonObject;
+      const vm = this;
 
       let map;
+
+      // fit bounds based on the geojsonObject
       if (!this.mapAdded) {
-        map = L.map('leaflet').fitBounds(L.geoJson(this.geojsonObject).getBounds());
+        map = L.map(this.$refs['leaflet']).fitBounds(L.geoJson(this.geojsonObject).getBounds());
         this.map = map;
       } else {
         map = this.map;
-        map.fitBounds(L.geoJson(this.geojsonObject).getBounds());
+        // map.fitBounds(L.geoJson(this.geojsonObject).getBounds());
       }
-
-
       
       // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
       // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
@@ -115,7 +101,24 @@ export default {
       // L.tileLayer.provider('Stamen.TonerLite').addTo(map);
       // L.tileLayer.provider('Hydda.Base').addTo(map);
       L.tileLayer.provider('CartoDB.Voyager').addTo(map);
-      
+
+
+      ///////////////////////////////////////////////////////////////////////////
+      /////////////////////////// Get Scale Functions ///////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+      const events = d3.entries(this.geojsonObject.features);
+
+      const maxCount = d3.max(events, function(d) {
+        return d.value.properties[vm.countTag]; 
+      });
+
+      const countPoints = this.getCountPoints(maxCount, this.width, 10);
+      const countScale = this.getCountScale(maxCount, this.width);
+      const colorScale = this.getColorScale(maxCount, this.colorRange);  
+
+      ///////////////////////////////////////////////////////////////////////////
+      //////////////////////////// add svg and geojson //////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
       if (!this.svgAdded) {
         L.svg().addTo(map); 
         this.svgAdded = true;
@@ -124,12 +127,8 @@ export default {
       const svg = d3.select(map.getPane('overlayPane')).select("svg");
       const g = svg.select("g");
 
-      if (!this.layerAdded) {
-        g.append("g").attr("id", this.geojsonType);
-        this.layerAdded = true;
-      }
-
-      const gGeojsonLayer = g.select(`#${this.geojsonType}`);
+      g.selectAll(`g[id=${this.geojsonType}]`).remove();
+      const gGeojsonLayer = g.append("g").attr("id", this.geojsonType);
 
       const transform = d3.geoTransform({
         point: function(x, y) {
@@ -140,46 +139,149 @@ export default {
 
       const path = d3.geoPath().projection(transform);
 
-      // gGeojsonLayer.selectAll("path").remove();
+      gGeojsonLayer.selectAll("path").remove();
 
-      const featureElement = gGeojsonLayer.selectAll("path")
+      gGeojsonLayer.selectAll("path")
         .data(this.geojsonObject.features)
         .enter()
         .append("path")
-        .attr("class", function(d) {
-            return "geojson";
+        .attr("fill", function() {
+          return "none"
+        })        
+        .attr("stroke-width", function() {
+          return "3px"
         })
-        .attr("d", path);
+        .attr("stroke", function(d,i) {
+          return colorScale(d.properties[vm.countTag]);
+        });        
 
-      // map.on("zoomend", () => {
-      //   featureElement.attr("d", path);
-      //   console.log('zoomend', map.getBounds());
-      // });
+      // g.selectAll(`g[id=${this.geojsonType}_label]`).remove();
+      // const gLabelLayer = g.append("g").attr("id", this.geojsonType + "_label");
 
-      // map.on("dragend", () => {
-      //   featureElement.attr("d", path);
-      //   console.log('dragend', map.getBounds());
-      // });
+
+      ///////////////////////////////////////////////////////////////////////////
+      ///////////////// Adding the initial gradient for the legend //////////////
+      ///////////////////////////////////////////////////////////////////////////
+      g.selectAll("defs[id=common_grads_def]").remove();
+
+      const commonGrads = g.append("defs")      
+        .attr("id", "common_grads_def");
+
+      commonGrads
+        .append("linearGradient")
+        .attr("id", "legendTraffic")
+        .attr("x1", "0%").attr("y1", "0%")
+        .attr("x2", "100%").attr("y2", "0%")
+        .selectAll("stop") 
+        .data(d3.range(10))                
+        .enter().append("stop") 
+        .attr("offset", function(d,i) { 
+          return countScale( countPoints[i] ) / vm.width;
+        })   
+        .attr("stop-color", function(d,i) { 
+          return colorScale(countPoints[i]);  
+        });      
+
+
+      ///////////////////////////////////////////////////////////////////////////
+      ////////////////////////// Draw the init legend ///////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+      vm.legendWidth = Math.min(vm.width * 0.8, 600);
+
+      // Color Legend container
+      g.selectAll("g[id=legendWrapper]").remove();
+
+      const legendsvg = g.append("g")      
+        .attr("id", "legendWrapper")
+        .attr("transform", "translate(" + (vm.width / 2) + "," + (vm.height * 0.95) + ")");
+
+      //Draw the Rectangle
+      legendsvg.append("rect")
+        .attr("id", "legendRect")
+        .attr("x", -vm.legendWidth/2)
+        .attr("y", 0)
+        .attr("width", vm.legendWidth)
+        .attr("height", 10)
+        .style("fill", "url(#legendTraffic)");
+        
+      //Append title
+      legendsvg.append("text")
+        .attr("class", "legendTitle")
+        .attr("x", 0)
+        .attr("y", -10)
+        .style("text-anchor", "middle")
+        .text(vm.legendTitle);
+
+      //Define x-axis
+      const xAxis = vm.getXAxis(vm.legendWidth, maxCount);
+
+      //Set up X axis
+      const axisLayer = legendsvg.append("g")
+        .attr("id", "axis")
+        .attr("transform", "translate(0," + (10) + ")");
+
+      axisLayer.call(xAxis);
+
+      ///////////////////////////////////////////////////////////////////////////
+      /////////////////////// leaflet map zoom events ///////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
       if (!this.mapAdded) {
-        // map.on("moveend", () => {
-        //   featureElement.attr("d", path);
-        //   console.log('zoomend', map.getBounds());
-        // });
-
         map.on("zoomend", () => {
-          featureElement.attr("d", path);
+          updatePath();
           console.log('zoomend', map.getBounds());
         });
 
         map.on("dragend", () => {
-          featureElement.attr("d", path);
+          updatePath();
           console.log('dragend', map.getBounds());
         });
+
         this.mapAdded = true;
       }
 
+      //pathのd属性を更新
+      const updatePath = function () {
+          g.selectAll("path").attr('d', path);
+      };
 
+      updatePath();
 
+    },
+    getCountScale(maxCount, width) {
+      //Calculate the variables for the sort gradient
+      return d3.scaleLinear()
+        .domain([0, maxCount])
+        .range([0, width]);
+    },
+    getCountPoints(maxCount, width, size) {
+      //Calculate the variables for the sort gradient
+      const countScale = this.getCountScale(maxCount, size);
+
+      //Calculate the variables for the sort gradient
+      const countRange = countScale.domain();
+      countRange[2] = countRange[1] - countRange[0];
+      const countPoints = [];
+      for(let i = 0; i < size; i++) {
+        countPoints.push(i * countRange[2]/(size-1) + countRange[0]);
+      }
+
+      return countPoints;
+    },
+    getXAxis(legendWidth, maxCount) {
+      const xScale = d3.scaleLinear()
+       .range([-legendWidth/2, legendWidth/2])
+       .domain([ 0, maxCount　] );
+
+      return d3.axisBottom()
+              .ticks(5)
+              //.tickFormat(formatPercent)
+              .scale(xScale);
+    },
+    getColorScale(maxCount, colorRange) {
+
+      return d3.scaleLinear()
+        .domain([0, maxCount/2, maxCount])
+        .range(colorRange.split(","));
     }
   }
 };
@@ -199,36 +301,7 @@ svg {
   display: block;
 }
 
-.background {
-  fill: none;
-  pointer-events: all;
-}
-
-.circle {
-}
-
-.layer1 {
-  cursor: pointer;
-}
-
-
-.layer1:hover {
-  fill: orange;
-}
-
-.layer1.active {
-  display:none;
-}
-
-.layer1-boundary {
-  fill: none;
-  stroke: white;
-  stroke-dasharray: 2,2;
-  stroke-linejoin: round;
-  stroke-width: 1;
-}
-
-.layer1LegendTitle {
+.legendTitle {
   fill: black;
   fill-opacity: 1;
   font-size: 18px;
@@ -237,26 +310,5 @@ svg {
   text-anchor: middle;
 }
 
-.layer2 {
-  stroke: white;
-  stroke-width: 0.2;
-}
-
-.label {
-  fill: white;
-  fill-opacity: 1;
-  font-size: 18px;
-  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
-  font-weight: 700;
-  text-anchor: middle;
-  text-shadow:
-    2px 2px 0 #000,
-    -1px -1px 0 #000,  
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-     1px 1px 0 #000;
-}
-
-.geojson { fill: none; stroke: #2342fd; stroke-width: 2px;}
 .geojsonActive { fill: none; stroke: crimson; stroke-width: 3px; filter: drop-shadow(0 0 2rem orange);}
 </style>

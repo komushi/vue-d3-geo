@@ -12,13 +12,13 @@
       @on-stop-events="unsubTaxiEvents"
       >    
     </d3-geo-double-layer> -->
-    <!--
-     <d3-geo-events 
+    
+<!--      <d3-geo-events 
       id="02" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
       :layer-event-data="matrixJson"
       >    
-    </d3-geo-events> -->
+    </d3-geo-events>  -->
 
 <!--     <d3-geo-static
       id="03" 
@@ -37,7 +37,7 @@
       >    
     </d3-geo-static> -->
 
-<!--     <d3-geo-subway
+    <d3-geo-subway
       id="04" 
       map-path="data/tokyo_23_blocks_districts_final.json"
       subway-path="data/tokyo_subway.topojson"
@@ -45,7 +45,7 @@
       height="1200"
       >    
     </d3-geo-subway>
-
+<!-- 
     <d3-geo-subway-v2
       id="05" 
       map-path="data/tokyo_23_blocks_districts_final.json"
@@ -57,14 +57,31 @@
     </d3-geo-subway-v2>  -->  
 
  
-    <d3-geo-leaf
+<!--     <d3-geo-leaf
       v-if="currentSubway"
       id="06" 
-      geojson-path="data/tokyo_subway.geojson"
       :geojson-object="currentSubway"
       color-range='#6f97d9,#6f97d9'
       >    
-    </d3-geo-leaf> 
+    </d3-geo-leaf>  -->
+    <div>
+      <div v-for="item in apiResponse">
+        <input type="radio" v-model="geojsonString" name="time_window" :value="item.geojson"> {{item.window_start}}
+      </div>
+    </div>
+
+
+
+    <div style="width: 80%; height: 1200px">
+      <d3-geo-leaf
+        v-if="featureStatistics"
+        id="06" 
+        :geojson-object="featureStatistics"
+        color-range='#0000ff,#e623e4,#ff0000'
+        >    
+      </d3-geo-leaf>     
+    </div>
+    
   </div>
 </template>
 
@@ -91,8 +108,19 @@ export default {
     D3GeoSubwayV4,
     D3GeoLeaf
   },
+  computed: {
+    featureStatistics: function() {
+      if (this.geojsonString) {
+        return JSON.parse(this.geojsonString);
+      } else {
+        return null;
+      }
+    }
+  },  
   data() {
     return {
+      geojsonString: null,
+      apiResponse: [],
       currentSubway: null,
       jsons: [],
       matrixJson: null,
@@ -257,38 +285,37 @@ export default {
   },
   mounted() {
     /*** for 2-layer ***/
-    setInterval(() => {
-      this.districtRankList = this.generateData();
-    }, 1000);
+    // setInterval(() => {
+    //   this.districtRankList = this.generateData();
+    // }, 1000);
     /*** for 2-layer ***/
 
     /*** for route event ***/
-    axios.get("data/event_data1.json")
-      .then((response)  =>  {
-        console.log(response.data.toptenlist);
-        this.jsons.push(response.data.toptenlist);
-      }, (error)  =>  {
-      })
+    // axios.get("data/event_data1.json")
+    //   .then((response)  =>  {
+    //     this.jsons.push(response.data.toptenlist);
+    //   }, (error)  =>  {
+    //   })
 
-    axios.get("data/event_data2.json")
-      .then((response)  =>  {
-        console.log(response);
-        this.jsons.push(response.data.toptenlist);
-      }, (error)  =>  {
-      })
+    // axios.get("data/event_data2.json")
+    //   .then((response)  =>  {
+    //     console.log(response);
+    //     this.jsons.push(response.data.toptenlist);
+    //   }, (error)  =>  {
+    //   })
 
 
-    let count = 0;
+    // let count = 0;
 
-    setInterval(() => {
+    // setInterval(() => {
 
-      let idx = Math.floor(Math.random() * 2);
-      this.matrixJson = this.jsons[idx];   
-    }, 2500);
+    //   let idx = Math.floor(Math.random() * 2);
+    //   this.matrixJson = this.jsons[idx];   
+    // }, 2500);
     /*** for route event ***/
 
     /*** Dynamic Subway Data ***/
-    const subways = [];
+/*    const subways = [];
     axios.get("data/maihama.geojson")
       .then((response)  =>  {
         subways.push(response.data)
@@ -296,7 +323,7 @@ export default {
       
       });
 
-    axios.get("data/rinkai.geojson")
+    axios.get("data/test.geojson")
       .then((response)  =>  {
         subways.push(response.data)
         this.currentSubway = response.data
@@ -310,7 +337,16 @@ export default {
       // console.log(this.currentSubway)
 
     }, 5000);
+*/    
     /*** Dynamic Subway Data ***/
+
+    axios.get("data/statistics.json")
+      .then((response)  =>  {
+        this.apiResponse = response.data
+      }, (error)  =>  {
+      
+      });
+
   }
 }
 </script>
