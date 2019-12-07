@@ -43121,12 +43121,12 @@ var D3GeoSubwayV4_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoSubwayV4 = (D3GeoSubwayV4_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"95b1bd42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=08d485ae&
-var D3GeoLeafvue_type_template_id_08d485ae_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"d3geoleaf"}},[_c('div',{style:({ height: _vm.height + 'px', width:　'100%'}),attrs:{"id":"leaflet"}})])}
-var D3GeoLeafvue_type_template_id_08d485ae_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"95b1bd42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=430d1466&
+var D3GeoLeafvue_type_template_id_430d1466_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"leaflet",style:({ height: '100%', width:　'100%'}),attrs:{"id":"leaflet"}})}
+var D3GeoLeafvue_type_template_id_430d1466_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/D3GeoLeaf.vue?vue&type=template&id=08d485ae&
+// CONCATENATED MODULE: ./src/components/D3GeoLeaf.vue?vue&type=template&id=430d1466&
 
 // EXTERNAL MODULE: ./node_modules/leaflet/dist/leaflet.css
 var leaflet = __webpack_require__("6cc5");
@@ -43140,8 +43140,9 @@ var leaflet_providers = __webpack_require__("e5e02");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=script&lang=js&
 
-//
-//
+
+
+
 //
 //
 //
@@ -43153,58 +43154,43 @@ var leaflet_providers = __webpack_require__("e5e02");
 
 
 var D3GeoLeafvue_type_script_lang_js_props = {
-  mapPath: {
-    type: String
-  },
   geojsonPath: {
     type: String
   },
   geojsonObject: {
     type: Object
   },
-  width: {
+  legendWidth: {
     type: [String, Number],
-    default: 900
-  },
-  height: {
-    type: [String, Number],
-    default: 1000
+    default: 500
   },
   colorRange: {
     type: String,
-    default: '#0d47a1,#e3f2fd'
+    default: '#0000ff,#e623e4,#ff0000'
   },
   center: {
     type: String,
     default: '139.752268, 35.677043'
   },
-  scale: {
-    type: [String, Number],
-    default: 110000
-  },
-  layerObjects: {
+  legendCenter: {
     type: String,
-    default: 'districts'
-  },
-  layerFeatureName: {
-    type: String,
-    default: 'properties.district'
-  },
-  layerFeatureCode: {
-    type: String,
-    default: 'properties.district_code'
+    default: '400, 50'
   },
   geojsonType: {
     type: String,
     default: 'lines'
   },
-  geojsonFeatureName: {
+  countTag: {
     type: String,
-    default: 'properties.N02_003'
+    default: 'collected'
   },
-  featureNameStyle: {
+  idTag: {
     type: String,
-    default: 'static'
+    default: 'id'
+  },
+  legendTitle: {
+    type: String,
+    default: 'Collected Count Per Feature'
   }
 };
 /* harmony default export */ var D3GeoLeafvue_type_script_lang_js_ = ({
@@ -43213,11 +43199,18 @@ var D3GeoLeafvue_type_script_lang_js_props = {
     return {
       map: null,
       mapAdded: false,
-      svgAdded: false,
-      layerAdded: false
+      svgAdded: false
     };
   },
   props: D3GeoLeafvue_type_script_lang_js_props,
+  computed: {
+    legendCenterObj: function legendCenterObj() {
+      return {
+        x: parseInt(this.legendCenter.split(",")[0]),
+        y: parseInt(this.legendCenter.split(",")[1])
+      };
+    }
+  },
   watch: {
     geojsonObject: {
       handler: function handler(newVal, oldVal) {
@@ -43231,17 +43224,14 @@ var D3GeoLeafvue_type_script_lang_js_props = {
   },
   methods: {
     renderMap: function renderMap() {
-      var geojsonFeatureName = this.geojsonFeatureName; // const geojsonObject = await d3.json(this.geojsonPath);
-      // const geojsonObject = this.geojsonObject;
-
-      var map;
+      var vm = this;
+      var map; // fit bounds based on the geojsonObject
 
       if (!this.mapAdded) {
-        map = leaflet_src_default.a.map('leaflet').fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
+        map = leaflet_src_default.a.map(this.$refs['leaflet']).fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
         this.map = map;
       } else {
-        map = this.map;
-        map.fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
+        map = this.map; // map.fitBounds(L.geoJson(this.geojsonObject).getBounds());
       } // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
       // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
       // L.tileLayer.provider('Stamen.TonerBackground').addTo(map);
@@ -43249,56 +43239,148 @@ var D3GeoLeafvue_type_script_lang_js_props = {
       // L.tileLayer.provider('Hydda.Base').addTo(map);
 
 
-      leaflet_src_default.a.tileLayer.provider('CartoDB.Voyager').addTo(map);
+      leaflet_src_default.a.tileLayer.provider('CartoDB.Voyager').addTo(map); ///////////////////////////////////////////////////////////////////////////
+      /////////////////////////// Get Scale Functions ///////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
 
-      if (!this.svgAdded) {
-        leaflet_src_default.a.svg().addTo(map);
-        this.svgAdded = true;
-      }
+      var events = src_entries(this.geojsonObject.features);
+      var maxCount = src_max(events, function (d) {
+        return d.value.properties[vm.countTag];
+      });
+      var colorDense = 10;
+      var countPoints = this.getCountPoints(maxCount, this.legendWidth, colorDense);
+      var countScale = this.getCountScale(maxCount, this.legendWidth);
+      var colorScale = this.getColorScale(maxCount, this.colorRange); ///////////////////////////////////////////////////////////////////////////
+      ///////////////////// create transform and path function //////////////////
+      ///////////////////////////////////////////////////////////////////////////
 
-      var svg = src_select(map.getPane('overlayPane')).select("svg");
-      var g = svg.select("g");
-
-      if (!this.layerAdded) {
-        g.append("g").attr("id", this.geojsonType);
-        this.layerAdded = true;
-      }
-
-      var gGeojsonLayer = g.select("#".concat(this.geojsonType));
       var transform = src_transform({
         point: function point(x, y) {
           var point = map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(y, x));
           this.stream.point(point.x, point.y);
         }
       });
-      var path = d3_geo_src_path().projection(transform); // gGeojsonLayer.selectAll("path").remove();
+      var path = d3_geo_src_path().projection(transform); ///////////////////////////////////////////////////////////////////////////
+      ///////////////////////////////// add svg /////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
 
-      var featureElement = gGeojsonLayer.selectAll("path").data(this.geojsonObject.features).enter().append("path").attr("class", function (d) {
-        return "geojson";
-      }).attr("d", path); // map.on("zoomend", () => {
-      //   featureElement.attr("d", path);
-      //   console.log('zoomend', map.getBounds());
-      // });
-      // map.on("dragend", () => {
-      //   featureElement.attr("d", path);
-      //   console.log('dragend', map.getBounds());
-      // });
+      if (!this.svgAdded) {
+        leaflet_src_default.a.svg().addTo(map);
+        this.svgAdded = true;
+      } ///////////////////////////////////////////////////////////////////////////
+      /////////////////////////// add geojson and label /////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+
+
+      var svg = src_select(map.getPane('overlayPane')).select("svg");
+      var g = svg.select("g");
+      g.selectAll("g[id=".concat(this.geojsonType, "]")).remove();
+      var gGeojsonLayer = g.append("g").attr("id", this.geojsonType);
+      g.selectAll("g[id=".concat(this.geojsonType, "_label]")).remove();
+      var gLabelLayer = g.append("g").attr("id", this.geojsonType + "_label");
+
+      var mouseover = function mouseover(p, i) {
+        src_select(this).style("cursor", "pointer").style("stroke-width", "5px");
+        gLabelLayer.selectAll("text").filter(function (d) {
+          return d.properties[vm.idTag] == p.properties[vm.idTag];
+        }).transition().style("fill-opacity", 1).style("display", "block").attr("fill", function (d, i) {
+          return colorScale(p.properties[vm.countTag]);
+        });
+      };
+
+      var mouseout = function mouseout(p, i) {
+        src_select(this).style("cursor", "").style("stroke-width", "3px");
+        gLabelLayer.selectAll("text").filter(function (d) {
+          return d.properties[vm.idTag] == p.properties[vm.idTag];
+        }).transition().style("fill-opacity", 0).transition().style("display", "none");
+      };
+
+      gGeojsonLayer.selectAll("path").data(this.geojsonObject.features).enter().append("path").style("fill", "none").style("stroke-width", "3px").style("pointer-events", "auto").attr("stroke", function (d, i) {
+        return colorScale(d.properties[vm.countTag]);
+      }).on("mouseout", mouseout).on("mouseover", mouseover); // Subway labels
+
+      gLabelLayer.selectAll("text").data(this.geojsonObject.features).enter().append("text").attr("class", "geojsonLabel").attr("pointer-events", "none").attr("transform", function (d) {
+        return "translate(" + path.centroid(d) + ")";
+      }).attr("dy", ".35em").text(function (d) {
+        return d.properties[vm.countTag];
+      }); ///////////////////////////////////////////////////////////////////////////
+      ///////////////// Adding the initial gradient for the legend //////////////
+      ///////////////////////////////////////////////////////////////////////////
+
+      g.selectAll("defs[id=color_grads_def]").remove();
+      var commonGrads = g.append("defs").attr("id", "color_grads_def");
+      commonGrads.append("linearGradient").attr("id", "legendTraffic").attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "0%").selectAll("stop").data(src_range(colorDense)).enter().append("stop").attr("offset", function (d, i) {
+        return countScale(countPoints[i]) / vm.legendWidth;
+      }).attr("stop-color", function (d, i) {
+        return colorScale(countPoints[i]);
+      }); ///////////////////////////////////////////////////////////////////////////
+      ////////////////////////// Draw the init legend ///////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+      // vm.legendWidth = Math.min(vm.width * 0.8, 600);
+      // Color Legend container
+
+      g.selectAll("g[id=legend_wrapper]").remove();
+      var legendsvg = g.append("g").attr("id", "legend_wrapper") // .attr("transform", "translate(" + (vm.width / 2) + "," + (vm.height * 0.95) + ")");
+      .attr("transform", "translate(" + vm.legendCenterObj.x + "," + vm.legendCenterObj.y + ")"); //Draw the Rectangle
+
+      legendsvg.append("rect").attr("id", "legend_rect").attr("x", -vm.legendWidth / 2).attr("y", 0).attr("width", vm.legendWidth).attr("height", 10).style("fill", "url(#legendTraffic)"); //Append title
+
+      legendsvg.append("text").attr("class", "legendTitle").attr("x", 0).attr("y", -10).style("text-anchor", "middle").text(vm.legendTitle); //Define x-axis
+
+      var xAxis = vm.getXAxis(vm.legendWidth, maxCount); //Set up X axis
+
+      var axisLayer = legendsvg.append("g").attr("id", "axis").attr("transform", "translate(0," + 10 + ")");
+      axisLayer.call(xAxis); ///////////////////////////////////////////////////////////////////////////
+      /////////////////////// leaflet map zoom events ///////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
 
       if (!this.mapAdded) {
-        // map.on("moveend", () => {
-        //   featureElement.attr("d", path);
-        //   console.log('zoomend', map.getBounds());
-        // });
         map.on("zoomend", function () {
-          featureElement.attr("d", path);
-          console.log('zoomend', map.getBounds());
+          updatePath();
         });
         map.on("dragend", function () {
-          featureElement.attr("d", path);
-          console.log('dragend', map.getBounds());
+          updatePath();
         });
         this.mapAdded = true;
+      } //pathのd属性を更新
+
+
+      var updatePath = function updatePath() {
+        // update path
+        g.selectAll("path").attr('d', path);
+        var nwPoint = map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(map.getBounds()._northEast.lat, map.getBounds()._southWest.lng));
+        console.log('dragend', nwPoint); // update legend
+
+        g.selectAll("g[id=legend_wrapper]").attr("transform", "translate(" + (vm.legendCenterObj.x + nwPoint.x) + "," + (vm.legendCenterObj.y + nwPoint.y) + ")");
+      };
+
+      updatePath();
+    },
+    getCountScale: function getCountScale(maxCount, width) {
+      //Calculate the variables for the sort gradient
+      return src_linear_linear().domain([0, maxCount]).range([0, width]);
+    },
+    getCountPoints: function getCountPoints(maxCount, width, size) {
+      //Calculate the variables for the sort gradient
+      var countScale = this.getCountScale(maxCount, width); //Calculate the variables for the sort gradient
+
+      var countRange = countScale.domain();
+      countRange[2] = countRange[1] - countRange[0];
+      var countPoints = [];
+
+      for (var i = 0; i < size; i++) {
+        countPoints.push(i * countRange[2] / (size - 1) + countRange[0]);
       }
+
+      return countPoints;
+    },
+    getXAxis: function getXAxis(legendWidth, maxCount) {
+      var xScale = src_linear_linear().range([-legendWidth / 2, legendWidth / 2]).domain([0, maxCount]);
+      return axisBottom().ticks(5) //.tickFormat(formatPercent)
+      .scale(xScale);
+    },
+    getColorScale: function getColorScale(maxCount, colorRange) {
+      return src_linear_linear().domain([0, maxCount / 2, maxCount]).range(colorRange.split(","));
     }
   }
 });
@@ -43318,8 +43400,8 @@ var D3GeoLeafvue_type_style_index_0_lang_css_ = __webpack_require__("2e33");
 
 var D3GeoLeaf_component = normalizeComponent(
   components_D3GeoLeafvue_type_script_lang_js_,
-  D3GeoLeafvue_type_template_id_08d485ae_render,
-  D3GeoLeafvue_type_template_id_08d485ae_staticRenderFns,
+  D3GeoLeafvue_type_template_id_430d1466_render,
+  D3GeoLeafvue_type_template_id_430d1466_staticRenderFns,
   false,
   null,
   null,

@@ -1,13 +1,5 @@
-<!-- <template>
-  <div id="d3geoleaf">
-    <div id="leaflet" :style="{ height: height + 'px', width:　'100%'}" ></div>
-  </div>
-</template> -->
-
 <template>
-
   <div id="leaflet" ref="leaflet" :style="{ height: '100%', width:　'100%'}"></div>
-
 </template>
 
 <script>
@@ -20,22 +12,15 @@ import L from 'leaflet';
 import 'leaflet-providers/leaflet-providers.js';
 
 const props = {
-  mapPath: {
-    type: String
-  },
   geojsonPath: {
     type: String
   },
   geojsonObject: {
     type: Object
   },
-  width: {
+  legendWidth: {
     type: [String, Number],
-    default: 900
-  },
-  height: {
-    type: [String, Number],
-    default: 1000
+    default: 500
   },
   colorRange: {
     type: String,
@@ -45,6 +30,10 @@ const props = {
     type: String,
     default: '139.752268, 35.677043'
   },
+  legendCenter: {
+    type: String,
+    default: '400, 50'
+  },  
   geojsonType: {
     type: String,
     default: 'lines'
@@ -52,6 +41,10 @@ const props = {
   countTag: {
     type: String,
     default: 'collected'
+  },
+  idTag: {
+    type: String,
+    default: 'id'
   },
   legendTitle: {
     type: String,
@@ -68,6 +61,11 @@ export default {
     };
   },
   props,
+  computed: {  
+    legendCenterObj: function() {
+      return { x: parseInt(this.legendCenter.split(",")[0]), y: parseInt(this.legendCenter.split(",")[1]) }
+    }    
+  },   
   watch: {
     geojsonObject: {
         handler: function(newVal, oldVal){
@@ -112,8 +110,9 @@ export default {
         return d.value.properties[vm.countTag]; 
       });
 
-      const countPoints = this.getCountPoints(maxCount, this.width, 10);
-      const countScale = this.getCountScale(maxCount, this.width);
+      const colorDense = 10;
+      const countPoints = this.getCountPoints(maxCount, this.legendWidth, colorDense);
+      const countScale = this.getCountScale(maxCount, this.legendWidth);
       const colorScale = this.getColorScale(maxCount, this.colorRange);  
 
       ///////////////////////////////////////////////////////////////////////////
@@ -156,7 +155,7 @@ export default {
 
         gLabelLayer.selectAll("text")
           .filter(function(d){
-            return d.properties[vm.countTag] == p.properties[vm.countTag];
+            return d.properties[vm.idTag] == p.properties[vm.idTag];
           })
           .transition()
           .style("fill-opacity", 1)
@@ -173,7 +172,7 @@ export default {
 
         gLabelLayer.selectAll("text")
           .filter(function(d){
-            return d.properties[vm.countTag] == p.properties[vm.countTag];
+            return d.properties[vm.idTag] == p.properties[vm.idTag];
           })
           .transition()
           .style("fill-opacity", 0)
@@ -202,7 +201,6 @@ export default {
         .attr("class", "geojsonLabel")
         .attr("pointer-events", "none")
         .attr("transform", function(d) { 
-          console.log(path.centroid(d));
           return "translate(" + path.centroid(d) + ")"; 
         })
         .attr("dy", ".35em")
@@ -224,10 +222,10 @@ export default {
         .attr("x1", "0%").attr("y1", "0%")
         .attr("x2", "100%").attr("y2", "0%")
         .selectAll("stop") 
-        .data(d3.range(10))                
+        .data(d3.range(colorDense))                
         .enter().append("stop") 
         .attr("offset", function(d,i) { 
-          return countScale( countPoints[i] ) / vm.width;
+          return countScale( countPoints[i] ) / vm.legendWidth;
         })   
         .attr("stop-color", function(d,i) { 
           return colorScale(countPoints[i]);  
@@ -237,7 +235,7 @@ export default {
       ///////////////////////////////////////////////////////////////////////////
       ////////////////////////// Draw the init legend ///////////////////////////
       ///////////////////////////////////////////////////////////////////////////
-      vm.legendWidth = Math.min(vm.width * 0.8, 600);
+      // vm.legendWidth = Math.min(vm.width * 0.8, 600);
 
       // Color Legend container
       g.selectAll("g[id=legend_wrapper]").remove();
@@ -245,7 +243,7 @@ export default {
       const legendsvg = g.append("g")      
         .attr("id", "legend_wrapper")
         // .attr("transform", "translate(" + (vm.width / 2) + "," + (vm.height * 0.95) + ")");
-        .attr("transform", "translate(" + 100 + "," + 100 + ")");
+        .attr("transform", "translate(" + vm.legendCenterObj.x + "," + vm.legendCenterObj.y + ")");
 
       //Draw the Rectangle
       legendsvg.append("rect")
@@ -280,12 +278,10 @@ export default {
       if (!this.mapAdded) {
         map.on("zoomend", () => {
           updatePath();
-          console.log('zoomend', map.getBounds());
         });
 
         map.on("dragend", () => {
           updatePath();
-          console.log('dragend', map.getBounds());
         });
 
         this.mapAdded = true;
@@ -293,7 +289,15 @@ export default {
 
       //pathのd属性を更新
       const updatePath = function () {
+          // update path
           g.selectAll("path").attr('d', path);
+
+          const nwPoint = map.latLngToLayerPoint(new L.LatLng(map.getBounds()._northEast.lat, map.getBounds()._southWest.lng));
+
+          console.log('dragend', nwPoint);
+
+          // update legend
+          g.selectAll("g[id=legend_wrapper]").attr("transform", "translate(" + (vm.legendCenterObj.x + nwPoint.x) + "," + (vm.legendCenterObj.y + nwPoint.y) + ")");          
       };
 
       updatePath();
@@ -307,7 +311,7 @@ export default {
     },
     getCountPoints(maxCount, width, size) {
       //Calculate the variables for the sort gradient
-      const countScale = this.getCountScale(maxCount, size);
+      const countScale = this.getCountScale(maxCount, width);
 
       //Calculate the variables for the sort gradient
       const countRange = countScale.domain();
