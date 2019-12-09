@@ -77,8 +77,9 @@
         v-if="featureStatistics"
         id="06" 
         :geojson-object="featureStatistics"
-        color-range='#0000ff,#e623e4,#ff0000'
-        legend-center='400, 50'
+        color-range="#0000ff,#e623e4,#ff0000"
+        legend-center="400, 50"
+        :auto-fit-bounds="true"
         >    
       </d3-geo-leaf>     
     </div>

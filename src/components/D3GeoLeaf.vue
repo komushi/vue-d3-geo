@@ -49,7 +49,11 @@ const props = {
   legendTitle: {
     type: String,
     default: 'Collected Count Per Feature'
-  }  
+  },
+  autoFitBounds: {
+    type: Boolean,
+    default: false
+  }
 };
 export default {
   name: 'd3-geo-leaf',
@@ -90,7 +94,9 @@ export default {
         this.map = map;
       } else {
         map = this.map;
-        // map.fitBounds(L.geoJson(this.geojsonObject).getBounds());
+        if (this.autoFitBounds) {
+          map.fitBounds(L.geoJson(this.geojsonObject).getBounds());
+        }
       }
       
       // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
