@@ -80,6 +80,8 @@
         color-range="#0000ff,#e623e4,#ff0000"
         legend-center="400, 50"
         :auto-fit-bounds="true"
+        @dragend="onDragEnd"
+        @zoomend="onZoomEnd"
         >    
       </d3-geo-leaf>     
     </div>
@@ -233,6 +235,12 @@ export default {
     };
   },
   methods: {
+    onDragEnd(bound) {
+      console.log(bound);
+    },
+    onZoomEnd(bound) {
+      console.log(bound);
+    },    
     /*** for 2-layer ***/
     subTaxiEventsFrom(payload) {
       // console.log('subTaxiEventsFrom');

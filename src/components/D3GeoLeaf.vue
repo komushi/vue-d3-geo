@@ -283,11 +283,15 @@ export default {
       ///////////////////////////////////////////////////////////////////////////
       if (!this.mapAdded) {
         map.on("zoomend", () => {
-          updatePath();
+          const envelope = updatePath();
+
+          this.$emit('zoomend', envelope);
         });
 
         map.on("dragend", () => {
-          updatePath();
+          const envelope = updatePath();
+
+          this.$emit('dragend', envelope);
         });
 
         this.mapAdded = true;
@@ -300,10 +304,17 @@ export default {
 
           const nwPoint = map.latLngToLayerPoint(new L.LatLng(map.getBounds()._northEast.lat, map.getBounds()._southWest.lng));
 
-          console.log('dragend', nwPoint);
+          // console.log('dragend', nwPoint);
 
           // update legend
-          g.selectAll("g[id=legend_wrapper]").attr("transform", "translate(" + (vm.legendCenterObj.x + nwPoint.x) + "," + (vm.legendCenterObj.y + nwPoint.y) + ")");          
+          g.selectAll("g[id=legend_wrapper]").attr("transform", "translate(" + (vm.legendCenterObj.x + nwPoint.x) + "," + (vm.legendCenterObj.y + nwPoint.y) + ")");
+
+          return {
+            lng_nw: map.getBounds()._southWest.lng,
+            lat_nw: map.getBounds()._northEast.lat,
+            lng_se: map.getBounds()._northEast.lng,
+            lat_se: map.getBounds()._southWest.lat
+          }
       };
 
       updatePath();

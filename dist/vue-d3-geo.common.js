@@ -43121,12 +43121,12 @@ var D3GeoSubwayV4_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoSubwayV4 = (D3GeoSubwayV4_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"95b1bd42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=3262d7fd&
-var D3GeoLeafvue_type_template_id_3262d7fd_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"leaflet",style:({ height: '100%', width:　'100%'}),attrs:{"id":"leaflet"}})}
-var D3GeoLeafvue_type_template_id_3262d7fd_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"95b1bd42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=119f2786&
+var D3GeoLeafvue_type_template_id_119f2786_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"leaflet",style:({ height: '100%', width:　'100%'}),attrs:{"id":"leaflet"}})}
+var D3GeoLeafvue_type_template_id_119f2786_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/D3GeoLeaf.vue?vue&type=template&id=3262d7fd&
+// CONCATENATED MODULE: ./src/components/D3GeoLeaf.vue?vue&type=template&id=119f2786&
 
 // EXTERNAL MODULE: ./node_modules/leaflet/dist/leaflet.css
 var leaflet = __webpack_require__("6cc5");
@@ -43228,6 +43228,8 @@ var D3GeoLeafvue_type_script_lang_js_props = {
   },
   methods: {
     renderMap: function renderMap() {
+      var _this = this;
+
       var vm = this;
       var map; // fit bounds based on the geojsonObject
 
@@ -43344,10 +43346,14 @@ var D3GeoLeafvue_type_script_lang_js_props = {
 
       if (!this.mapAdded) {
         map.on("zoomend", function () {
-          updatePath();
+          var envelope = updatePath();
+
+          _this.$emit('zoomend', envelope);
         });
         map.on("dragend", function () {
-          updatePath();
+          var envelope = updatePath();
+
+          _this.$emit('dragend', envelope);
         });
         this.mapAdded = true;
       } //pathのd属性を更新
@@ -43356,10 +43362,16 @@ var D3GeoLeafvue_type_script_lang_js_props = {
       var updatePath = function updatePath() {
         // update path
         g.selectAll("path").attr('d', path);
-        var nwPoint = map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(map.getBounds()._northEast.lat, map.getBounds()._southWest.lng));
-        console.log('dragend', nwPoint); // update legend
+        var nwPoint = map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(map.getBounds()._northEast.lat, map.getBounds()._southWest.lng)); // console.log('dragend', nwPoint);
+        // update legend
 
         g.selectAll("g[id=legend_wrapper]").attr("transform", "translate(" + (vm.legendCenterObj.x + nwPoint.x) + "," + (vm.legendCenterObj.y + nwPoint.y) + ")");
+        return {
+          lng_nw: map.getBounds()._southWest.lng,
+          lat_nw: map.getBounds()._northEast.lat,
+          lng_se: map.getBounds()._northEast.lng,
+          lat_se: map.getBounds()._southWest.lat
+        };
       };
 
       updatePath();
@@ -43408,8 +43420,8 @@ var D3GeoLeafvue_type_style_index_0_lang_css_ = __webpack_require__("2e33");
 
 var D3GeoLeaf_component = normalizeComponent(
   components_D3GeoLeafvue_type_script_lang_js_,
-  D3GeoLeafvue_type_template_id_3262d7fd_render,
-  D3GeoLeafvue_type_template_id_3262d7fd_staticRenderFns,
+  D3GeoLeafvue_type_template_id_119f2786_render,
+  D3GeoLeafvue_type_template_id_119f2786_staticRenderFns,
   false,
   null,
   null,
