@@ -425,12 +425,18 @@ svg {
 }
 
 .legendTitle {
-  fill: black;
+  fill: silver;
   fill-opacity: 1;
-  font-size: 18px;
+  font-size: 44px;
   font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
   font-weight: 700;
   text-anchor: middle;
+  text-shadow:
+    2px 2px 0 #000,
+    -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;  
 }
 
 .geojsonLabel {
