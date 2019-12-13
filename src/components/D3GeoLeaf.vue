@@ -12,6 +12,10 @@ import L from 'leaflet';
 import 'leaflet-providers/leaflet-providers.js';
 
 const props = {
+  tileProvider: {
+    type: String,
+    default: 'CartoDB.Voyager'
+  },  
   geojsonPath: {
     type: String
   },
@@ -26,10 +30,14 @@ const props = {
     type: String,
     default: '#0000ff,#e623e4,#ff0000'
   },
-  center: {
+  mapCenter: {
     type: String,
-    default: '139.752268, 35.677043'
+    default: '139.77887823700362, 35.69026554219554'
   },
+  mapZoom: {
+    type: [String, Number],
+    default: 17
+  },  
   legendCenter: {
     type: String,
     default: '400, 50'
@@ -60,6 +68,7 @@ export default {
   data() {
     return {
       map: null,
+      svg: null,
       mapAdded: false,
       svgAdded: false,
     };
@@ -73,7 +82,12 @@ export default {
   watch: {
     geojsonObject: {
         handler: function(newVal, oldVal){
-            this.renderMap();
+          if (newVal)   {
+            this.renderMap();  
+          } else {
+            this.clearSvg();
+          }
+          
         },
         deep: true
 
@@ -83,28 +97,66 @@ export default {
     this.renderMap();
   },
   methods: {
+    clearSvg() {
+      const vm = this;
+
+      const svg = d3.select(vm.map.getPane('overlayPane')).select("svg");
+      const g = svg.select("g");
+
+      g.selectAll(`g[id=${this.geojsonType}]`).remove();
+
+      g.selectAll(`g[id=${this.geojsonType}_label]`).remove();
+
+      g.selectAll("defs[id=color_grads_def]").remove();
+
+      g.selectAll("g[id=legend_wrapper]").remove();
+
+    },
     renderMap() {
       const vm = this;
 
-      let map;
+      // let map;
 
       // fit bounds based on the geojsonObject
       if (!this.mapAdded) {
-        map = L.map(this.$refs['leaflet']).fitBounds(L.geoJson(this.geojsonObject).getBounds());
-        this.map = map;
+        if (this.geojsonObject) {
+          vm.map = L.map(this.$refs['leaflet']).fitBounds(L.geoJson(this.geojsonObject).getBounds());
+
+        } else {
+          vm.map = L.map(this.$refs['leaflet']);
+          vm.map.setView(new L.LatLng(this.mapCenter.split(",")[1], this.mapCenter.split(",")[0]), this.mapZoom);
+        }
+
+        this.mapAdded = true;
+
+        L.tileLayer.provider(vm.tileProvider).addTo(vm.map);
+
+        vm.map.on("zoomend", () => {
+          this.$emit('zoomend', vm.getBounds(vm.map));
+        });
+
+        vm.map.on("dragend", () => {
+          this.$emit('dragend', vm.getBounds(vm.map));
+        });      
+
+        this.$emit('initmap', vm.getBounds(vm.map));        
       } else {
-        map = this.map;
         if (this.autoFitBounds) {
-          map.fitBounds(L.geoJson(this.geojsonObject).getBounds());
+          vm.map.fitBounds(L.geoJson(this.geojsonObject).getBounds());
         }
       }
+
+
       
       // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
       // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
       // L.tileLayer.provider('Stamen.TonerBackground').addTo(map);
       // L.tileLayer.provider('Stamen.TonerLite').addTo(map);
       // L.tileLayer.provider('Hydda.Base').addTo(map);
-      L.tileLayer.provider('CartoDB.Voyager').addTo(map);
+      
+      if (!this.geojsonObject) {
+        return;
+      }
 
 
       ///////////////////////////////////////////////////////////////////////////
@@ -126,7 +178,7 @@ export default {
       ///////////////////////////////////////////////////////////////////////////
       const transform = d3.geoTransform({
         point: function(x, y) {
-          const point = map.latLngToLayerPoint(new L.LatLng(y, x));
+          const point = vm.map.latLngToLayerPoint(new L.LatLng(y, x));
           this.stream.point(point.x, point.y);
         }
       });
@@ -137,14 +189,15 @@ export default {
       ///////////////////////////////// add svg /////////////////////////////////
       ///////////////////////////////////////////////////////////////////////////
       if (!this.svgAdded) {
-        L.svg().addTo(map); 
+        L.svg().addTo(vm.map); 
+
         this.svgAdded = true;
       }
       
       ///////////////////////////////////////////////////////////////////////////
       /////////////////////////// add geojson and label /////////////////////////
       ///////////////////////////////////////////////////////////////////////////
-      const svg = d3.select(map.getPane('overlayPane')).select("svg");
+      const svg = d3.select(vm.map.getPane('overlayPane')).select("svg");
       const g = svg.select("g");
 
       g.selectAll(`g[id=${this.geojsonType}]`).remove();
@@ -281,45 +334,42 @@ export default {
       ///////////////////////////////////////////////////////////////////////////
       /////////////////////// leaflet map zoom events ///////////////////////////
       ///////////////////////////////////////////////////////////////////////////
-      if (!this.mapAdded) {
-        map.on("zoomend", () => {
-          const envelope = updatePath();
+      vm.map.on("zoomend", () => {
+        updatePath();
 
-          this.$emit('zoomend', envelope);
-        });
+      });
 
-        map.on("dragend", () => {
-          const envelope = updatePath();
-
-          this.$emit('dragend', envelope);
-        });
-
-        this.mapAdded = true;
-      }
+      vm.map.on("dragend", () => {
+        updatePath();
+      });
 
       //pathのd属性を更新
       const updatePath = function () {
           // update path
           g.selectAll("path").attr('d', path);
 
-          const nwPoint = map.latLngToLayerPoint(new L.LatLng(map.getBounds()._northEast.lat, map.getBounds()._southWest.lng));
+          const nwPoint = vm.map.latLngToLayerPoint(new L.LatLng(vm.map.getBounds()._northEast.lat, vm.map.getBounds()._southWest.lng));
 
           // console.log('dragend', nwPoint);
 
           // update legend
           g.selectAll("g[id=legend_wrapper]").attr("transform", "translate(" + (vm.legendCenterObj.x + nwPoint.x) + "," + (vm.legendCenterObj.y + nwPoint.y) + ")");
 
-          return {
-            lng_nw: map.getBounds()._southWest.lng,
-            lat_nw: map.getBounds()._northEast.lat,
-            lng_se: map.getBounds()._northEast.lng,
-            lat_se: map.getBounds()._southWest.lat
-          }
+          
       };
 
       updatePath();
 
     },
+    getBounds(map) {
+      //Calculate the variables for the sort gradient
+      return {
+        lng_nw: map.getBounds()._southWest.lng,
+        lat_nw: map.getBounds()._northEast.lat,
+        lng_se: map.getBounds()._northEast.lng,
+        lat_se: map.getBounds()._southWest.lat
+      };
+    },    
     getCountScale(maxCount, width) {
       //Calculate the variables for the sort gradient
       return d3.scaleLinear()

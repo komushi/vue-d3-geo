@@ -65,6 +65,7 @@
       >    
     </d3-geo-leaf>  -->
     <div>
+      <button @click="clickHandler">clear</button>
       <div v-for="item in apiResponse">
         <input type="radio" v-model="geojsonString" name="time_window" :value="item.geojson"> {{item.window_start}}
       </div>
@@ -72,16 +73,16 @@
 
 
 
-    <div style="width: 80%; height: 1200px">
+    <div style="width: 100%; height: 800px">
       <d3-geo-leaf
-        v-if="featureStatistics"
-        id="06" 
+        tile-provider="Stamen.TonerLite"
         :geojson-object="featureStatistics"
         color-range="#0000ff,#e623e4,#ff0000"
         legend-center="400, 50"
         :auto-fit-bounds="true"
         @dragend="onDragEnd"
         @zoomend="onZoomEnd"
+        @initmap="onInit"
         >    
       </d3-geo-leaf>     
     </div>
@@ -235,12 +236,15 @@ export default {
     };
   },
   methods: {
-    onDragEnd(bound) {
-      console.log(bound);
+    onDragEnd(bounds) {
+      console.log('onDragEnd', bounds);
     },
-    onZoomEnd(bound) {
-      console.log(bound);
+    onZoomEnd(bounds) {
+      console.log('this.onZoomEnd', bounds);
     },    
+    onInit(bounds) {
+      console.log('this.onInit', bounds);
+    },      
     /*** for 2-layer ***/
     subTaxiEventsFrom(payload) {
       // console.log('subTaxiEventsFrom');
@@ -286,12 +290,15 @@ export default {
       }
 
       return districtRank;
-    }
+    },
     /*** for 2-layer ***/
 
     /*** for route event ***/
 
     /*** for route event ***/
+    clickHandler() {
+      this.geojsonString = null;
+    }
   },
   mounted() {
     /*** for 2-layer ***/
@@ -350,12 +357,22 @@ export default {
 */    
     /*** Dynamic Subway Data ***/
 
-    axios.get("data/statistics.json")
-      .then((response)  =>  {
-        this.apiResponse = response.data
-      }, (error)  =>  {
+    // axios.get("data/statistics.json")
+    //   .then((response)  =>  {
+    //     this.apiResponse = response.data
+    //   }, (error)  =>  {
       
-      });
+    //   });
+
+    setTimeout(() => {
+      axios.get("data/statistics.json")
+        .then((response)  =>  {
+          this.apiResponse = response.data
+        }, (error)  =>  {
+        
+        });
+
+    }, 1000);
 
   }
 }

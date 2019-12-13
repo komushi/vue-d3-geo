@@ -20155,7 +20155,7 @@ function pair(a, b) {
 var array_array = Array.prototype;
 
 var slice = array_array.slice;
-var array_map = array_array.map;
+var map = array_array.map;
 
 // CONCATENATED MODULE: ./node_modules/d3-array/src/constant.js
 /* harmony default export */ var constant = (function(x) {
@@ -20342,7 +20342,7 @@ function tickStep(start, stop, count) {
 
 
 /* harmony default export */ var freedmanDiaconis = (function(values, min, max) {
-  values = array_map.call(values, number).sort(ascending);
+  values = map.call(values, number).sort(ascending);
   return Math.ceil((max - min) / (2 * (quantile(values, 0.75) - quantile(values, 0.25)) * Math.pow(values.length, -1 / 3)));
 });
 
@@ -33280,7 +33280,7 @@ function initInterpolator(domain, interpolator) {
 // CONCATENATED MODULE: ./node_modules/d3-scale/src/array.js
 var d3_scale_src_array_array = Array.prototype;
 
-var src_array_map = d3_scale_src_array_array.map;
+var array_map = d3_scale_src_array_array.map;
 var d3_scale_src_array_slice = d3_scale_src_array_array.slice;
 
 // CONCATENATED MODULE: ./node_modules/d3-scale/src/ordinal.js
@@ -33537,7 +33537,7 @@ function continuous_transformer() {
   };
 
   scale.domain = function(_) {
-    return arguments.length ? (domain = src_array_map.call(_, d3_scale_src_number), clamp === continuous_identity || (clamp = clamper(domain)), rescale()) : domain.slice();
+    return arguments.length ? (domain = array_map.call(_, d3_scale_src_number), clamp === continuous_identity || (clamp = clamper(domain)), rescale()) : domain.slice();
   };
 
   scale.range = function(_) {
@@ -33690,7 +33690,7 @@ function identity_identity(domain) {
   scale.invert = scale;
 
   scale.domain = scale.range = function(_) {
-    return arguments.length ? (domain = src_array_map.call(_, d3_scale_src_number), scale) : domain.slice();
+    return arguments.length ? (domain = array_map.call(_, d3_scale_src_number), scale) : domain.slice();
   };
 
   scale.unknown = function(_) {
@@ -33701,7 +33701,7 @@ function identity_identity(domain) {
     return identity_identity(domain).unknown(unknown);
   };
 
-  domain = arguments.length ? src_array_map.call(domain, d3_scale_src_number) : [0, 1];
+  domain = arguments.length ? array_map.call(domain, d3_scale_src_number) : [0, 1];
 
   return linearish(scale);
 }
@@ -35246,7 +35246,7 @@ function calendar(year, month, week, day, hour, minute, second, millisecond, for
   };
 
   scale.domain = function(_) {
-    return arguments.length ? domain(src_array_map.call(_, time_number)) : domain().map(time_date);
+    return arguments.length ? domain(array_map.call(_, time_number)) : domain().map(time_date);
   };
 
   scale.ticks = function(interval, step) {
@@ -43130,12 +43130,12 @@ var D3GeoSubwayV4_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoSubwayV4 = (D3GeoSubwayV4_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"95b1bd42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=119f2786&
-var D3GeoLeafvue_type_template_id_119f2786_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"leaflet",style:({ height: '100%', width:　'100%'}),attrs:{"id":"leaflet"}})}
-var D3GeoLeafvue_type_template_id_119f2786_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"95b1bd42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=4de71619&
+var D3GeoLeafvue_type_template_id_4de71619_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"leaflet",style:({ height: '100%', width:　'100%'}),attrs:{"id":"leaflet"}})}
+var D3GeoLeafvue_type_template_id_4de71619_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/D3GeoLeaf.vue?vue&type=template&id=119f2786&
+// CONCATENATED MODULE: ./src/components/D3GeoLeaf.vue?vue&type=template&id=4de71619&
 
 // EXTERNAL MODULE: ./node_modules/leaflet/dist/leaflet.css
 var leaflet = __webpack_require__("6cc5");
@@ -43163,6 +43163,10 @@ var leaflet_providers = __webpack_require__("e5e02");
 
 
 var D3GeoLeafvue_type_script_lang_js_props = {
+  tileProvider: {
+    type: String,
+    default: 'CartoDB.Voyager'
+  },
   geojsonPath: {
     type: String
   },
@@ -43177,9 +43181,13 @@ var D3GeoLeafvue_type_script_lang_js_props = {
     type: String,
     default: '#0000ff,#e623e4,#ff0000'
   },
-  center: {
+  mapCenter: {
     type: String,
-    default: '139.752268, 35.677043'
+    default: '139.77887823700362, 35.69026554219554'
+  },
+  mapZoom: {
+    type: [String, Number],
+    default: 17
   },
   legendCenter: {
     type: String,
@@ -43211,6 +43219,7 @@ var D3GeoLeafvue_type_script_lang_js_props = {
   data: function data() {
     return {
       map: null,
+      svg: null,
       mapAdded: false,
       svgAdded: false
     };
@@ -43227,7 +43236,11 @@ var D3GeoLeafvue_type_script_lang_js_props = {
   watch: {
     geojsonObject: {
       handler: function handler(newVal, oldVal) {
-        this.renderMap();
+        if (newVal) {
+          this.renderMap();
+        } else {
+          this.clearSvg();
+        }
       },
       deep: true
     }
@@ -43236,20 +43249,41 @@ var D3GeoLeafvue_type_script_lang_js_props = {
     this.renderMap();
   },
   methods: {
+    clearSvg: function clearSvg() {
+      var vm = this;
+      var svg = src_select(vm.map.getPane('overlayPane')).select("svg");
+      var g = svg.select("g");
+      g.selectAll("g[id=".concat(this.geojsonType, "]")).remove();
+      g.selectAll("g[id=".concat(this.geojsonType, "_label]")).remove();
+      g.selectAll("defs[id=color_grads_def]").remove();
+      g.selectAll("g[id=legend_wrapper]").remove();
+    },
     renderMap: function renderMap() {
       var _this = this;
 
-      var vm = this;
-      var map; // fit bounds based on the geojsonObject
+      var vm = this; // let map;
+      // fit bounds based on the geojsonObject
 
       if (!this.mapAdded) {
-        map = leaflet_src_default.a.map(this.$refs['leaflet']).fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
-        this.map = map;
-      } else {
-        map = this.map;
+        if (this.geojsonObject) {
+          vm.map = leaflet_src_default.a.map(this.$refs['leaflet']).fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
+        } else {
+          vm.map = leaflet_src_default.a.map(this.$refs['leaflet']);
+          vm.map.setView(new leaflet_src_default.a.LatLng(this.mapCenter.split(",")[1], this.mapCenter.split(",")[0]), this.mapZoom);
+        }
 
+        this.mapAdded = true;
+        leaflet_src_default.a.tileLayer.provider(vm.tileProvider).addTo(vm.map);
+        vm.map.on("zoomend", function () {
+          _this.$emit('zoomend', vm.getBounds(vm.map));
+        });
+        vm.map.on("dragend", function () {
+          _this.$emit('dragend', vm.getBounds(vm.map));
+        });
+        this.$emit('initmap', vm.getBounds(vm.map));
+      } else {
         if (this.autoFitBounds) {
-          map.fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
+          vm.map.fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
         }
       } // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
       // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
@@ -43258,9 +43292,12 @@ var D3GeoLeafvue_type_script_lang_js_props = {
       // L.tileLayer.provider('Hydda.Base').addTo(map);
 
 
-      leaflet_src_default.a.tileLayer.provider('CartoDB.Voyager').addTo(map); ///////////////////////////////////////////////////////////////////////////
+      if (!this.geojsonObject) {
+        return;
+      } ///////////////////////////////////////////////////////////////////////////
       /////////////////////////// Get Scale Functions ///////////////////////////
       ///////////////////////////////////////////////////////////////////////////
+
 
       var events = src_entries(this.geojsonObject.features);
       var maxCount = src_max(events, function (d) {
@@ -43275,7 +43312,7 @@ var D3GeoLeafvue_type_script_lang_js_props = {
 
       var transform = src_transform({
         point: function point(x, y) {
-          var point = map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(y, x));
+          var point = vm.map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(y, x));
           this.stream.point(point.x, point.y);
         }
       });
@@ -43284,14 +43321,14 @@ var D3GeoLeafvue_type_script_lang_js_props = {
       ///////////////////////////////////////////////////////////////////////////
 
       if (!this.svgAdded) {
-        leaflet_src_default.a.svg().addTo(map);
+        leaflet_src_default.a.svg().addTo(vm.map);
         this.svgAdded = true;
       } ///////////////////////////////////////////////////////////////////////////
       /////////////////////////// add geojson and label /////////////////////////
       ///////////////////////////////////////////////////////////////////////////
 
 
-      var svg = src_select(map.getPane('overlayPane')).select("svg");
+      var svg = src_select(vm.map.getPane('overlayPane')).select("svg");
       var g = svg.select("g");
       g.selectAll("g[id=".concat(this.geojsonType, "]")).remove();
       var gGeojsonLayer = g.append("g").attr("id", this.geojsonType);
@@ -43353,37 +43390,32 @@ var D3GeoLeafvue_type_script_lang_js_props = {
       /////////////////////// leaflet map zoom events ///////////////////////////
       ///////////////////////////////////////////////////////////////////////////
 
-      if (!this.mapAdded) {
-        map.on("zoomend", function () {
-          var envelope = updatePath();
-
-          _this.$emit('zoomend', envelope);
-        });
-        map.on("dragend", function () {
-          var envelope = updatePath();
-
-          _this.$emit('dragend', envelope);
-        });
-        this.mapAdded = true;
-      } //pathのd属性を更新
-
+      vm.map.on("zoomend", function () {
+        updatePath();
+      });
+      vm.map.on("dragend", function () {
+        updatePath();
+      }); //pathのd属性を更新
 
       var updatePath = function updatePath() {
         // update path
         g.selectAll("path").attr('d', path);
-        var nwPoint = map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(map.getBounds()._northEast.lat, map.getBounds()._southWest.lng)); // console.log('dragend', nwPoint);
+        var nwPoint = vm.map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(vm.map.getBounds()._northEast.lat, vm.map.getBounds()._southWest.lng)); // console.log('dragend', nwPoint);
         // update legend
 
         g.selectAll("g[id=legend_wrapper]").attr("transform", "translate(" + (vm.legendCenterObj.x + nwPoint.x) + "," + (vm.legendCenterObj.y + nwPoint.y) + ")");
-        return {
-          lng_nw: map.getBounds()._southWest.lng,
-          lat_nw: map.getBounds()._northEast.lat,
-          lng_se: map.getBounds()._northEast.lng,
-          lat_se: map.getBounds()._southWest.lat
-        };
       };
 
       updatePath();
+    },
+    getBounds: function getBounds(map) {
+      //Calculate the variables for the sort gradient
+      return {
+        lng_nw: map.getBounds()._southWest.lng,
+        lat_nw: map.getBounds()._northEast.lat,
+        lng_se: map.getBounds()._northEast.lng,
+        lat_se: map.getBounds()._southWest.lat
+      };
     },
     getCountScale: function getCountScale(maxCount, width) {
       //Calculate the variables for the sort gradient
@@ -43429,8 +43461,8 @@ var D3GeoLeafvue_type_style_index_0_lang_css_ = __webpack_require__("2e33");
 
 var D3GeoLeaf_component = normalizeComponent(
   components_D3GeoLeafvue_type_script_lang_js_,
-  D3GeoLeafvue_type_template_id_119f2786_render,
-  D3GeoLeafvue_type_template_id_119f2786_staticRenderFns,
+  D3GeoLeafvue_type_template_id_4de71619_render,
+  D3GeoLeafvue_type_template_id_4de71619_staticRenderFns,
   false,
   null,
   null,
