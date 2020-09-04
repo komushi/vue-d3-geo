@@ -2,7 +2,8 @@
   <div id="app">
 
 
-<!--     <d3-geo-double-layer 
+<!-- 
+    <d3-geo-double-layer 
       id="01" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
       :layer1-event-data="districtRankList"
@@ -11,59 +12,39 @@
       @on-receive-events="subTaxiEventsFrom"
       @on-stop-events="unsubTaxiEvents"
       >    
-    </d3-geo-double-layer> -->
+    </d3-geo-double-layer>
+
     
-<!--      <d3-geo-events 
+     <d3-geo-events 
       id="02" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
       :layer-event-data="matrixJson"
       >    
-    </d3-geo-events>  -->
+    </d3-geo-events> 
 
-<!--     <d3-geo-static
+
+
+ -->
+<!-- 
+    <d3-geo-static
       id="03" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
       color-range='#6f97d9,#6f97d9'
       >    
-    </d3-geo-static> -->
+    </d3-geo-static>
 
+  -->
 <!--     <d3-geo-static
       id="03" 
       topojson-path="data/states.topojson"
       layer-objects="states"
-      layer-feature-name="properties.NAME"
-      layer-feature-code="properties.STUSPS"
+      layer-feature-name="properties.STUSPS"
+      layer-feature-code="properties.NAME"
       color-range='#6f97d9,#6f97d9'
       >    
     </d3-geo-static> -->
-
-<!--     <d3-geo-subway
-      id="04" 
-      map-path="data/tokyo_23_blocks_districts_final.json"
-      subway-path="data/tokyo_subway.topojson"
-      width="1200"
-      height="1200"
-      >    
-    </d3-geo-subway> -->
-<!-- 
-    <d3-geo-subway-v2
-      id="05" 
-      map-path="data/tokyo_23_blocks_districts_final.json"
-      subway-path="data/tokyo_subway.topojson"
-      color-range="#e3f2fd,#e3f2fd"
-      width="1200"
-      height="1200"
-      >    
-    </d3-geo-subway-v2>  -->  
-
  
-<!--     <d3-geo-leaf
-      v-if="currentSubway"
-      id="06" 
-      :geojson-object="currentSubway"
-      color-range='#6f97d9,#6f97d9'
-      >    
-    </d3-geo-leaf>  -->
+
     <div>
       <button @click="clickHandler">clear</button>
       <div v-for="item in apiResponse">
@@ -87,6 +68,7 @@
       </d3-geo-leaf>     
     </div>
     
+  
   </div>
 </template>
 
@@ -94,10 +76,6 @@
 import D3GeoStatic from './components/D3GeoStatic'
 import D3GeoDoubleLayer from './components/D3GeoDoubleLayer'
 import D3GeoEvents from './components/D3GeoEvents'
-import D3GeoSubway from './components/D3GeoSubway'
-import D3GeoSubwayV2 from './components/D3GeoSubwayV2'
-import D3GeoSubwayV3 from './components/D3GeoSubwayV3'
-import D3GeoSubwayV4 from './components/D3GeoSubwayV4'
 import D3GeoLeaf from './components/D3GeoLeaf'
 import axios from 'axios'
 
@@ -107,10 +85,6 @@ export default {
     D3GeoStatic,
     D3GeoDoubleLayer,
     D3GeoEvents,
-    D3GeoSubway,
-    D3GeoSubwayV2,
-    D3GeoSubwayV3,
-    D3GeoSubwayV4,
     D3GeoLeaf
   },
   computed: {
@@ -302,67 +276,35 @@ export default {
   },
   mounted() {
     /*** for 2-layer ***/
-    // setInterval(() => {
-    //   this.districtRankList = this.generateData();
-    // }, 1000);
+    setInterval(() => {
+      this.districtRankList = this.generateData();
+    }, 1000);
     /*** for 2-layer ***/
 
     /*** for route event ***/
-    // axios.get("data/event_data1.json")
-    //   .then((response)  =>  {
-    //     this.jsons.push(response.data.toptenlist);
-    //   }, (error)  =>  {
-    //   })
-
-    // axios.get("data/event_data2.json")
-    //   .then((response)  =>  {
-    //     console.log(response);
-    //     this.jsons.push(response.data.toptenlist);
-    //   }, (error)  =>  {
-    //   })
-
-
-    // let count = 0;
-
-    // setInterval(() => {
-
-    //   let idx = Math.floor(Math.random() * 2);
-    //   this.matrixJson = this.jsons[idx];   
-    // }, 2500);
-    /*** for route event ***/
-
-    /*** Dynamic Subway Data ***/
-/*    const subways = [];
-    axios.get("data/maihama.geojson")
+    axios.get("data/event_data1.json")
       .then((response)  =>  {
-        subways.push(response.data)
+        this.jsons.push(response.data.toptenlist);
       }, (error)  =>  {
-      
-      });
+      })
 
-    axios.get("data/test.geojson")
+    axios.get("data/event_data2.json")
       .then((response)  =>  {
-        subways.push(response.data)
-        this.currentSubway = response.data
+        console.log(response);
+        this.jsons.push(response.data.toptenlist);
       }, (error)  =>  {
-      
-      });
+      })
+
+
+    let count = 0;
 
     setInterval(() => {
-      let idx = Math.floor(Math.random() * 2)
-      this.currentSubway = subways[idx]
-      // console.log(this.currentSubway)
 
-    }, 5000);
-*/    
-    /*** Dynamic Subway Data ***/
+      let idx = Math.floor(Math.random() * 2);
+      this.matrixJson = this.jsons[idx];   
+    }, 1500);
+    /*** for route event ***/
 
-    // axios.get("data/statistics.json")
-    //   .then((response)  =>  {
-    //     this.apiResponse = response.data
-    //   }, (error)  =>  {
-      
-    //   });
 
     setTimeout(() => {
       axios.get("data/statistics.json")
