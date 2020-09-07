@@ -2,13 +2,13 @@
 A D3 Geo Vue.js Library
 
 *Static View*
-![screenshot](https://raw.githubusercontent.com/komushi/vue-d3-geo/master/images/static.jpg)
+![screenshot](images/static.jpg)
 
 *Events View*
-![screenshot](https://raw.githubusercontent.com/komushi/vue-d3-geo/master/images/events.png)
+![screenshot](images/events.png)
 
 *Leaflet View*
-![screenshot](https://raw.githubusercontent.com/komushi/vue-d3-geo/master/images/leaflet.png)
+![screenshot](images/leaflet.png)
 
 
 ## 1. For Users to see the demo(using live-server or host it as a static web app)
