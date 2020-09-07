@@ -7,8 +7,8 @@ A D3 Geo Vue.js Library
 *Events View*
 ![screenshot](https://raw.githubusercontent.com/komushi/vue-d3-geo/master/images/events.png)
 
-*Static View*
-![screenshot](https://raw.githubusercontent.com/komushi/vue-d3-geo/master/images/screenshot.jpg)
+*Leaflet View*
+![screenshot](https://raw.githubusercontent.com/komushi/vue-d3-geo/master/images/leaflet.png)
 
 
 ## 1. For Users to see the demo(using live-server or host it as a static web app)
