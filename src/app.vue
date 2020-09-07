@@ -2,7 +2,7 @@
   <div id="app">
 
 
-<!-- 
+
     <d3-geo-double-layer 
       id="01" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
@@ -22,9 +22,6 @@
       >    
     </d3-geo-events> 
 
-
-
- -->
 <!-- 
     <d3-geo-static
       id="03" 
