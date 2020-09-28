@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>D3 Test</title>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css">
+  <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+</head>
+
+<body>
+  <div id="map" style="width:600px; height:600px;"></div>
+  <script>
+    var map = new L.Map("map", {
+        center: [37.8, -96.9],
+        zoom: 4
+      })
+      .addLayer(new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"));
+
+    var svg = d3.select(map.getPanes().overlayPane).append("svg"),
+      svgCircles = svg.append("g").attr("class", "leaflet-zoom-hide");
+
+    d3.json("data/", function(error, myPoints) {
+      if (error) throw error;
+
+      var transform = d3.geo.transform({
+          point: projectPoint
+        }),
+        path = d3.geo.path().projection(transform);
+
+      var bounds = path.bounds(myPoints),
+        topLeft = bounds[0],
+        bottomRight = bounds[1];
+
+      myPoints.features.forEach(function(d) {
+        d.LatLng = new L.LatLng(d.geometry.coordinates[1],
+          d.geometry.coordinates[0]);
+      });
+
+      var circles = svgCircles.selectAll("circle")
+        .data(myPoints.features)
+        .enter()
+        .append("circle")
+        .attr("r", 10)
+        .style("fill", "red")
+        .attr("fill-opacity", 0.5);
+
+      // Use Leaflet to implement a D3 geometric transformation.
+      function projectPoint(x, y) {
+        var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+        this.stream.point(point.x, point.y);
+      }
+
+      function update() {
+        circles.attr("cx", function(d) {
+          return map.latLngToLayerPoint(d.LatLng).x;
+        });
+        circles.attr("cy", function(d) {
+          return map.latLngToLayerPoint(d.LatLng).y;
+        });
+        svg.attr("width", bottomRight[0] - topLeft[0])
+          .attr("height", bottomRight[1] - topLeft[1])
+          .style("left", topLeft[0] + "px")
+          .style("top", topLeft[1] + "px");
+
+        svgCircles.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
+      }
+
+      map.on("viewreset", update);
+      update();
+
+    })
+  </script>
+</body>

@@ -148,3 +148,6 @@ http://www.geonet.ch/basic-leaflet-map-with-d3-overlay/
 https://shimz.me/blog/d3-js/3517
 http://bl.ocks.org/shimizu/749df041c1945aef78fd992c7dfbe0e1
 https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
+
+### 4-1. fix mouseover for D3GeoLeaf
+https://www.d3-graph-gallery.com/graph/line_cursor.html

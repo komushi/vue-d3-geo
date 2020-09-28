@@ -3,6 +3,7 @@
 
 
 
+<!-- 
     <d3-geo-double-layer 
       id="01" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
@@ -13,15 +14,15 @@
       @on-stop-events="unsubTaxiEvents"
       >    
     </d3-geo-double-layer>
-
-    
+-->
+<!--      
      <d3-geo-events 
       id="02" 
       topojson-path="data/tokyo_23_blocks_districts_final.json"
       :layer-event-data="matrixJson"
       >    
     </d3-geo-events> 
-
+ -->
 <!-- 
     <d3-geo-static
       id="03" 
@@ -41,7 +42,7 @@
       >    
     </d3-geo-static> -->
  
-
+<!--
     <div>
       <button @click="clickHandler">clear</button>
       <div v-for="item in apiResponse">
@@ -65,7 +66,28 @@
       </d3-geo-leaf>     
     </div>
     
-  
+-->  
+
+    <div>
+      <button @click="clickHandler">clear</button>
+      <div v-for="item in apiResponse">
+        <input type="radio" v-model="geojsonString" name="area" :value="item.geojson"> {{item.area}}
+      </div>
+    </div>
+
+     <div style="width: 100%; height: 800px">
+      <d3-geo-leaf-polygon
+        tile-provider="Stamen.TonerLite"
+        :geojson-object="featureStatistics"
+        color-range="#0000ff,#e623e4,#ff0000"
+        :auto-fit-bounds="true"
+        @dragend="onDragEnd"
+        @zoomend="onZoomEnd"
+        @initmap="onInit"
+        >    
+      </d3-geo-leaf-polygon>     
+    </div>
+
   </div>
 </template>
 
@@ -74,6 +96,7 @@ import D3GeoStatic from './components/D3GeoStatic'
 import D3GeoDoubleLayer from './components/D3GeoDoubleLayer'
 import D3GeoEvents from './components/D3GeoEvents'
 import D3GeoLeaf from './components/D3GeoLeaf'
+import D3GeoLeafPolygon from './components/D3GeoLeafPolygon'
 import axios from 'axios'
 
 export default {
@@ -82,7 +105,8 @@ export default {
     D3GeoStatic,
     D3GeoDoubleLayer,
     D3GeoEvents,
-    D3GeoLeaf
+    D3GeoLeaf,
+    D3GeoLeafPolygon
   },
   computed: {
     featureStatistics: function() {
@@ -208,13 +232,13 @@ export default {
   },
   methods: {
     onDragEnd(bounds) {
-      console.log('onDragEnd', bounds);
+      // console.log('onDragEnd', bounds);
     },
     onZoomEnd(bounds) {
-      console.log('this.onZoomEnd', bounds);
+      // console.log('this.onZoomEnd', bounds);
     },    
     onInit(bounds) {
-      console.log('this.onInit', bounds);
+      // console.log('this.onInit', bounds);
     },      
     /*** for 2-layer ***/
     subTaxiEventsFrom(payload) {
@@ -303,8 +327,21 @@ export default {
     /*** for route event ***/
 
 
+    /*** for d3-geo-leaf ***/
+    // setTimeout(() => {
+    //   axios.get("data/statistics.json")
+    //     .then((response)  =>  {
+    //       this.apiResponse = response.data
+    //     }, (error)  =>  {
+        
+    //     });
+
+    // }, 1000);
+    /*** for d3-geo-leaf ***/
+
+    /*** for d3-geo-leaf-mesh ***/
     setTimeout(() => {
-      axios.get("data/statistics.json")
+      axios.get("data/tokyo_mesh.json")
         .then((response)  =>  {
           this.apiResponse = response.data
         }, (error)  =>  {
@@ -312,7 +349,7 @@ export default {
         });
 
     }, 1000);
-
+    /*** for d3-geo-leaf-mesh ***/
   }
 }
 </script>
