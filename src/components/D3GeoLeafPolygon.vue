@@ -16,15 +16,17 @@ const props = {
     type: String,
     default: 'CartoDB.Voyager'
   },  
-
   geojsonObject: {
     type: Object
   },
-
-  colorRange: {
+  color: {
     type: String,
-    default: '#0000ff,#e623e4,#ff0000'
+    default: 'MidnightBlue'
   },
+  colorOpacity: {
+    type: String,
+    default: '0.2'
+  },  
   mapCenter: {
     type: String,
     default: '139.77887823700362, 35.69026554219554'
@@ -33,7 +35,6 @@ const props = {
     type: [String, Number],
     default: 17
   },  
-
   geojsonType: {
     type: String,
     default: 'Polygon'
@@ -42,11 +43,17 @@ const props = {
     type: String,
     default: 'MESH_ID'
   },
-
   autoFitBounds: {
     type: Boolean,
     default: false
-  }
+  },
+  hideLabelThreshold: {
+    type: Number,
+    default: 100
+  },
+  highlightedMeshes: {
+    type: Array
+  }    
 };
 export default {
   name: 'd3-geo-leaf-polygon',
@@ -74,12 +81,51 @@ export default {
         },
         deep: true
 
-    }
+    },
+    highlightedMeshes: {
+        handler: function(newVal, oldVal){
+          if (newVal.length > 0)   {
+            this.highlightMesh();  
+          } else {
+            this.clearHighlight();
+          }
+          
+        },
+        deep: true
+
+    }    
   },
   mounted () {
     this.renderMap();
   },
   methods: {
+    clearHighlight() {
+      const vm = this;
+
+      const svg = d3.select(vm.map.getPane('overlayPane')).select("svg");
+      const g = svg.select("g");
+
+      const gGeojsonLayer = g.selectAll(`g[id=${this.geojsonType}]`);
+
+      gGeojsonLayer.selectAll("path")     
+        .attr("fill-opacity","0");
+
+    },      
+    highlightMesh() {
+      const vm = this;
+
+      const svg = d3.select(vm.map.getPane('overlayPane')).select("svg");
+      const g = svg.select("g");
+
+      const gGeojsonLayer = g.selectAll(`g[id=${this.geojsonType}]`);
+
+      gGeojsonLayer.selectAll("path")
+        .filter(function(d){
+          return vm.highlightedMeshes.includes(String(d.properties[vm.idTag]));
+        })      
+        .attr("fill-opacity", vm.colorOpacity);
+
+    },    
     clearSvg() {
       const vm = this;
 
@@ -90,14 +136,9 @@ export default {
 
       g.selectAll(`g[id=${this.geojsonType}_label]`).remove();
 
-      g.selectAll("defs[id=color_grads_def]").remove();
-
-
     },
     renderMap() {
       const vm = this;
-
-      // let map;
 
       // fit bounds based on the geojsonObject
       if (!this.mapAdded) {
@@ -179,34 +220,37 @@ export default {
 
       const mouseover = function(p, i) {
         d3.select(this)
-          // .style("cursor", "pointer")
-          .style("stroke-width", "5px")
+          .style("cursor", "pointer")
+          .style("stroke-width", "3px")
 
-        // gLabelLayer.selectAll("text")
-        //   .filter(function(d){
-        //     return d.properties[vm.idTag] == p.properties[vm.idTag];
-        //   })
-        //   .transition()
-        //   .style("fill-opacity", 1)
-        //   .style("display", "block")
-        //   .attr("fill", function(d,i) {
-        //     return "#000000";
-        //   });
+        gLabelLayer.selectAll("text")
+          .filter(function(d){
+            return d.properties[vm.idTag] == p.properties[vm.idTag];
+          })
+          .transition()
+          .style("fill-opacity", 1)
+          .style("display", "block")
+          .attr("fill", function(d,i) {
+            return "#000000";
+          });
       }
 
       const mouseout = function(p, i) {
         d3.select(this)
-          // .style("cursor", "")
+          .style("cursor", "")
           .style("stroke-width", "1px");
 
-        // gLabelLayer.selectAll("text")
-        //   .filter(function(d){
-        //     return d.properties[vm.idTag] == p.properties[vm.idTag];
-        //   })
-        //   .transition()
-        //   .style("fill-opacity", 0)
-        //   .transition()
-        //   .style("display", "none");        
+        const bbox = gGeojsonLayer.select("path").node().getBBox();
+        if (bbox.width < vm.hideLabelThreshold) {
+          gLabelLayer.selectAll("text")
+            .filter(function(d){
+              return d.properties[vm.idTag] == p.properties[vm.idTag];
+            })
+            .transition()
+            .style("fill-opacity", 0)
+            .transition()
+            .style("display", "none");  
+        }
       }      
 
       gGeojsonLayer.selectAll("path")
@@ -214,12 +258,11 @@ export default {
         .enter()
         .append("path")
         .attr("fill-opacity","0.0")
-        .style("fill","MidnightBlue")
-        // .style("fill", "none")        
+        .style("fill", vm.color)
         .style("stroke-width", "1px")
         .style("pointer-events", "auto")
         .attr("stroke", function(d,i) {
-          return "#00EEFF";
+          return vm.color;
         })
         .on("mouseout", mouseout)
         .on("mouseover", mouseover);
@@ -246,6 +289,7 @@ export default {
       ///////////////////////////////////////////////////////////////////////////
       /////////////////////// leaflet map zoom events ///////////////////////////
       ///////////////////////////////////////////////////////////////////////////
+
       vm.map.on("zoomend", () => {
         updatePath();
       });
@@ -260,6 +304,8 @@ export default {
         // update path
         gGeojsonLayer.selectAll("path").attr('d', path);
 
+        
+
         // update label
         labels.attr("x", function(d) {
           return vm.map.latLngToLayerPoint(d.LatLng).x;
@@ -268,6 +314,15 @@ export default {
         labels.attr("y", function(d) {
           return vm.map.latLngToLayerPoint(d.LatLng).y;
         });
+
+        const bbox = gGeojsonLayer.select("path").node().getBBox();
+
+        if (bbox.width >= vm.hideLabelThreshold) {
+          labels.style("fill-opacity", 1).style("display", "block");
+        } else {
+          labels.style("fill-opacity", 0).style("display", "none");
+        }
+        
           
       };
 

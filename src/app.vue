@@ -44,7 +44,7 @@
  
 <!--
     <div>
-      <button @click="clickHandler">clear</button>
+      <button @click="clearHandler">clear</button>
       <div v-for="item in apiResponse">
         <input type="radio" v-model="geojsonString" name="time_window" :value="item.geojson"> {{item.window_start}}
       </div>
@@ -69,18 +69,20 @@
 -->  
 
     <div>
-      <button @click="clickHandler">clear</button>
+      <button @click="clearHandler">clear</button>
       <div v-for="item in apiResponse">
         <input type="radio" v-model="geojsonString" name="area" :value="item.geojson"> {{item.area}}
       </div>
+      <button @click="highlightHandler">highlight</button>
     </div>
 
      <div style="width: 100%; height: 800px">
       <d3-geo-leaf-polygon
         tile-provider="Stamen.TonerLite"
         :geojson-object="featureStatistics"
-        color-range="#0000ff,#e623e4,#ff0000"
+        color="#FF6600"
         :auto-fit-bounds="true"
+        :highlighted-meshes="meshes"
         @dragend="onDragEnd"
         @zoomend="onZoomEnd"
         @initmap="onInit"
@@ -119,6 +121,7 @@ export default {
   },  
   data() {
     return {
+      meshes: [],
       geojsonString: null,
       apiResponse: [],
       currentSubway: null,
@@ -291,9 +294,15 @@ export default {
     /*** for route event ***/
 
     /*** for route event ***/
-    clickHandler() {
-      this.geojsonString = null;
-    }
+    clearHandler() {
+      // this.geojsonString = null;
+      this.meshes = [];
+    },
+    highlightHandler() {
+      this.meshes = ["53393483", "53385739", "53385759"];
+      // this.meshes = ["49395630", "53393483"];
+
+    }    
   },
   mounted() {
     /*** for 2-layer ***/
