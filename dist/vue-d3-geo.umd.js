@@ -42864,12 +42864,12 @@ var D3GeoLeaf_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoLeaf = (D3GeoLeaf_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeafPolygon.vue?vue&type=template&id=2d2941ea&
-var D3GeoLeafPolygonvue_type_template_id_2d2941ea_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"leaflet",style:({ height: '100%', width:　'100%'}),attrs:{"id":"leaflet"}})}
-var D3GeoLeafPolygonvue_type_template_id_2d2941ea_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeafPolygon.vue?vue&type=template&id=05170d6b&
+var D3GeoLeafPolygonvue_type_template_id_05170d6b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"leaflet",style:({ height: '100%', width:　'100%'}),attrs:{"id":"leaflet"}})}
+var D3GeoLeafPolygonvue_type_template_id_05170d6b_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/D3GeoLeafPolygon.vue?vue&type=template&id=2d2941ea&
+// CONCATENATED MODULE: ./src/components/D3GeoLeafPolygon.vue?vue&type=template&id=05170d6b&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
 var es_array_includes = __webpack_require__("caad");
@@ -42990,11 +42990,10 @@ var D3GeoLeafPolygonvue_type_script_lang_js_props = {
       var vm = this;
       var svg = src_select(vm.map.getPane('overlayPane')).select("svg");
       var g = svg.select("g");
-      var gGeojsonLayer = g.selectAll("g[id=".concat(this.geojsonType, "]"));
+      var gGeojsonLayer = g.selectAll("g[id=".concat(this.geojsonType, "]")); // console.log(vm.highlightedMeshes)
+
+      gGeojsonLayer.selectAll("path").attr("fill-opacity", 0);
       gGeojsonLayer.selectAll("path").filter(function (d) {
-        console.log(vm.highlightedMeshes.map(function (ele) {
-          return ele.mesh_id;
-        }));
         return vm.highlightedMeshes.map(function (ele) {
           return ele.mesh_id;
         }).includes(String(d.properties[vm.idTag]));
@@ -43161,8 +43160,8 @@ var D3GeoLeafPolygonvue_type_style_index_0_lang_css_ = __webpack_require__("3acb
 
 var D3GeoLeafPolygon_component = normalizeComponent(
   components_D3GeoLeafPolygonvue_type_script_lang_js_,
-  D3GeoLeafPolygonvue_type_template_id_2d2941ea_render,
-  D3GeoLeafPolygonvue_type_template_id_2d2941ea_staticRenderFns,
+  D3GeoLeafPolygonvue_type_template_id_05170d6b_render,
+  D3GeoLeafPolygonvue_type_template_id_05170d6b_staticRenderFns,
   false,
   null,
   null,

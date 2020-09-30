@@ -299,7 +299,12 @@ export default {
       this.meshes = [];
     },
     highlightHandler() {
-      this.meshes = [{mesh_id: "49395630"}, {mesh_id: "53393483"}, {mesh_id: "53385739"}, {mesh_id: "53385759"}];
+      if (this.meshes.length != 4 ){
+        this.meshes = [{mesh_id: "49395630"}, {mesh_id: "53393483"}, {mesh_id: "53385739"}, {mesh_id: "53385759"}];
+      } else {
+        this.meshes = [{mesh_id: "49395630"}, {mesh_id: "53385739"}, {mesh_id: "53385759"}];
+      }
+      
     }    
   },
   mounted() {
