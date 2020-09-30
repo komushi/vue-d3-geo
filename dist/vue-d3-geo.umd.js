@@ -704,6 +704,28 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 
 /***/ }),
 
+/***/ "2532":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__("23e7");
+var notARegExp = __webpack_require__("5a34");
+var requireObjectCoercible = __webpack_require__("1d80");
+var correctIsRegExpLogic = __webpack_require__("ab13");
+
+// `String.prototype.includes` method
+// https://tc39.github.io/ecma262/#sec-string.prototype.includes
+$({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, {
+  includes: function includes(searchString /* , position = 0 */) {
+    return !!~String(requireObjectCoercible(this))
+      .indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+
+/***/ }),
+
 /***/ "2584":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -959,6 +981,17 @@ module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperti
 
 /***/ }),
 
+/***/ "3acb":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_D3GeoLeafPolygon_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("623b");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_D3GeoLeafPolygon_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_D3GeoLeafPolygon_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_D3GeoLeafPolygon_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "3bbe":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1031,6 +1064,33 @@ module.exports = fails(function () {
 }) ? function (it) {
   return classof(it) == 'String' ? split.call(it, '') : Object(it);
 } : Object;
+
+
+/***/ }),
+
+/***/ "44d2":
+/***/ (function(module, exports, __webpack_require__) {
+
+var wellKnownSymbol = __webpack_require__("b622");
+var create = __webpack_require__("7c73");
+var definePropertyModule = __webpack_require__("9bf2");
+
+var UNSCOPABLES = wellKnownSymbol('unscopables');
+var ArrayPrototype = Array.prototype;
+
+// Array.prototype[@@unscopables]
+// https://tc39.github.io/ecma262/#sec-array.prototype-@@unscopables
+if (ArrayPrototype[UNSCOPABLES] == undefined) {
+  definePropertyModule.f(ArrayPrototype, UNSCOPABLES, {
+    configurable: true,
+    value: create(null)
+  });
+}
+
+// add a key to Array.prototype[@@unscopables]
+module.exports = function (key) {
+  ArrayPrototype[UNSCOPABLES][key] = true;
+};
 
 
 /***/ }),
@@ -1287,6 +1347,20 @@ module.exports = {
 
 /***/ }),
 
+/***/ "5a34":
+/***/ (function(module, exports, __webpack_require__) {
+
+var isRegExp = __webpack_require__("44e7");
+
+module.exports = function (it) {
+  if (isRegExp(it)) {
+    throw TypeError("The method doesn't accept regular expressions");
+  } return it;
+};
+
+
+/***/ }),
+
 /***/ "5c6c":
 /***/ (function(module, exports) {
 
@@ -1299,6 +1373,13 @@ module.exports = function (bitmap, value) {
   };
 };
 
+
+/***/ }),
+
+/***/ "623b":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -2920,6 +3001,28 @@ if (isForced(NUMBER, !NativeNumber(' 0o1') || !NativeNumber('0b1') || NativeNumb
 
 /***/ }),
 
+/***/ "ab13":
+/***/ (function(module, exports, __webpack_require__) {
+
+var wellKnownSymbol = __webpack_require__("b622");
+
+var MATCH = wellKnownSymbol('match');
+
+module.exports = function (METHOD_NAME) {
+  var regexp = /./;
+  try {
+    '/./'[METHOD_NAME](regexp);
+  } catch (e) {
+    try {
+      regexp[MATCH] = false;
+      return '/./'[METHOD_NAME](regexp);
+    } catch (f) { /* empty */ }
+  } return false;
+};
+
+
+/***/ }),
+
 /***/ "ac1f":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3334,6 +3437,32 @@ module.exports = function (object, names) {
   }
   return result;
 };
+
+
+/***/ }),
+
+/***/ "caad":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__("23e7");
+var $includes = __webpack_require__("4d64").includes;
+var addToUnscopables = __webpack_require__("44d2");
+var arrayMethodUsesToLength = __webpack_require__("ae40");
+
+var USES_TO_LENGTH = arrayMethodUsesToLength('indexOf', { ACCESSORS: true, 1: 0 });
+
+// `Array.prototype.includes` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.includes
+$({ target: 'Array', proto: true, forced: !USES_TO_LENGTH }, {
+  includes: function includes(el /* , fromIndex = 0 */) {
+    return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+// https://tc39.github.io/ecma262/#sec-array.prototype-@@unscopables
+addToUnscopables('includes');
 
 
 /***/ }),
@@ -19166,6 +19295,7 @@ __webpack_require__.d(__webpack_exports__, "D3GeoSubway", function() { return /*
 __webpack_require__.d(__webpack_exports__, "D3GeoSubwayV3", function() { return /* reexport */ D3GeoSubwayV3; });
 __webpack_require__.d(__webpack_exports__, "D3GeoSubwayV4", function() { return /* reexport */ D3GeoSubwayV4; });
 __webpack_require__.d(__webpack_exports__, "D3GeoLeaf", function() { return /* reexport */ D3GeoLeaf; });
+__webpack_require__.d(__webpack_exports__, "D3GeoLeafPolygon", function() { return /* reexport */ D3GeoLeafPolygon; });
 
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
 // This file is imported into lib/wc client bundles.
@@ -19191,7 +19321,7 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"074e7c56-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoStatic.vue?vue&type=template&id=5f182486&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoStatic.vue?vue&type=template&id=5f182486&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
 var staticRenderFns = []
 
@@ -40683,7 +40813,7 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoStatic = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"074e7c56-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoDoubleLayer.vue?vue&type=template&id=c52e47e2&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoDoubleLayer.vue?vue&type=template&id=c52e47e2&
 var D3GeoDoubleLayervue_type_template_id_c52e47e2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
 var D3GeoDoubleLayervue_type_template_id_c52e47e2_staticRenderFns = []
 
@@ -41147,7 +41277,7 @@ var D3GeoDoubleLayer_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoDoubleLayer = (D3GeoDoubleLayer_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"074e7c56-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoEvents.vue?vue&type=template&id=2ae661a6&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoEvents.vue?vue&type=template&id=2ae661a6&
 var D3GeoEventsvue_type_template_id_2ae661a6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
 var D3GeoEventsvue_type_template_id_2ae661a6_staticRenderFns = []
 
@@ -41538,7 +41668,7 @@ var D3GeoEvents_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoEvents = (D3GeoEvents_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"074e7c56-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoSubway.vue?vue&type=template&id=1a192d1a&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoSubway.vue?vue&type=template&id=1a192d1a&
 var D3GeoSubwayvue_type_template_id_1a192d1a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
 var D3GeoSubwayvue_type_template_id_1a192d1a_staticRenderFns = []
 
@@ -41801,7 +41931,7 @@ var D3GeoSubway_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoSubway = (D3GeoSubway_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"074e7c56-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoSubwayV3.vue?vue&type=template&id=d9ad435e&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoSubwayV3.vue?vue&type=template&id=d9ad435e&
 var D3GeoSubwayV3vue_type_template_id_d9ad435e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
 var D3GeoSubwayV3vue_type_template_id_d9ad435e_staticRenderFns = []
 
@@ -42135,7 +42265,7 @@ var D3GeoSubwayV3_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoSubwayV3 = (D3GeoSubwayV3_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"074e7c56-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoSubwayV4.vue?vue&type=template&id=d254c2fa&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoSubwayV4.vue?vue&type=template&id=d254c2fa&
 var D3GeoSubwayV4vue_type_template_id_d254c2fa_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
 var D3GeoSubwayV4vue_type_template_id_d254c2fa_staticRenderFns = []
 
@@ -42389,7 +42519,7 @@ var D3GeoSubwayV4_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoSubwayV4 = (D3GeoSubwayV4_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"074e7c56-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=494546be&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeaf.vue?vue&type=template&id=494546be&
 var D3GeoLeafvue_type_template_id_494546be_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"leaflet",style:({ height: '100%', width:　'100%'}),attrs:{"id":"leaflet"}})}
 var D3GeoLeafvue_type_template_id_494546be_staticRenderFns = []
 
@@ -42734,7 +42864,315 @@ var D3GeoLeaf_component = normalizeComponent(
 )
 
 /* harmony default export */ var D3GeoLeaf = (D3GeoLeaf_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0e1247ce-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeafPolygon.vue?vue&type=template&id=2d2941ea&
+var D3GeoLeafPolygonvue_type_template_id_2d2941ea_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"leaflet",style:({ height: '100%', width:　'100%'}),attrs:{"id":"leaflet"}})}
+var D3GeoLeafPolygonvue_type_template_id_2d2941ea_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/D3GeoLeafPolygon.vue?vue&type=template&id=2d2941ea&
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
+var es_array_includes = __webpack_require__("caad");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
+var es_string_includes = __webpack_require__("2532");
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/D3GeoLeafPolygon.vue?vue&type=script&lang=js&
+
+
+
+
+
+
+
+
+
+//
+//
+//
+//
+
+
+
+
+
+
+var D3GeoLeafPolygonvue_type_script_lang_js_props = {
+  tileProvider: {
+    type: String,
+    default: 'CartoDB.Voyager'
+  },
+  geojsonObject: {
+    type: Object
+  },
+  color: {
+    type: String,
+    default: 'MidnightBlue'
+  },
+  colorOpacity: {
+    type: String,
+    default: '0.2'
+  },
+  mapCenter: {
+    type: String,
+    default: '139.77887823700362, 35.69026554219554'
+  },
+  mapZoom: {
+    type: [String, Number],
+    default: 17
+  },
+  geojsonType: {
+    type: String,
+    default: 'Polygon'
+  },
+  idTag: {
+    type: String,
+    default: 'MESH_ID'
+  },
+  autoFitBounds: {
+    type: Boolean,
+    default: false
+  },
+  hideLabelThreshold: {
+    type: Number,
+    default: 100
+  },
+  highlightedMeshes: {
+    type: Array
+  }
+};
+/* harmony default export */ var D3GeoLeafPolygonvue_type_script_lang_js_ = ({
+  name: 'd3-geo-leaf-polygon',
+  data: function data() {
+    return {
+      map: null,
+      svg: null,
+      mapAdded: false,
+      svgAdded: false
+    };
+  },
+  props: D3GeoLeafPolygonvue_type_script_lang_js_props,
+  computed: {},
+  watch: {
+    geojsonObject: {
+      handler: function handler(newVal, oldVal) {
+        if (newVal) {
+          this.renderMap();
+        } else {
+          this.clearSvg();
+        }
+      },
+      deep: true
+    },
+    highlightedMeshes: {
+      handler: function handler(newVal, oldVal) {
+        if (newVal.length > 0) {
+          this.highlightMesh();
+        } else {
+          this.clearHighlight();
+        }
+      },
+      deep: true
+    }
+  },
+  mounted: function mounted() {
+    this.renderMap();
+  },
+  methods: {
+    clearHighlight: function clearHighlight() {
+      var vm = this;
+      var svg = src_select(vm.map.getPane('overlayPane')).select("svg");
+      var g = svg.select("g");
+      var gGeojsonLayer = g.selectAll("g[id=".concat(this.geojsonType, "]"));
+      gGeojsonLayer.selectAll("path").attr("fill-opacity", "0");
+    },
+    highlightMesh: function highlightMesh() {
+      var vm = this;
+      var svg = src_select(vm.map.getPane('overlayPane')).select("svg");
+      var g = svg.select("g");
+      var gGeojsonLayer = g.selectAll("g[id=".concat(this.geojsonType, "]"));
+      gGeojsonLayer.selectAll("path").filter(function (d) {
+        console.log(vm.highlightedMeshes.map(function (ele) {
+          return ele.mesh_id;
+        }));
+        return vm.highlightedMeshes.map(function (ele) {
+          return ele.mesh_id;
+        }).includes(String(d.properties[vm.idTag]));
+      }).attr("fill-opacity", vm.colorOpacity);
+    },
+    clearSvg: function clearSvg() {
+      var vm = this;
+      var svg = src_select(vm.map.getPane('overlayPane')).select("svg");
+      var g = svg.select("g");
+      g.selectAll("g[id=".concat(this.geojsonType, "]")).remove();
+      g.selectAll("g[id=".concat(this.geojsonType, "_label]")).remove();
+    },
+    renderMap: function renderMap() {
+      var _this = this;
+
+      var vm = this; // fit bounds based on the geojsonObject
+
+      if (!this.mapAdded) {
+        if (this.geojsonObject) {
+          vm.map = leaflet_src_default.a.map(this.$refs['leaflet']).fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
+        } else {
+          vm.map = leaflet_src_default.a.map(this.$refs['leaflet']);
+          vm.map.setView(new leaflet_src_default.a.LatLng(this.mapCenter.split(",")[1], this.mapCenter.split(",")[0]), this.mapZoom);
+        }
+
+        this.mapAdded = true;
+        leaflet_src_default.a.tileLayer.provider(vm.tileProvider).addTo(vm.map);
+        vm.map.on("zoomend", function () {
+          _this.$emit('zoomend', vm.getBounds(vm.map));
+        });
+        vm.map.on("dragend", function () {
+          _this.$emit('dragend', vm.getBounds(vm.map));
+        });
+        this.$emit('initmap', vm.getBounds(vm.map));
+      } else {
+        if (this.autoFitBounds) {
+          vm.map.fitBounds(leaflet_src_default.a.geoJson(this.geojsonObject).getBounds());
+        }
+      } // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
+      // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
+      // L.tileLayer.provider('Stamen.TonerBackground').addTo(map);
+      // L.tileLayer.provider('Stamen.TonerLite').addTo(map);
+      // L.tileLayer.provider('Hydda.Base').addTo(map);
+
+
+      if (!this.geojsonObject) {
+        return;
+      } ///////////////////////////////////////////////////////////////////////////
+      ///////////////////// create transform and path function //////////////////
+      ///////////////////////////////////////////////////////////////////////////
+
+
+      var projectPoint = function projectPoint(x, y) {
+        var point = vm.map.latLngToLayerPoint(new leaflet_src_default.a.LatLng(y, x));
+        this.stream.point(point.x, point.y);
+      };
+
+      var transform = src_transform({
+        point: projectPoint
+      });
+      var path = d3_geo_src_path().projection(transform); ///////////////////////////////////////////////////////////////////////////
+      ///////////////////////////////// add svg /////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+
+      if (!this.svgAdded) {
+        leaflet_src_default.a.svg().addTo(vm.map);
+        this.svgAdded = true;
+      } ///////////////////////////////////////////////////////////////////////////
+      /////////////////////////// add geojson and label /////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+
+
+      var svg = src_select(vm.map.getPane('overlayPane')).select("svg");
+      var g = svg.select("g").attr("class", "leaflet-zoom-hide");
+      g.selectAll("g[id=".concat(this.geojsonType, "]")).remove();
+      var gGeojsonLayer = g.append("g").attr("id", this.geojsonType);
+      g.selectAll("g[id=".concat(this.geojsonType, "_label]")).remove();
+      var gLabelLayer = g.append("g").attr("id", this.geojsonType + "_label");
+
+      var mouseover = function mouseover(p, i) {
+        src_select(this).style("cursor", "pointer").style("stroke-width", "3px");
+        gLabelLayer.selectAll("text").filter(function (d) {
+          return d.properties[vm.idTag] == p.properties[vm.idTag];
+        }).transition().style("fill-opacity", 1).style("display", "block").attr("fill", function (d, i) {
+          return "#000000";
+        });
+      };
+
+      var mouseout = function mouseout(p, i) {
+        src_select(this).style("cursor", "").style("stroke-width", "1px");
+        var bbox = gGeojsonLayer.select("path").node().getBBox();
+
+        if (bbox.width < vm.hideLabelThreshold) {
+          gLabelLayer.selectAll("text").filter(function (d) {
+            return d.properties[vm.idTag] == p.properties[vm.idTag];
+          }).transition().style("fill-opacity", 0).transition().style("display", "none");
+        }
+      };
+
+      gGeojsonLayer.selectAll("path").data(this.geojsonObject.features).enter().append("path").attr("fill-opacity", "0.0").style("fill", vm.color).style("stroke-width", "1px").style("pointer-events", "auto").attr("stroke", function (d, i) {
+        return vm.color;
+      }).on("mouseout", mouseout).on("mouseover", mouseover);
+      this.geojsonObject.features.forEach(function (d) {
+        d.LatLng = new leaflet_src_default.a.LatLng(d.geometry.coordinates[0][1][1], d.geometry.coordinates[0][1][0]);
+      });
+      var labels = gLabelLayer.selectAll("text").data(this.geojsonObject.features).enter().append("text").attr("class", "geojsonLabel").attr("pointer-events", "none").attr("dx", "2.5em").attr("dy", "1em").style("fill-opacity", 1).style("display", "block").text(function (d) {
+        return d.properties[vm.idTag];
+      }); ///////////////////////////////////////////////////////////////////////////
+      /////////////////////// leaflet map zoom events ///////////////////////////
+      ///////////////////////////////////////////////////////////////////////////
+
+      vm.map.on("zoomend", function () {
+        updatePath();
+      });
+      vm.map.on("dragend", function () {
+        updatePath();
+      }); // update path & label
+
+      var updatePath = function updatePath() {
+        // update path
+        gGeojsonLayer.selectAll("path").attr('d', path); // update label
+
+        labels.attr("x", function (d) {
+          return vm.map.latLngToLayerPoint(d.LatLng).x;
+        });
+        labels.attr("y", function (d) {
+          return vm.map.latLngToLayerPoint(d.LatLng).y;
+        });
+        var bbox = gGeojsonLayer.select("path").node().getBBox();
+
+        if (bbox.width >= vm.hideLabelThreshold) {
+          labels.style("fill-opacity", 1).style("display", "block");
+        } else {
+          labels.style("fill-opacity", 0).style("display", "none");
+        }
+      };
+
+      updatePath();
+    },
+    getBounds: function getBounds(map) {
+      //Calculate the variables for the sort gradient
+      return {
+        lng_nw: map.getBounds()._southWest.lng,
+        lat_nw: map.getBounds()._northEast.lat,
+        lng_se: map.getBounds()._northEast.lng,
+        lat_se: map.getBounds()._southWest.lat
+      };
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/D3GeoLeafPolygon.vue?vue&type=script&lang=js&
+ /* harmony default export */ var components_D3GeoLeafPolygonvue_type_script_lang_js_ = (D3GeoLeafPolygonvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/D3GeoLeafPolygon.vue?vue&type=style&index=0&lang=css&
+var D3GeoLeafPolygonvue_type_style_index_0_lang_css_ = __webpack_require__("3acb");
+
+// CONCATENATED MODULE: ./src/components/D3GeoLeafPolygon.vue
+
+
+
+
+
+
+/* normalize component */
+
+var D3GeoLeafPolygon_component = normalizeComponent(
+  components_D3GeoLeafPolygonvue_type_script_lang_js_,
+  D3GeoLeafPolygonvue_type_template_id_2d2941ea_render,
+  D3GeoLeafPolygonvue_type_template_id_2d2941ea_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var D3GeoLeafPolygon = (D3GeoLeafPolygon_component.exports);
 // CONCATENATED MODULE: ./src/lib.js
+
 
 
 

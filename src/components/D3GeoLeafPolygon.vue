@@ -121,7 +121,8 @@ export default {
 
       gGeojsonLayer.selectAll("path")
         .filter(function(d){
-          return vm.highlightedMeshes.includes(String(d.properties[vm.idTag]));
+          console.log(vm.highlightedMeshes.map(ele => ele.mesh_id))
+          return vm.highlightedMeshes.map(ele => ele.mesh_id).includes(String(d.properties[vm.idTag]));
         })      
         .attr("fill-opacity", vm.colorOpacity);
 

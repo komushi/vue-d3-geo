@@ -5,7 +5,7 @@ import D3GeoSubway from './components/D3GeoSubway'
 import D3GeoSubwayV3 from './components/D3GeoSubwayV3'
 import D3GeoSubwayV4 from './components/D3GeoSubwayV4'
 import D3GeoLeaf from './components/D3GeoLeaf'
-import D3GeoLeaf from './components/D3GeoLeafPolygon'
+import D3GeoLeafPolygon from './components/D3GeoLeafPolygon'
 
 export {
 	D3GeoDoubleLayer,
