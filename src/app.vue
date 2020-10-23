@@ -42,7 +42,7 @@
       >    
     </d3-geo-static> -->
  
-<!--
+
     <div>
       <button @click="clearHandler">clear</button>
       <div v-for="item in apiResponse">
@@ -57,7 +57,6 @@
         tile-provider="Stamen.TonerLite"
         :geojson-object="featureStatistics"
         color-range="#0000ff,#e623e4,#ff0000"
-        legend-center="400, 50"
         :auto-fit-bounds="true"
         @dragend="onDragEnd"
         @zoomend="onZoomEnd"
@@ -66,8 +65,8 @@
       </d3-geo-leaf>     
     </div>
     
--->  
-
+  
+<!-- 
     <div>
       <button @click="clearHandler">clear</button>
       <div v-for="item in apiResponse">
@@ -89,6 +88,8 @@
         >    
       </d3-geo-leaf-polygon>     
     </div>
+
+ -->
 
   </div>
 </template>
@@ -340,27 +341,27 @@ export default {
 
 
     /*** for d3-geo-leaf ***/
-    // setTimeout(() => {
-    //   axios.get("data/statistics.json")
-    //     .then((response)  =>  {
-    //       this.apiResponse = response.data
-    //     }, (error)  =>  {
-        
-    //     });
-
-    // }, 1000);
-    /*** for d3-geo-leaf ***/
-
-    /*** for d3-geo-leaf-mesh ***/
     setTimeout(() => {
-      axios.get("data/tokyo_mesh.json")
+      axios.get("data/statistics.json")
         .then((response)  =>  {
           this.apiResponse = response.data
         }, (error)  =>  {
         
         });
 
-    }, 1000);
+    }, 200);
+    /*** for d3-geo-leaf ***/
+
+    /*** for d3-geo-leaf-mesh ***/
+    // setTimeout(() => {
+    //   axios.get("data/tokyo_mesh.json")
+    //     .then((response)  =>  {
+    //       this.apiResponse = response.data
+    //     }, (error)  =>  {
+        
+    //     });
+
+    // }, 200);
     /*** for d3-geo-leaf-mesh ***/
   }
 }

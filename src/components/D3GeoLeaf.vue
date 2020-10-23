@@ -40,11 +40,15 @@ const props = {
   },  
   legendCenter: {
     type: String,
-    default: '400, 50'
+    default: '360, 50'
   },  
   geojsonType: {
     type: String,
     default: 'lines'
+  },
+  captionTag: {
+    type: String,
+    default: 'collected'
   },
   countTag: {
     type: String,
@@ -207,21 +211,33 @@ export default {
       const gLabelLayer = g.append("g").attr("id", this.geojsonType + "_label");
 
 
-      const mouseover = function(p, i) {
-        d3.select(this)
-          .style("cursor", "pointer")
-          .style("stroke-width", "5px")
-
-        gLabelLayer.selectAll("text")
+      const mousemove = function(p, i) {
+        const activeLabel = gLabelLayer.selectAll("text")
           .filter(function(d){
             return d.properties[vm.idTag] == p.properties[vm.idTag];
           })
-          .transition()
+          .attr("class", "lineLabel")
+          .attr("x", d3.mouse(this)[0] + 15)
+          .attr("y", d3.mouse(this)[1] + 15);
+      }
+
+      const mouseover = function(p, i) {
+        d3.select(this)
+          .style("cursor", "pointer")
+          .style("stroke-width", "8px")
+
+        const activeLabel = gLabelLayer.selectAll("text")
+          .filter(function(d){
+            return d.properties[vm.idTag] == p.properties[vm.idTag];
+          })
+          .attr("class", "lineLabel")
           .style("fill-opacity", 1)
           .style("display", "block")
           .attr("fill", function(d,i) {
-            return colorScale(p.properties[vm.countTag]);
-          });
+            return colorScale(d.properties[vm.countTag]);
+          })
+          .attr("x", d3.mouse(this)[0] + 15)
+          .attr("y", d3.mouse(this)[1] + 15);
       }
 
       const mouseout = function(p, i) {
@@ -250,21 +266,21 @@ export default {
           return colorScale(d.properties[vm.countTag]);
         })
         .on("mouseout", mouseout)
-        .on("mouseover", mouseover);
+        .on("mouseover", mouseover)
+        .on("mousemove", mouseover);
 
-      // Subway labels
       gLabelLayer.selectAll("text")
         .data(this.geojsonObject.features)
         .enter()
         .append("text")
-        .attr("class", "geojsonLabel")
+        .attr("class", "lineLabel")
         .attr("pointer-events", "none")
-        .attr("transform", function(d) { 
-          return "translate(" + path.centroid(d) + ")"; 
-        })
-        .attr("dy", ".35em")
+        .attr("dx", "2.5em")
+        .attr("dy", "1em")
+        // .style("fill-opacity", 0)
+        // .style("display", "none")
         .text(function(d) { 
-          return d.properties[vm.countTag];
+          return d.properties[vm.captionTag];
         });
 
       ///////////////////////////////////////////////////////////////////////////
@@ -348,13 +364,9 @@ export default {
           // update path
           g.selectAll("path").attr('d', path);
 
-          const nwPoint = vm.map.latLngToLayerPoint(new L.LatLng(vm.map.getBounds()._northEast.lat, vm.map.getBounds()._southWest.lng));
-
-          // console.log('dragend', nwPoint);
-
           // update legend
+          const nwPoint = vm.map.latLngToLayerPoint(new L.LatLng(vm.map.getBounds()._northEast.lat, vm.map.getBounds()._southWest.lng));
           g.selectAll("g[id=legend_wrapper]").attr("transform", "translate(" + (vm.legendCenterObj.x + nwPoint.x) + "," + (vm.legendCenterObj.y + nwPoint.y) + ")");
-
           
       };
 
@@ -425,9 +437,9 @@ svg {
 }
 
 .legendTitle {
-  fill: silver;
+  fill: red;
   fill-opacity: 1;
-  font-size: 44px;
+  font-size: 30px;
   font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
   font-weight: 700;
   text-anchor: middle;
@@ -439,10 +451,9 @@ svg {
      1px 1px 0 #000;  
 }
 
-.geojsonLabel {
-  display: none;
-  fill-opacity: 1;
-  font-size: 30px;
+.lineLabel {
+  fill-opacity: 0;
+  font-size: 26px;
   font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
   font-weight: 700;
   text-anchor: middle;
@@ -451,7 +462,7 @@ svg {
     -1px -1px 0 #000,  
     1px -1px 0 #000,
     -1px 1px 0 #000,
-     1px 1px 0 #000;
+     1px 1px 0 #000;  
 }
 
 </style>

@@ -281,7 +281,7 @@ export default {
         .data(this.geojsonObject.features)
         .enter()
         .append("text")
-        .attr("class", "geojsonLabel")
+        .attr("class", "polygonLabel")
         .attr("pointer-events", "none")
         .attr("dx", "2.5em")
         .attr("dy", "1em")
@@ -362,12 +362,15 @@ svg {
 }
 
 
-.geojsonLabel {
-  display: block;
-  fill-opacity: 1;
+.polygonLabel {
+  fill-opacity: 0;
   font-size: 15px;
   font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
-  font-weight: 100;
+  font-weight: 500;
+  text-anchor: middle;
+
 }
+
+
 
 </style>
