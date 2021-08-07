@@ -43,7 +43,7 @@
     </d3-geo-static> -->
  
 
-    <div>
+<!--     <div>
       <button @click="clearHandler">clear</button>
       <div v-for="item in apiResponse">
         <input type="radio" v-model="geojsonString" name="time_window" :value="item.geojson"> {{item.window_start}}
@@ -63,11 +63,11 @@
         @initmap="onInit"
         >    
       </d3-geo-leaf>     
-    </div>
+    </div> -->
     
   
-<!-- 
-    <div>
+
+<!--     <div>
       <button @click="clearHandler">clear</button>
       <div v-for="item in apiResponse">
         <input type="radio" v-model="geojsonString" name="area" :value="item.geojson"> {{item.area}}
@@ -88,9 +88,22 @@
         >    
       </d3-geo-leaf-polygon>     
     </div>
-
  -->
 
+
+    <div style="width: 100%; height: 800px">
+      <d3-geo-leaf-icons
+        tile-provider="Stamen.TonerLite"
+        :geojson-object="geojson"
+        color="#FF6600"
+        :auto-fit-bounds="true"
+        :highlighted-meshes="meshes"
+        @dragend="onDragEnd"
+        @zoomend="onZoomEnd"
+        @initmap="onInit"
+        >    
+      </d3-geo-leaf-icons>     
+    </div>
   </div>
 </template>
 
@@ -100,6 +113,7 @@ import D3GeoDoubleLayer from './components/D3GeoDoubleLayer'
 import D3GeoEvents from './components/D3GeoEvents'
 import D3GeoLeaf from './components/D3GeoLeaf'
 import D3GeoLeafPolygon from './components/D3GeoLeafPolygon'
+import D3GeoLeafIcons from './components/D3GeoLeafIcons'
 import axios from 'axios'
 
 export default {
@@ -109,7 +123,8 @@ export default {
     D3GeoDoubleLayer,
     D3GeoEvents,
     D3GeoLeaf,
-    D3GeoLeafPolygon
+    D3GeoLeafPolygon,
+    D3GeoLeafIcons
   },
   computed: {
     featureStatistics: function() {
@@ -118,6 +133,28 @@ export default {
       } else {
         return null;
       }
+    },
+    geojson() {
+      const json = {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": { 
+              "scannerName": "ropal ningyocho 01"
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates":             [
+                    139.78128,
+                    35.687603
+                  ]
+            }
+          }
+        ]
+      }
+
+      return json
     }
   },  
   data() {

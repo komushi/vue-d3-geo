@@ -6,6 +6,7 @@ import D3GeoSubwayV3 from './components/D3GeoSubwayV3'
 import D3GeoSubwayV4 from './components/D3GeoSubwayV4'
 import D3GeoLeaf from './components/D3GeoLeaf'
 import D3GeoLeafPolygon from './components/D3GeoLeafPolygon'
+import D3GeoLeafIcons from './components/D3GeoLeafIcons'
 
 export {
 	D3GeoDoubleLayer,
@@ -15,5 +16,6 @@ export {
 	D3GeoSubwayV3,
 	D3GeoSubwayV4,
 	D3GeoLeaf,
-	D3GeoLeafPolygon
+	D3GeoLeafPolygon,
+	D3GeoLeafIcons,
 }

@@ -41,7 +41,7 @@ const props = {
   },
   idTag: {
     type: String,
-    default: 'MESH_ID'
+    default: 'scannerName'
   },
   autoFitBounds: {
     type: Boolean,
@@ -50,13 +50,10 @@ const props = {
   hideLabelThreshold: {
     type: Number,
     default: 100
-  },
-  highlightedMeshes: {
-    type: Array
-  }    
+  }  
 };
 export default {
-  name: 'd3-geo-leaf-polygon',
+  name: 'd3-geo-leaf-icons',
   data() {
     return {
       map: null,
@@ -81,56 +78,12 @@ export default {
         },
         deep: true
 
-    },
-    highlightedMeshes: {
-        handler: function(newVal, oldVal){
-          if (newVal.length > 0)   {
-            this.highlightMesh();  
-          } else {
-            this.clearHighlight();
-          }
-          
-        },
-        deep: true
-
-    }    
+    }   
   },
   mounted () {
     this.renderMap();
   },
-  methods: {
-    clearHighlight() {
-      const vm = this;
-
-      const svg = d3.select(vm.map.getPane('overlayPane')).select("svg");
-      const g = svg.select("g");
-
-      const gGeojsonLayer = g.selectAll(`g[id=${this.geojsonType}]`);
-
-      gGeojsonLayer.selectAll("path")     
-        .attr("fill-opacity","0");
-
-    },      
-    highlightMesh() {
-      const vm = this;
-
-      const svg = d3.select(vm.map.getPane('overlayPane')).select("svg");
-      const g = svg.select("g");
-
-      const gGeojsonLayer = g.selectAll(`g[id=${this.geojsonType}]`);
-
-      // console.log(vm.highlightedMeshes)
-
-      gGeojsonLayer.selectAll("path")
-        .attr("fill-opacity", 0);
-
-      gGeojsonLayer.selectAll("path")
-        .filter(function(d){
-          return vm.highlightedMeshes.map(ele => ele.mesh_id).includes(String(d.properties[vm.idTag]));
-        })      
-        .attr("fill-opacity", vm.colorOpacity);
-
-    },    
+  methods: {    
     clearSvg() {
       const vm = this;
 
@@ -174,18 +127,9 @@ export default {
         }
       }
 
-
-      
-      // L.tileLayer.provider('CartoDB.PositronNoLabels').addTo(map);
-      // L.tileLayer.provider('CartoDB.VoyagerNoLabels').addTo(map);
-      // L.tileLayer.provider('Stamen.TonerBackground').addTo(map);
-      // L.tileLayer.provider('Stamen.TonerLite').addTo(map);
-      // L.tileLayer.provider('Hydda.Base').addTo(map);
-      
       if (!this.geojsonObject) {
         return;
       }
-
 
       ///////////////////////////////////////////////////////////////////////////
       ///////////////////// create transform and path function //////////////////
@@ -226,7 +170,7 @@ export default {
       const mouseover = function(p, i) {
         d3.select(this)
           .style("cursor", "pointer")
-          .style("stroke-width", "3px")
+          .style("stroke-width", "15px")
 
         gLabelLayer.selectAll("text")
           .filter(function(d){
@@ -243,7 +187,7 @@ export default {
       const mouseout = function(p, i) {
         d3.select(this)
           .style("cursor", "")
-          .style("stroke-width", "1px");
+          .style("stroke-width", "10px");
 
         const bbox = gGeojsonLayer.select("path").node().getBBox();
         if (bbox.width < vm.hideLabelThreshold) {
@@ -262,9 +206,9 @@ export default {
         .data(this.geojsonObject.features)
         .enter()
         .append("path")
-        .attr("fill-opacity","0.0")
+        .attr("fill-opacity","1.0")
         .style("fill", vm.color)
-        .style("stroke-width", "1px")
+        .style("stroke-width", "10px")
         .style("pointer-events", "auto")
         .attr("stroke", function(d,i) {
           return vm.color;
@@ -272,17 +216,15 @@ export default {
         .on("mouseout", mouseout)
         .on("mouseover", mouseover);
 
+
       this.geojsonObject.features.forEach(function(d) {
         if (d.geometry.type == 'Point') {
           d.LatLng = new L.LatLng(d.geometry.coordinates[1],
             d.geometry.coordinates[0]);
 
-        } else if (d.geometry.type == 'MultiLineString') {
-          d.LatLng = new L.LatLng(d.geometry.coordinates[0][1][1],
-            d.geometry.coordinates[0][1][0]);
         }
-
       });
+
 
       const labels = gLabelLayer.selectAll("text")
         .data(this.geojsonObject.features)
@@ -291,12 +233,21 @@ export default {
         .attr("class", "polygonLabel")
         .attr("pointer-events", "none")
         .attr("dx", "2.5em")
-        .attr("dy", "1em")
+        .attr("dy", "-2em")
         .style("fill-opacity", 1)
         .style("display", "block")
         .text(function(d) { 
           return d.properties[vm.idTag];
         });
+
+
+      // const labels = gLabelLayer.selectAll("text")
+      //     .data(this.geojsonObject.features)
+      //     .enter()
+      //     .append("text")
+      //     .attr('font-family', 'Font Awesome 5 Free')
+      //     .attr('font-size', '20px' )
+      //     .text(function(d) { return '\uf566' }); 
 
       ///////////////////////////////////////////////////////////////////////////
       /////////////////////// leaflet map zoom events ///////////////////////////
@@ -360,6 +311,8 @@ export default {
 
 @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
 
+@import url(//use.fontawesome.com/releases/v5.12.1/css/all.css);
+
 svg {
   font-size: 11px;
   font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
@@ -376,6 +329,11 @@ svg {
   font-weight: 500;
   text-anchor: middle;
 
+}
+
+
+body {
+    font-family:"Font Awesome 5 Free";
 }
 
 
