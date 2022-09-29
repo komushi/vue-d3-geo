@@ -14,7 +14,7 @@
     "build:lib": "vue-cli-service build --target lib --name vue-d3-geo ./src/lib.js --dest dist/"
   },
   "dependencies": {
-    "d3": "^5.12.0",
+    "d3": "^7.6.1",
     "leaflet": "^1.5.1",
     "leaflet-providers": "^1.9.0",
     "topojson-client": "^3.1.0",
